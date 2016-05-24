@@ -10,3 +10,27 @@ dependencies {
     compile 'org.antlr:antlr4:4.5.2-1'
     testCompile 'junit:junit:latest.release'
 }
+
+task generatePythonParser(type:JavaExec) {
+    main = 'org.antlr.v4.Tool'
+    classpath = sourceSets.main.runtimeClasspath
+    args = ['-Dlanguage=Java', 'src/test/resources/me/tomassetti/antlrplus/python/Python3.g4', '-o', 'build/generated/', '-package', 'me.tomassetti.antlrplus.python']
+}
+
+compileTestJava.dependsOn generatePythonParser
+
+def generatedResourcesFolder = "build/generated/src/test/resources"
+sourceSets {
+    test {
+        output.dir(generatedResourcesFolder)
+        java.srcDirs generatedResourcesFolder
+    }
+}
+clean {
+    delete generatedResourcesFolder
+}
+idea {
+    module {
+        sourceDirs += file(generatedResourcesFolder)
+    }
+}
