@@ -6,9 +6,4 @@ package me.tomassetti.antlrplus.metamodel;
 public enum Multiplicity {
     ONE,
     MANY;
-
-    @Override
-    public String toString() {
-        return "Multiplicity{}";
-    }
 }

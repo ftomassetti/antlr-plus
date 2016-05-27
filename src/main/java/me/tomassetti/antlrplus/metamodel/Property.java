@@ -16,6 +16,10 @@ public class Property {
                 '}';
     }
 
+    public boolean isSingle() {
+        return multiplicity == Multiplicity.ONE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,7 +33,20 @@ public class Property {
 
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Datatype getDatatype() {
+        return datatype;
+    }
+
+    public Multiplicity getMultiplicity() {
+        return multiplicity;
+    }
+
     @Override
+
     public int hashCode() {
         int result = name.hashCode();
         result = 31 * result + datatype.hashCode();

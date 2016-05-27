@@ -1,6 +1,7 @@
 package me.tomassetti.antlrplus.metamodel.mapping;
 
 import me.tomassetti.antlrplus.metamodel.*;
+import me.tomassetti.antlrplus.model.Element;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -28,22 +29,6 @@ public class ReflectionMapper {
     }
 
     private void registerEntity(Class<? extends ParserRuleContext> ruleClass) {
-        // unfortunately getRuleIndex is an instance method so I need an instance
-//        try {
-//            R instance = ruleClass.newInstance();
-//            int index = (int) ruleClass.getMethod("getRuleIndex").invoke(instance);
-//            String name = ruleNames[index];
-//            return new Entity(name);
-//        } catch (InstantiationException e) {
-//            throw new RuntimeException(e);
-//        } catch (IllegalAccessException e) {
-//            throw new RuntimeException(e);
-//        } catch (NoSuchMethodException e) {
-//            throw new RuntimeException(e);
-//        } catch (InvocationTargetException e) {
-//            throw new RuntimeException(e);
-//        }
-
         String name = ruleClass.getSimpleName();
         if (!name.endsWith("Context")) {
             throw new RuntimeException("Name is not ending in Context: "+name);
@@ -53,7 +38,7 @@ public class ReflectionMapper {
         classesToEntities.put(ruleClass.getCanonicalName(), entity);
 
         for (Method method : ruleClass.getDeclaredMethods()) {
-            if (!methodNamesToIgnore.contains(method.getName())) {
+            if (!methodNamesToIgnore.contains(method.getName()) && method.getParameterCount() == 0) {
                 if (method.getReturnType().getCanonicalName().equals(List.class.getCanonicalName())) {
                     ParameterizedType listType = (ParameterizedType)method.getGenericReturnType();
                     Class elementType = (Class) listType.getActualTypeArguments()[0];
@@ -83,10 +68,13 @@ public class ReflectionMapper {
                 }
             }
         }
-
     }
 
     public <R extends ParserRuleContext> Grammar getGrammar(String name, Class<R> rootRuleClass) {
         throw new UnsupportedOperationException();
+    }
+
+    public Element toElement(ParserRuleContext astNode) {
+        return new ReflectionElement(this, astNode, getEntity(astNode.getClass()));
     }
 }

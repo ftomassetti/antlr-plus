@@ -19,6 +19,10 @@ public class Relation {
         return type;
     }
 
+    public boolean isSingle() {
+        return multiplicity == Multiplicity.ONE;
+    }
+
     public Multiplicity getMultiplicity() {
         return multiplicity;
     }
