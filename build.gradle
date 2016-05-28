@@ -16,47 +16,30 @@ repositories {
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'antlr'
 
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:latest.release'
-    compile 'org.antlr:antlr4:4.5.2-1'
-    testCompile 'junit:junit:latest.release'
+    antlr "org.antlr:antlr4:4.5.1"
+    compile "org.antlr:antlr4-runtime:4.5.1"
+    testCompile 'junit:junit:4.12'
 }
 
-task generateAntlrParser(type:JavaExec) {
-    main = 'org.antlr.v4.Tool'
-    classpath = sourceSets.main.runtimeClasspath
-    args = ['-Dlanguage=Java', 'src/main/resources/me/tomassetti/antlrplus/antlrparser/ANTLR4.g4', '-o', 'build/generated', '-package', 'me.tomassetti.antlrplus.antlrparser']
+generateGrammarSource {
+    maxHeapSize = "64m"
+    arguments += ['-package', 'me.tomassetti.antlrplus.antlrparser']
+    outputDirectory = new File("generated-src/antlr/main/me/tomassetti/antlrplus/antlrparser".toString())
 }
-//compileJava.dependsOn generateAntlrParser
 
-task generatePythonParser(type:JavaExec) {
-    main = 'org.antlr.v4.Tool'
-    classpath = sourceSets.main.runtimeClasspath
-    args = ['-Dlanguage=Java', 'src/test/resources/me/tomassetti/antlrplus/python/Python3.g4', '-o', 'build/generated', '-package', 'me.tomassetti.antlrplus.python']
+generateTestGrammarSource {
+    maxHeapSize = "64m"
+    arguments += ['-package', 'me.tomassetti.antlrplus.python']
+    outputDirectory = new File("generated-src/antlr/test/me/tomassetti/antlrplus/python".toString())
 }
-compileTestJava.dependsOn generatePythonParser
 
-def generatedMainResourcesFolder = "build/generated/src/main/resources"
-def generatedTestResourcesFolder = "build/generated/src/test/resources"
-sourceSets {
-    main {
-        output.dir(generatedMainResourcesFolder)
-        java.srcDirs generatedMainResourcesFolder
-    }
-    test {
-        output.dir(generatedTestResourcesFolder)
-        java.srcDirs generatedTestResourcesFolder
-    }
-}
-clean {
-    delete generatedMainResourcesFolder
-    delete generatedTestResourcesFolder
-}
 idea {
     module {
-        generatedSourceDirs += file(generatedMainResourcesFolder)
-        testSourceDirs += file(generatedTestResourcesFolder)
+        sourceDirs += file("generated-src/antlr/main")
+        testSourceDirs += file("generated-src/antlr/test")
     }
 }

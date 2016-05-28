@@ -1,7 +1,5 @@
-package me.tomassetti.antlrplus.antlrparsing;
+package me.tomassetti.antlrplus.antlrparser;
 
-import me.tomassetti.antlr4.parser.ANTLRv4Lexer;
-import me.tomassetti.antlr4.parser.ANTLRv4Parser;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenStream;
 

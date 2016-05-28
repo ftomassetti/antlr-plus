@@ -1,5 +1,7 @@
 package me.tomassetti.antlrplus;
 
+import me.tomassetti.antlrplus.antlrparser.ANTLRv4Parser;
+import me.tomassetti.antlrplus.antlrparser.Antlr4ParserFacade;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.v4.parse.*;
 
@@ -22,19 +24,8 @@ public class AntlrSimplifier {
     }
 
     public void simplify(InputStream inputStream) {
-        Tool tool = new Tool();
-        try {
-            ToolANTLRLexer lexer = new ToolANTLRLexer(new org.antlr.runtime.ANTLRInputStream(inputStream), tool);
-            org.antlr.runtime.TokenStream tokens = new org.antlr.runtime.CommonTokenStream(lexer);
-            ToolANTLRParser parser = new ToolANTLRParser(tokens, tool);
-            parser.setTreeAdaptor(new GrammarASTAdaptor());
-            ANTLRParser.grammarSpec_return grammar = parser.grammarSpec();
-            analyzeGrammar(grammar);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (RecognitionException e) {
-            throw new RuntimeException(e);
-        }
+        Antlr4ParserFacade facade = new Antlr4ParserFacade();
+        ANTLRv4Parser.GrammarSpecContext grammarSpec = facade.parseStream(inputStream);
     }
 
 }
