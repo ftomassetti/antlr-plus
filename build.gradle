@@ -17,6 +17,7 @@ repositories {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'antlr'
+apply plugin: 'maven-publish'
 
 
 dependencies {
