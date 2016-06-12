@@ -25,6 +25,12 @@ public class XmlExporter {
 
     public static final String ROOT_ROLE = "root";
 
+    private boolean printProperties = true;
+
+    public void setPrintProperties(boolean printProperties) {
+        this.printProperties = printProperties;
+    }
+
     public Node toXml(Element astNode, String role) {
         return toXml(astNode, createDocument(), role);
     }
@@ -38,18 +44,20 @@ public class XmlExporter {
     private Node toXml(Element astNode, Document document, String role) {
         org.w3c.dom.Element node = document.createElement(role);
         node.setAttribute("type", astNode.type().getName());
-        astNode.type().getProperties().forEach(p -> {
-            if (p.isSingle()) {
-                Optional<Object> value = astNode.getSingleProperty(p);
-                if (value.isPresent()) {
-                    node.appendChild(propertyValueNode(value.get(), document, p.getName()));
+        if (printProperties) {
+            astNode.type().getProperties().forEach(p -> {
+                if (p.isSingle()) {
+                    Optional<Object> value = astNode.getSingleProperty(p);
+                    if (value.isPresent()) {
+                        node.appendChild(propertyValueNode(value.get(), document, p.getName()));
+                    }
+                } else {
+                    for (Object value : astNode.getMultipleProperty(p)) {
+                        node.appendChild(propertyValueNode(value, document, p.getName()));
+                    }
                 }
-            } else {
-                for (Object value : astNode.getMultipleProperty(p)) {
-                    node.appendChild(propertyValueNode(value, document, p.getName()));
-                }
-            }
-        });
+            });
+        }
         astNode.type().getRelations().forEach(r -> {
             if (r.isSingle()) {
                 Optional<Element> value = astNode.getSingleRelation(r);

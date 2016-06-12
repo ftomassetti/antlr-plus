@@ -21,7 +21,16 @@ public class ReflectionMapper {
 
     private static Set<String> methodNamesToIgnore = new HashSet<>(Arrays.asList("enterRule", "exitRule", "getRuleIndex"));
 
+    private Set<Class<? extends ParserRuleContext>> transparentEntities = new HashSet<>();
+
+    public void markAsTransparent(Class<? extends ParserRuleContext> ruleClass) {
+        transparentEntities.add(ruleClass);
+    }
+
     public Entity getEntity(Class<? extends ParserRuleContext> ruleClass) {
+        if (transparentEntities.contains(ruleClass)) {
+            throw new IllegalArgumentException("Transparent rule, no corresponding Entity can be generated");
+        }
         if (!classesToEntities.containsKey(ruleClass.getCanonicalName())) {
             registerEntity(ruleClass);
         }
@@ -75,6 +84,15 @@ public class ReflectionMapper {
     }
 
     public Element toElement(ParserRuleContext astNode) {
+        if (transparentEntities.contains(astNode.getClass())) {
+            if (astNode.getChildCount() != 1) {
+                throw new IllegalArgumentException("Transparent rules are expected to have exactly one child: " + astNode.getClass());
+            }
+            if (!(astNode.getChild(0) instanceof ParserRuleContext)) {
+                throw new IllegalArgumentException("A transparent rule only child is expected to be a non-terminal: " + astNode.getClass());
+            }
+            return toElement((ParserRuleContext) astNode.getChild(0));
+        }
         return new ReflectionElement(this, astNode, getEntity(astNode.getClass()));
     }
 }
