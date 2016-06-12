@@ -14,11 +14,16 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Optional;
 
 public class XmlExporter {
+
+    public static final String ROOT_ROLE = "root";
 
     public Node toXml(Element astNode, String role) {
         return toXml(astNode, createDocument(), role);
@@ -93,6 +98,16 @@ public class XmlExporter {
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void toXmlFile(Element astNode, File file, String role) throws FileNotFoundException {
+        try (PrintWriter out = new PrintWriter(file)) {
+            out.println(toXmlString(astNode, role));
+        }
+    }
+
+    public void toXmlFile(Element astNode, File file) throws FileNotFoundException {
+        toXmlFile(astNode, file, ROOT_ROLE);
     }
 
 }
