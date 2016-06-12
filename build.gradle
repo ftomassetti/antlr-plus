@@ -31,16 +31,34 @@ generateGrammarSource {
     arguments += ['-package', 'me.tomassetti.antlrplus.antlrparser']
     outputDirectory = new File("generated-src/antlr/main/me/tomassetti/antlrplus/antlrparser".toString())
 }
+compileJava.dependsOn generateGrammarSource
+sourceSets {
+    antlrdeps {
+        java.srcDir 'src/main/antlr-deps/'
+    }
+    generated {
+        java.srcDir 'generated-src/antlr/main/'
+    }
+}
+compileJava.source sourceSets.antlrdeps.java, sourceSets.generated.java, sourceSets.main.java
 
 generateTestGrammarSource {
     maxHeapSize = "64m"
     arguments += ['-package', 'me.tomassetti.antlrplus.python']
     outputDirectory = new File("generated-src/antlr/test/me/tomassetti/antlrplus/python".toString())
 }
+compileTestJava.dependsOn generateTestGrammarSource
+sourceSets {
+    test_generated {
+        java.srcDir 'generated-src/antlr/test/'
+    }
+}
+compileTestJava.source sourceSets.test_generated.java, sourceSets.test.java
 
 idea {
     module {
         sourceDirs += file("generated-src/antlr/main")
+        sourceDirs += file("src/main/antlr-deps")
         testSourceDirs += file("generated-src/antlr/test")
     }
 }
