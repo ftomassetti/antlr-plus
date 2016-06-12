@@ -6,8 +6,8 @@ buildscript {
         }
         jcenter()
     }
-
 }
+
 
 repositories {
     mavenCentral()
@@ -19,6 +19,8 @@ apply plugin: 'idea'
 apply plugin: 'antlr'
 apply plugin: 'maven-publish'
 
+group = 'me.tomassetti'
+version = '0.1'
 
 dependencies {
     antlr "org.antlr:antlr4:4.5.1"
