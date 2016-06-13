@@ -57,6 +57,10 @@ sourceSets {
 }
 compileTestJava.source sourceSets.test_generated.java, sourceSets.test.java
 
+clean{
+    delete "generated-src"
+}
+
 idea {
     module {
         sourceDirs += file("generated-src/antlr/main")
