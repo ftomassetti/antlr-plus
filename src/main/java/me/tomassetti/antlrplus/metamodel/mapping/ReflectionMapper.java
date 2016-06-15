@@ -56,7 +56,7 @@ public class ReflectionMapper {
                         Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.MANY);
                         entity.addProperty(property);
                     } else {
-                        Entity target = getEntity((Class<? extends ParserRuleContext>) elementType);
+                        Entity target = getEntity(skipTransparentClasses((Class<? extends ParserRuleContext>) elementType));
                         Relation relation = new Relation(method.getName(),
                                 Relation.Type.CONTAINMENT,
                                 Multiplicity.MANY,
@@ -68,7 +68,7 @@ public class ReflectionMapper {
                     Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.ONE);
                     entity.addProperty(property);
                 } else {
-                    Entity target = getEntity((Class<? extends ParserRuleContext>) method.getReturnType());
+                    Entity target = getEntity(skipTransparentClasses((Class<? extends ParserRuleContext>) method.getReturnType()));
                     Relation relation = new Relation(method.getName(),
                             Relation.Type.CONTAINMENT,
                             Multiplicity.ONE,
@@ -77,6 +77,29 @@ public class ReflectionMapper {
                     entity.addRelation(relation);
                 }
             }
+        }
+    }
+
+    private Class<? extends ParserRuleContext> getOnlySingleRelation(Class<? extends ParserRuleContext> ruleClass) {
+        for (Method method : ruleClass.getDeclaredMethods()) {
+            if (!methodNamesToIgnore.contains(method.getName()) && method.getParameterCount() == 0) {
+                if (method.getReturnType().getCanonicalName().equals(List.class.getCanonicalName())) {
+                    throw new IllegalArgumentException("This class was expected to have one single relation: " + ruleClass);
+                } else if (method.getReturnType().getCanonicalName().equals(TerminalNode.class.getCanonicalName())) {
+                    throw new IllegalArgumentException("This class was expected to have one single relation: " + ruleClass);
+                } else {
+                    return (Class<? extends ParserRuleContext>) method.getReturnType();
+                }
+            }
+        }
+        throw new IllegalArgumentException("This class was expected to have one single relation: " + ruleClass);
+    }
+
+    private Class<? extends ParserRuleContext> skipTransparentClasses(Class<? extends ParserRuleContext> ruleClass) {
+        if (transparentEntities.contains(ruleClass)) {
+            return skipTransparentClasses(getOnlySingleRelation(ruleClass));
+        } else {
+            return ruleClass;
         }
     }
 
