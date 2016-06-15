@@ -23,9 +23,14 @@ public class ReflectionMapper {
     private static Set<String> methodNamesToIgnore = new HashSet<>(Arrays.asList("enterRule", "exitRule", "getRuleIndex"));
 
     private Set<Class<? extends ParserRuleContext>> transparentEntities = new HashSet<>();
+    private Set<String> tokensToIgnore = new HashSet<>();
 
     public void markAsTransparent(Class<? extends ParserRuleContext> ruleClass) {
         transparentEntities.add(ruleClass);
+    }
+
+    public void markAsTokenToIgnore(String token) {
+        tokensToIgnore.add(token);
     }
 
     public Entity getEntity(Class<? extends ParserRuleContext> ruleClass) {
@@ -53,8 +58,11 @@ public class ReflectionMapper {
                     ParameterizedType listType = (ParameterizedType)method.getGenericReturnType();
                     Class elementType = (Class) listType.getActualTypeArguments()[0];
                     if (elementType.getCanonicalName().equals(TerminalNode.class.getCanonicalName())) {
-                        Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.MANY);
-                        entity.addProperty(property);
+                        // for now we look at the method name to recognize the properties to ignore
+                        if (!tokensToIgnore.contains(method.getName())) {
+                            Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.MANY);
+                            entity.addProperty(property);
+                        }
                     } else {
                         Entity target = getEntity(skipTransparentClasses((Class<? extends ParserRuleContext>) elementType));
                         Relation relation = new Relation(method.getName(),
@@ -65,8 +73,11 @@ public class ReflectionMapper {
                         entity.addRelation(relation);
                     }
                 } else if (method.getReturnType().getCanonicalName().equals(TerminalNode.class.getCanonicalName())) {
-                    Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.ONE);
-                    entity.addProperty(property);
+                    // for now we look at the method name to recognize the properties to ignore
+                    if (!tokensToIgnore.contains(method.getName())) {
+                        Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.ONE);
+                        entity.addProperty(property);
+                    }
                 } else {
                     Entity target = getEntity(skipTransparentClasses((Class<? extends ParserRuleContext>) method.getReturnType()));
                     Relation relation = new Relation(method.getName(),
