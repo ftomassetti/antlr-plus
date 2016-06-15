@@ -1,6 +1,6 @@
 package me.tomassetti.antlrplus.metamodel;
 
-public class Property {
+public class Property extends Feature {
     public enum Datatype {
         STRING,
         INTEGER,
@@ -10,7 +10,7 @@ public class Property {
     @Override
     public String toString() {
         return "Property{" +
-                "name='" + name + '\'' +
+                "name='" + getName() + '\'' +
                 ", datatype=" + datatype +
                 ", multiplicity=" + multiplicity +
                 '}';
@@ -27,14 +27,10 @@ public class Property {
 
         Property property = (Property) o;
 
-        if (!name.equals(property.name)) return false;
+        if (!getName().equals(property.getName())) return false;
         if (datatype != property.datatype) return false;
         return multiplicity == property.multiplicity;
 
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Datatype getDatatype() {
@@ -48,18 +44,17 @@ public class Property {
     @Override
 
     public int hashCode() {
-        int result = name.hashCode();
+        int result = getName().hashCode();
         result = 31 * result + datatype.hashCode();
         result = 31 * result + multiplicity.hashCode();
         return result;
     }
 
-    private String name;
     private Datatype datatype;
     private Multiplicity multiplicity;
 
     public Property(String name, Datatype datatype, Multiplicity multiplicity) {
-        this.name = name;
+        super(name);
         this.datatype = datatype;
         this.multiplicity = multiplicity;
     }

@@ -1,19 +1,14 @@
 package me.tomassetti.antlrplus.metamodel;
 
-public class Relation {
+public class Relation extends Feature {
     public enum Type {
         CONTAINMENT,
         REFERENCE
     };
 
-    private String name;
     private Type type;
     private Multiplicity multiplicity;
     private Entity source;
-
-    public String getName() {
-        return name;
-    }
 
     public Type getType() {
         return type;
@@ -38,7 +33,7 @@ public class Relation {
     @Override
     public String toString() {
         return "Relation{" +
-                "name='" + name + '\'' +
+                "name='" + getName() + '\'' +
                 ", type=" + type +
                 ", multiplicity=" + multiplicity +
                 ", source=" + source.getName() +
@@ -53,7 +48,7 @@ public class Relation {
 
         Relation relation = (Relation) o;
 
-        if (!name.equals(relation.name)) return false;
+        if (!getName().equals(relation.getName())) return false;
         if (type != relation.type) return false;
         if (multiplicity != relation.multiplicity) return false;
         if (!source.equals(relation.source)) return false;
@@ -63,7 +58,7 @@ public class Relation {
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
+        int result = getName().hashCode();
         result = 31 * result + type.hashCode();
         result = 31 * result + multiplicity.hashCode();
         result = 31 * result + source.hashCode();
@@ -74,7 +69,7 @@ public class Relation {
     private Entity target;
 
     public Relation(String name, Type type, Multiplicity multiplicity, Entity source, Entity target) {
-        this.name = name;
+        super(name);
         this.type = type;
         this.multiplicity = multiplicity;
         this.source = source;
