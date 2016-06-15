@@ -2,6 +2,7 @@ package me.tomassetti.antlrplus.metamodel.mapping;
 
 import me.tomassetti.antlrplus.metamodel.*;
 import me.tomassetti.antlrplus.model.Element;
+import me.tomassetti.antlrplus.model.OrderedElement;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -83,7 +84,7 @@ public class ReflectionMapper {
         throw new UnsupportedOperationException();
     }
 
-    public Element toElement(ParserRuleContext astNode) {
+    public OrderedElement toElement(ParserRuleContext astNode) {
         if (transparentEntities.contains(astNode.getClass())) {
             if (astNode.getChildCount() != 1) {
                 throw new IllegalArgumentException("Transparent rules are expected to have exactly one child: " + astNode.getClass());

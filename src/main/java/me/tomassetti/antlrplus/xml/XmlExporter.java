@@ -1,6 +1,9 @@
 package me.tomassetti.antlrplus.xml;
 
+import me.tomassetti.antlrplus.metamodel.Property;
+import me.tomassetti.antlrplus.metamodel.Relation;
 import me.tomassetti.antlrplus.model.Element;
+import me.tomassetti.antlrplus.model.OrderedElement;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -31,7 +34,7 @@ public class XmlExporter {
         this.printProperties = printProperties;
     }
 
-    public Node toXml(Element astNode, String role) {
+    public Node toXml(OrderedElement astNode, String role) {
         return toXml(astNode, createDocument(), role);
     }
 
@@ -41,38 +44,40 @@ public class XmlExporter {
         return node;
     }
 
-    private Node toXml(Element astNode, Document document, String role) {
+    private Object getPropertyValue(OrderedElement astNode, OrderedElement.ValueReference valueReference) {
+        Property property = valueReference.getFeature().asProperty();
+        if (property.isSingle()) {
+            return astNode.getSingleProperty(property).get();
+        } else {
+            return astNode.getMultipleProperty(property).get(valueReference.getIndex());
+        }
+    }
+
+    private OrderedElement getRelationValue(OrderedElement astNode, OrderedElement.ValueReference valueReference) {
+        Relation relation = valueReference.getFeature().asRelation();
+        if (relation.isSingle()) {
+            return (OrderedElement) astNode.getSingleRelation(relation).get();
+        } else {
+            return (OrderedElement) astNode.getMultipleRelation(relation).get(valueReference.getIndex());
+        }
+    }
+
+    private Node toXml(OrderedElement astNode, Document document, String role) {
         org.w3c.dom.Element node = document.createElement(role);
         node.setAttribute("type", astNode.type().getName());
-        if (printProperties) {
-            astNode.type().getProperties().forEach(p -> {
-                if (p.isSingle()) {
-                    Optional<Object> value = astNode.getSingleProperty(p);
-                    if (value.isPresent()) {
-                        node.appendChild(propertyValueNode(value.get(), document, p.getName()));
-                    }
-                } else {
-                    for (Object value : astNode.getMultipleProperty(p)) {
-                        node.appendChild(propertyValueNode(value, document, p.getName()));
-                    }
-                }
-            });
-        }
-        astNode.type().getRelations().forEach(r -> {
-            if (r.isSingle()) {
-                Optional<Element> value = astNode.getSingleRelation(r);
-                if (value.isPresent()) {
-                    node.appendChild(toXml(value.get(), document, r.getName()));
+        astNode.getValuesOrder().forEach(valueReference -> {
+            if (valueReference.getFeature().isProperty()) {
+                if (printProperties) {
+                    node.appendChild(propertyValueNode(getPropertyValue(astNode, valueReference), document, valueReference.getFeature().getName()));
                 }
             } else {
-                List<Element> values = astNode.getMultipleRelation(r);
-                values.forEach(c -> node.appendChild(toXml(c, document, r.getName())));
+                node.appendChild(toXml(getRelationValue(astNode, valueReference), document, valueReference.getFeature().getName()));
             }
         });
         return node;
     }
 
-    public String toXmlString(Element astNode, String role) {
+    public String toXmlString(OrderedElement astNode, String role) {
         Document document = createDocument();
         return serialize(toXml(astNode, document, role), document);
     }
@@ -108,13 +113,13 @@ public class XmlExporter {
         }
     }
 
-    public void toXmlFile(Element astNode, File file, String role) throws FileNotFoundException {
+    public void toXmlFile(OrderedElement astNode, File file, String role) throws FileNotFoundException {
         try (PrintWriter out = new PrintWriter(file)) {
             out.println(toXmlString(astNode, role));
         }
     }
 
-    public void toXmlFile(Element astNode, File file) throws FileNotFoundException {
+    public void toXmlFile(OrderedElement astNode, File file) throws FileNotFoundException {
         toXmlFile(astNode, file, ROOT_ROLE);
     }
 

@@ -8,6 +8,22 @@ public abstract class Feature {
         this.name = name;
     }
 
+    public boolean isProperty() {
+        return this instanceof Property;
+    }
+
+    public boolean isRelation() {
+        return this instanceof Relation;
+    }
+
+    public Relation asRelation() {
+        return (Relation)this;
+    }
+
+    public Property asProperty() {
+        return (Property)this;
+    }
+
     public String getName() {
         return name;
     }

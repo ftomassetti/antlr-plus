@@ -3,6 +3,7 @@ package me.tomassetti.antlrplus.python;
 import me.tomassetti.antlrplus.ParserFacade;
 import me.tomassetti.antlrplus.metamodel.mapping.ReflectionMapper;
 import me.tomassetti.antlrplus.model.Element;
+import me.tomassetti.antlrplus.model.OrderedElement;
 import me.tomassetti.antlrplus.xml.XmlExporter;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
@@ -64,11 +65,9 @@ public class XmlExporterTest {
     @Test
     public void toXml() {
         Python3Parser.Single_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"));
-        Element element = new ReflectionMapper(Python3Parser.ruleNames).toElement(astRoot);
+        OrderedElement element = new ReflectionMapper(Python3Parser.ruleNames).toElement(astRoot);
         assertEquals("<root type=\"Single_input\">\n" +
                 "    <simple_stmt type=\"Simple_stmt\">\n" +
-                "        <NEWLINE><![CDATA[\n" +
-                "]]></NEWLINE>\n" +
                 "        <small_stmt type=\"Small_stmt\">\n" +
                 "            <expr_stmt type=\"Expr_stmt\">\n" +
                 "                <testlist_star_expr type=\"Testlist_star_expr\">\n" +
@@ -145,6 +144,8 @@ public class XmlExporterTest {
                 "                </testlist_star_expr>\n" +
                 "            </expr_stmt>\n" +
                 "        </small_stmt>\n" +
+                "        <NEWLINE><![CDATA[\n" +
+                "]]></NEWLINE>\n" +
                 "    </simple_stmt>\n" +
                 "</root>\n", new XmlExporter().toXmlString(element, "root"));
     }

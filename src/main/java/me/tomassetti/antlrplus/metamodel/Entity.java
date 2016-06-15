@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public class Entity {
     private String name;
+    private List<Feature> features;
     private List<Property> properties;
     private List<Relation> relations;
     private Optional<Entity> parent = Optional.empty();
@@ -15,9 +16,14 @@ public class Entity {
         return parent;
     }
 
+    public List<Feature> getFeatures() {
+        return features;
+    }
+
     @Override
     public String toString() {
         return "Entity{" +
+
                 "name='" + name + '\'' +
                 ", properties=" + properties +
                 ", relations=" + relations +
@@ -39,6 +45,7 @@ public class Entity {
 
     public void addProperty(Property property) {
         this.properties.add(property);
+        this.features.add(property);
         this.properties.sort(new Comparator<Property>() {
             @Override
             public int compare(Property o1, Property o2) {
@@ -49,6 +56,7 @@ public class Entity {
 
     public void addRelation(Relation relation) {
         this.relations.add(relation);
+        this.features.add(relation);
         this.relations.sort(new Comparator<Relation>() {
             @Override
             public int compare(Relation o1, Relation o2) {
@@ -58,10 +66,10 @@ public class Entity {
     }
 
     public Entity(String name) {
-
         this.name = name;
         this.properties = new LinkedList<>();
         this.relations = new LinkedList<>();
+        this.features = new LinkedList<>();
     }
 
     public Optional<Relation> getRelation(String name){

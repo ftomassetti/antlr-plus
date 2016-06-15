@@ -1,17 +1,21 @@
 package me.tomassetti.antlrplus.metamodel.mapping;
 
+import javafx.util.Pair;
 import me.tomassetti.antlrplus.metamodel.Entity;
+import me.tomassetti.antlrplus.metamodel.Feature;
 import me.tomassetti.antlrplus.metamodel.Property;
 import me.tomassetti.antlrplus.metamodel.Relation;
 import me.tomassetti.antlrplus.model.Element;
+import me.tomassetti.antlrplus.model.OrderedElement;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
-class ReflectionElement implements Element {
+class ReflectionElement implements OrderedElement {
 
     private ParserRuleContext wrapped;
     private Entity entity;
@@ -43,8 +47,7 @@ class ReflectionElement implements Element {
         return elements;
     }
 
-    @Override
-    public Optional<Element> getSingleRelation(Relation relation) {
+    private Optional<ParserRuleContext> getSingleRelationRaw(Relation relation) {
         if (!relation.isSingle()) {
             throw new IllegalArgumentException();
         }
@@ -53,13 +56,19 @@ class ReflectionElement implements Element {
             if (result == null) {
                 return Optional.empty();
             } else {
-                return Optional.of(reflectionMapper.toElement(result));
+                return Optional.of(result);
             }
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
             throw new RuntimeException(e);
         } catch (ClassCastException e){
             throw new RuntimeException("Relation "+relation, e);
         }
+    }
+
+    @Override
+    public Optional<Element> getSingleRelation(Relation relation) {
+        Optional<ParserRuleContext> raw = getSingleRelationRaw(relation);
+        return raw.map(e -> reflectionMapper.toElement(e));
     }
 
     @Override
@@ -72,19 +81,23 @@ class ReflectionElement implements Element {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public List<Element> getMultipleRelation(Relation relation) {
+    private List<? extends ParserRuleContext> getMultipleRelationRaw(Relation relation) {
         if (relation.isSingle()) {
             throw new IllegalArgumentException();
         }
-        List<Element> elements = new ArrayList<>();
         try {
             List<? extends ParserRuleContext> result = (List<? extends ParserRuleContext>)wrapped.getClass().getMethod(relation.getName()).invoke(wrapped);
-            for (ParserRuleContext child : result) {
-                elements.add(reflectionMapper.toElement(child));
-            }
+            return result;
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Element> getMultipleRelation(Relation relation) {
+        List<Element> elements = new ArrayList<>();
+        for (ParserRuleContext child : getMultipleRelationRaw(relation)) {
+            elements.add(reflectionMapper.toElement(child));
         }
         return elements;
     }
@@ -121,5 +134,54 @@ class ReflectionElement implements Element {
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<ValueReference> getValuesOrder() {
+        List<Pair<ValueReference, Interval>> positions = new LinkedList<>();
+
+        for (Relation relation : type().getRelations()) {
+            if (relation.isSingle()) {
+                Optional<ParserRuleContext> raw = getSingleRelationRaw(relation);
+                if (raw.isPresent()) {
+                    ValueReference vr = new ValueReference(relation, 0);
+                    positions.add(new Pair<>(vr, raw.get().getSourceInterval()));
+                }
+            } else {
+                List<? extends ParserRuleContext> raw = getMultipleRelationRaw(relation);
+                for (int i=0;i<raw.size();i++) {
+                    ValueReference vr = new ValueReference(relation, i);
+                    positions.add(new Pair<>(vr, raw.get(i).getSourceInterval()));
+                }
+            }
+        }
+        for (Property property : type().getProperties()) {
+            if (property.isSingle()) {
+                Optional<Object> raw = getSingleProperty(property);
+                if (raw.isPresent()) {
+                    ValueReference vr = new ValueReference(property, 0);
+                    positions.add(new Pair<>(vr, ((TerminalNode)raw.get()).getSourceInterval()));
+                }
+            } else {
+                List<Object> raw = getMultipleProperty(property);
+                for (int i=0;i<raw.size();i++) {
+                    ValueReference vr = new ValueReference(property, i);
+                    positions.add(new Pair<>(vr, ((TerminalNode)raw.get(i)).getSourceInterval()));
+                }
+            }
+        }
+
+        positions.sort((o1, o2) -> {
+            Interval i1 = o1.getValue();
+            Interval i2 = o2.getValue();
+            if (i1.startsAfter(i2)) {
+                return 1;
+            } else if (i2.startsAfter(i1)){
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+        return positions.stream().map(p -> p.getKey()).collect(Collectors.toList());
     }
 }
