@@ -23,6 +23,16 @@ class ReflectionElement implements OrderedElement {
     private Optional<OrderedElement> parent;
 
     @Override
+    public Optional<Element> getSingleRelation(String name) {
+        return this.getSingleRelation(this.type().getRelation(name).get());
+    }
+
+    @Override
+    public Optional<Object> getSingleProperty(String name) {
+        return this.getSingleProperty(this.type().getProperty(name).get());
+    }
+
+    @Override
     public String toString() {
         return "ReflectionElement{" +
                 "entity=" + entity +

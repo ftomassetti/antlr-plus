@@ -75,4 +75,8 @@ public class Entity {
     public Optional<Relation> getRelation(String name){
         return relations.stream().filter(r -> r.getName().equals(name)).findFirst();
     }
+
+    public Optional<Property> getProperty(String name){
+        return properties.stream().filter(r -> r.getName().equals(name)).findFirst();
+    }
 }

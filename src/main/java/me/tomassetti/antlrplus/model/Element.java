@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface Element {
     Entity type();
     Optional<Element> getSingleRelation(Relation relation);
+    Optional<Element> getSingleRelation(String name);
+    Optional<Object> getSingleProperty(String name);
     void setSingleRelation(Relation relation, Element element);
     int getMultipleRelationCount(Relation relation);
     List<Element> getMultipleRelation(Relation relation);
