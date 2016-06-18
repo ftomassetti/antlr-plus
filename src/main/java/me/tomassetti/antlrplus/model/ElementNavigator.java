@@ -8,23 +8,23 @@ import java.util.Optional;
 
 public class ElementNavigator {
 
-    public static List<OrderedElement> allDescendants(OrderedElement root, boolean includingItself) {
-        List<OrderedElement> res = new LinkedList<>();
+    public static List<Element> allDescendants(Element root, boolean includingItself) {
+        List<Element> res = new LinkedList<>();
         if (includingItself) {
             res.add(root);
         }
         for (Element child: root.getAllChildren()) {
-            res.addAll(ElementNavigator.allDescendants((OrderedElement) child, true));
+            res.addAll(ElementNavigator.allDescendants(child, true));
         }
         return res;
     }
 
-    public static Optional<OrderedElement> findAncestor(OrderedElement element, Entity parentType) {
+    public static Optional<Element> findAncestor(Element element, Entity parentType) {
         if (element.getParent().isPresent()) {
             if (element.getParent().get().type().equals(parentType)) {
-                return Optional.of((OrderedElement) element.getParent().get());
+                return Optional.of(element.getParent().get());
             } else {
-                return findAncestor((OrderedElement) element.getParent().get(), parentType);
+                return findAncestor(element.getParent().get(), parentType);
             }
         } else {
             return Optional.empty();
