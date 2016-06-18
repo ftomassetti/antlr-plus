@@ -3,9 +3,6 @@ package me.tomassetti.antlrplus.python;
 import me.tomassetti.antlrplus.AntlrSimplifier;
 import org.junit.Test;
 
-/**
- * Created by federico on 28/05/16.
- */
 public class AntlrSimplifierTest {
 
     @Test

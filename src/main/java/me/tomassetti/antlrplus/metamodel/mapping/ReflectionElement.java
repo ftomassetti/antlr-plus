@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -77,12 +78,21 @@ class ReflectionElement implements OrderedElement {
         return elements;
     }
 
+    private Optional<Field> getField(Class<?> clazz, String fieldName) {
+        return Arrays.stream(clazz.getFields()).filter(f -> f.getName().equals(fieldName)).findFirst();
+    }
+
     private Optional<ParserRuleContext> getSingleRelationRaw(Relation relation) {
         if (!relation.isSingle()) {
             throw new IllegalArgumentException();
         }
         try {
-            ParserRuleContext result = (ParserRuleContext)wrapped.getClass().getMethod(relation.getName()).invoke(wrapped);
+            ParserRuleContext result;
+            if (getField(wrapped.getClass(), relation.getName()).isPresent()) {
+                result = (ParserRuleContext) getField(wrapped.getClass(), relation.getName()).get().get(wrapped);
+            } else {
+                result = (ParserRuleContext) wrapped.getClass().getMethod(relation.getName()).invoke(wrapped);
+            }
             if (result == null) {
                 return Optional.empty();
             } else {
@@ -125,7 +135,12 @@ class ReflectionElement implements OrderedElement {
             throw new IllegalArgumentException();
         }
         try {
-            List<? extends ParserRuleContext> result = (List<? extends ParserRuleContext>)wrapped.getClass().getMethod(relation.getName()).invoke(wrapped);
+            List<? extends ParserRuleContext> result;
+            if (getField(wrapped.getClass(), relation.getName()).isPresent()) {
+                result = (List<? extends ParserRuleContext>) getField(wrapped.getClass(), relation.getName()).get().get(wrapped);
+            } else {
+                result = (List<? extends ParserRuleContext>)wrapped.getClass().getMethod(relation.getName()).invoke(wrapped);
+            }
             return result;
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
             throw new RuntimeException(e);

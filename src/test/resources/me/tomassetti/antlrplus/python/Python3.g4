@@ -391,8 +391,12 @@ compound_stmt
 
 /// if_stmt: 'if' test ':' suite ('elif' test ':' suite)* ['else' ':' suite]
 if_stmt
- : IF test ':' suite ( ELIF test ':' suite )* ( ELSE ':' suite )?
+ : IF condition=test ':' body=suite ( elifs+=elifClause )* ( ELSE ':' suite )?
  ;
+
+elifClause
+  : ELIF test ':' suite
+  ;
 
 /// while_stmt: 'while' test ':' suite ['else' ':' suite]
 while_stmt

@@ -38,7 +38,7 @@ public class AntlrSimplifier {
 
     private void analyzeRule(ANTLRv4Parser.RuleSpecContext rule) {
         if (rule.parserRuleSpec() != null) {
-            System.out.println("RULE " + rule.getText());
+            //System.out.println("RULE " + rule.getText());
             String name = rule.parserRuleSpec().RULE_REF().getText();
             List<ANTLRv4Parser.LabeledAltContext> topAlternatives = rule.parserRuleSpec().ruleBlock().ruleAltList().labeledAlt();
             //System.out.println("  n alternatives: " + topAlternatives.size());
@@ -59,12 +59,12 @@ public class AntlrSimplifier {
                     } else {
                         transparentMultipleRules.put(name, replacedBy);
                     }
-                    System.out.println("  TRANSPARENT "+(single?"single":"multiple"));
+                    //System.out.println("  TRANSPARENT "+(single?"single":"multiple"));
                 }
             } else if (topAlternatives.size() >= 2) {
                 if (topAlternatives.stream().allMatch(alt -> alt.alternative().element().size() == 1)) {
                     abstractTypes.add(name);
-                    System.out.println("  ABSTRACT");
+                    //System.out.println("  ABSTRACT");
                 }
             }
             nSynRules++;
