@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -65,7 +66,7 @@ public class XmlExporterTest {
     @Test
     public void toXml() {
         Python3Parser.Single_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"));
-        OrderedElement element = new ReflectionMapper(Python3Parser.ruleNames).toElement(astRoot);
+        OrderedElement element = new ReflectionMapper(Python3Parser.ruleNames).toElement(astRoot, Optional.empty());
         assertEquals("<root type=\"Single_input\">\n" +
                 "    <simple_stmt type=\"Simple_stmt\">\n" +
                 "        <small_stmt type=\"Small_stmt\">\n" +

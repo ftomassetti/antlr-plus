@@ -11,6 +11,9 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 import org.junit.Test;
+
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 public class ReflectionMapperTest {
@@ -67,7 +70,7 @@ public class ReflectionMapperTest {
     @Test
     public void toElement() {
         Python3Parser.Single_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"));
-        Element element = new ReflectionMapper(Python3Parser.ruleNames).toElement(astRoot);
+        Element element = new ReflectionMapper(Python3Parser.ruleNames).toElement(astRoot, Optional.empty());
         Entity entity = element.type();
         assertEquals(true, element.getSingleRelation(entity.getRelation("simple_stmt").get()).isPresent());
         assertEquals(false, element.getSingleRelation(entity.getRelation("compound_stmt").get()).isPresent());

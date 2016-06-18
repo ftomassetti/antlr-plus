@@ -20,11 +20,31 @@ class ReflectionElement implements OrderedElement {
     private ParserRuleContext wrapped;
     private Entity entity;
     private ReflectionMapper reflectionMapper;
+    private Optional<OrderedElement> parent;
 
-    public ReflectionElement(ReflectionMapper reflectionMapper, ParserRuleContext wrapped, Entity entity) {
+    @Override
+    public String toString() {
+        return "ReflectionElement{" +
+                "entity=" + entity +
+                ", wrapped=" + wrapped +
+                '}';
+    }
+
+    @Override
+    public Optional<Element> getParent() {
+        if (parent.isPresent()) {
+            return Optional.of(parent.get());
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public ReflectionElement(ReflectionMapper reflectionMapper, ParserRuleContext wrapped, Entity entity, Optional<OrderedElement> parent) {
         this.reflectionMapper = reflectionMapper;
         this.wrapped = wrapped;
         this.entity = entity;
+
+        this.parent = parent;
     }
 
     @Override
@@ -68,7 +88,7 @@ class ReflectionElement implements OrderedElement {
     @Override
     public Optional<Element> getSingleRelation(Relation relation) {
         Optional<ParserRuleContext> raw = getSingleRelationRaw(relation);
-        return raw.map(e -> reflectionMapper.toElement(e));
+        return raw.map(e -> reflectionMapper.toElement(e, Optional.of(this)));
     }
 
     @Override
@@ -97,7 +117,7 @@ class ReflectionElement implements OrderedElement {
     public List<Element> getMultipleRelation(Relation relation) {
         List<Element> elements = new ArrayList<>();
         for (ParserRuleContext child : getMultipleRelationRaw(relation)) {
-            elements.add(reflectionMapper.toElement(child));
+            elements.add(reflectionMapper.toElement(child, Optional.of(this)));
         }
         return elements;
     }
@@ -134,6 +154,22 @@ class ReflectionElement implements OrderedElement {
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Element> getAllChildren() {
+        List<Element> children = new LinkedList<>();
+        for (Relation relation : this.type().getRelations()) {
+            if (relation.isSingle()) {
+                Optional<Element> child = this.getSingleRelation(relation);
+                if (child.isPresent()) {
+                    children.add(child.get());
+                }
+            } else {
+                children.addAll(this.getMultipleRelation(relation));
+            }
+        }
+        return children;
     }
 
     @Override

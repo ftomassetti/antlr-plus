@@ -118,7 +118,7 @@ public class ReflectionMapper {
         throw new UnsupportedOperationException();
     }
 
-    public OrderedElement toElement(ParserRuleContext astNode) {
+    public OrderedElement toElement(ParserRuleContext astNode, Optional<OrderedElement> parent) {
         if (transparentEntities.contains(astNode.getClass())) {
             if (astNode.getChildCount() != 1) {
                 throw new IllegalArgumentException("Transparent rules are expected to have exactly one child: " + astNode.getClass());
@@ -126,8 +126,8 @@ public class ReflectionMapper {
             if (!(astNode.getChild(0) instanceof ParserRuleContext)) {
                 throw new IllegalArgumentException("A transparent rule only child is expected to be a non-terminal: " + astNode.getClass());
             }
-            return toElement((ParserRuleContext) astNode.getChild(0));
+            return toElement((ParserRuleContext) astNode.getChild(0), parent);
         }
-        return new ReflectionElement(this, astNode, getEntity(astNode.getClass()));
+        return new ReflectionElement(this, astNode, getEntity(astNode.getClass()), parent);
     }
 }

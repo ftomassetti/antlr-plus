@@ -19,4 +19,6 @@ public interface Element {
     void removeMultipleRelationAt(Relation relation, int index);
     void setSingleProperty(Property property, Object value);
     Optional<Object> getSingleProperty(Property property);
+    List<Element> getAllChildren();
+    Optional<Element> getParent();
 }
