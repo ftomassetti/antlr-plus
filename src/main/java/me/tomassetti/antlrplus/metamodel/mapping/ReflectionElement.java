@@ -96,6 +96,15 @@ class ReflectionElement implements OrderedElement {
     }
 
     @Override
+    public Optional<Element> firstChild() {
+        if (getAllChildren().isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(getAllChildren().get(0));
+        }
+    }
+
+    @Override
     public Optional<Element> getSingleRelation(Relation relation) {
         Optional<ParserRuleContext> raw = getSingleRelationRaw(relation);
         return raw.map(e -> reflectionMapper.toElement(e, Optional.of(this)));

@@ -23,4 +23,5 @@ public interface Element {
     Optional<Object> getSingleProperty(Property property);
     List<Element> getAllChildren();
     Optional<Element> getParent();
+    Optional<Element> firstChild();
 }
