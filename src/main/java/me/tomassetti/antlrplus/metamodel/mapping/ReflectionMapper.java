@@ -26,6 +26,7 @@ public class ReflectionMapper {
     private static Set<String> methodNamesToIgnore = new HashSet<>(Arrays.asList("enterRule", "exitRule", "getRuleIndex"));
 
     private Set<Class<? extends ParserRuleContext>> transparentEntities = new HashSet<>();
+    private Set<Class<? extends ParserRuleContext>> toTreatAsToken = new HashSet<>();
     private Set<String> tokensToIgnore = new HashSet<>();
 
     public void markAsTransparent(Class<? extends ParserRuleContext> ruleClass) {
@@ -34,6 +35,10 @@ public class ReflectionMapper {
 
     public void markAsTokenToIgnore(String token) {
         tokensToIgnore.add(token);
+    }
+
+    public void markAsTreatAsToken(Class<? extends ParserRuleContext> ruleClass) {
+        toTreatAsToken.add(ruleClass);
     }
 
     public Entity getEntity(Class<? extends ParserRuleContext> ruleClass) {
@@ -117,22 +122,34 @@ public class ReflectionMapper {
                     } else {
                         Class<? extends ParserRuleContext> childType = (Class<? extends ParserRuleContext>)elementType;
                         if (notShadowedFieldsOfType(ruleClass, childType).isEmpty()) {
-                            Entity target = getEntity(skipTransparentClasses(childType));
-                            Relation relation = new Relation(method.getName(),
-                                    Relation.Type.CONTAINMENT,
-                                    Multiplicity.MANY,
-                                    entity,
-                                    target);
-                            entity.addRelation(relation);
-                        } else {
-                            for (Field f : notShadowedFieldsOfType(ruleClass, childType)) {
-                                Entity target = getEntity(skipTransparentClasses(childType));
-                                Relation relation = new Relation(f.getName(),
+                            Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
+                            if (toTreatAsToken.contains(effectiveChildType)) {
+                                Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.MANY);
+                                entity.addProperty(property);
+                            } else {
+                                Entity target = getEntity(effectiveChildType);
+                                Relation relation = new Relation(method.getName(),
                                         Relation.Type.CONTAINMENT,
-                                        f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
+                                        Multiplicity.MANY,
                                         entity,
                                         target);
                                 entity.addRelation(relation);
+                            }
+                        } else {
+                            for (Field f : notShadowedFieldsOfType(ruleClass, childType)) {
+                                Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
+                                if (toTreatAsToken.contains(effectiveChildType)) {
+                                    Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.MANY);
+                                    entity.addProperty(property);
+                                } else {
+                                    Entity target = getEntity(effectiveChildType);
+                                    Relation relation = new Relation(f.getName(),
+                                            Relation.Type.CONTAINMENT,
+                                            f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
+                                            entity,
+                                            target);
+                                    entity.addRelation(relation);
+                                }
                             }
                         }
                     }
@@ -145,22 +162,34 @@ public class ReflectionMapper {
                 } else {
                     Class<? extends ParserRuleContext> childType = (Class<? extends ParserRuleContext>)method.getReturnType();
                     if (notShadowedFieldsOfType(ruleClass, childType).isEmpty()) {
-                        Entity target = getEntity(skipTransparentClasses((Class<? extends ParserRuleContext>) childType));
-                        Relation relation = new Relation(method.getName(),
-                                Relation.Type.CONTAINMENT,
-                                Multiplicity.ONE,
-                                entity,
-                                target);
-                        entity.addRelation(relation);
-                    } else {
-                        for (Field f : notShadowedFieldsOfType(ruleClass, childType)) {
-                            Entity target = getEntity(skipTransparentClasses(childType));
-                            Relation relation = new Relation(f.getName(),
+                        Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
+                        if (toTreatAsToken.contains(effectiveChildType)) {
+                            Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.ONE);
+                            entity.addProperty(property);
+                        } else {
+                            Entity target = getEntity(effectiveChildType);
+                            Relation relation = new Relation(method.getName(),
                                     Relation.Type.CONTAINMENT,
-                                    f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
+                                    Multiplicity.ONE,
                                     entity,
                                     target);
                             entity.addRelation(relation);
+                        }
+                    } else {
+                        for (Field f : notShadowedFieldsOfType(ruleClass, childType)) {
+                            Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
+                            if (toTreatAsToken.contains(effectiveChildType)) {
+                                Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.ONE);
+                                entity.addProperty(property);
+                            } else {
+                                Entity target = getEntity(effectiveChildType);
+                                Relation relation = new Relation(f.getName(),
+                                        Relation.Type.CONTAINMENT,
+                                        f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
+                                        entity,
+                                        target);
+                                entity.addRelation(relation);
+                            }
                         }
                     }
                 }

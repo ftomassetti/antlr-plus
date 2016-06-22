@@ -9,6 +9,7 @@ import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.model.OrderedElement;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.lang.reflect.Field;
@@ -71,6 +72,10 @@ class ReflectionElement implements OrderedElement {
         List<Object> elements = new ArrayList<>();
         try {
             List<? extends Object> result = (List<? extends Object>)wrapped.getClass().getMethod(property.getName()).invoke(wrapped);
+
+            // if it was obtained from a Rule to be treated as token we need to convert it
+            //result = result.stream().map(e -> toToken(e)).collect(Collectors.toList());
+
             elements.addAll(result);
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
             throw new RuntimeException(e);
@@ -176,6 +181,14 @@ class ReflectionElement implements OrderedElement {
         throw new UnsupportedOperationException();
     }
 
+    /*private String toToken(Object value) {
+        if (value instanceof ParseTree) {
+            return ((ParseTree)value).getText();
+        } else {
+            throw new RuntimeException("Unexpected type: " + value.getClass().getCanonicalName());
+        }
+    }*/
+
     @Override
     public Optional<Object> getSingleProperty(Property property) {
         try {
@@ -230,13 +243,13 @@ class ReflectionElement implements OrderedElement {
                 Optional<Object> raw = getSingleProperty(property);
                 if (raw.isPresent()) {
                     ValueReference vr = new ValueReference(property, 0);
-                    positions.add(new Pair<>(vr, ((TerminalNode)raw.get()).getSourceInterval()));
+                    positions.add(new Pair<>(vr, ((ParseTree)raw.get()).getSourceInterval()));
                 }
             } else {
                 List<Object> raw = getMultipleProperty(property);
                 for (int i=0;i<raw.size();i++) {
                     ValueReference vr = new ValueReference(property, i);
-                    positions.add(new Pair<>(vr, ((TerminalNode)raw.get(i)).getSourceInterval()));
+                    positions.add(new Pair<>(vr, ((ParseTree)raw.get(i)).getSourceInterval()));
                 }
             }
         }

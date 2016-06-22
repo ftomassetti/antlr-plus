@@ -5,6 +5,7 @@ import me.tomassetti.antlrplus.metamodel.Relation;
 import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.model.OrderedElement;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -40,7 +41,7 @@ public class XmlExporter {
 
     private Node propertyValueNode(Object value, Document document, String role) {
         org.w3c.dom.Element node = document.createElement(role);
-        node.appendChild(document.createCDATASection(value.toString()));
+        node.appendChild(document.createCDATASection(((ParseTree)value).getText()));
         return node;
     }
 
