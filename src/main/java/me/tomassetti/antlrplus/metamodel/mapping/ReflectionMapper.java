@@ -3,7 +3,9 @@ package me.tomassetti.antlrplus.metamodel.mapping;
 import me.tomassetti.antlrplus.metamodel.*;
 import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.model.OrderedElement;
+import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.lang.reflect.Field;
@@ -16,11 +18,13 @@ import java.util.stream.Collectors;
 public class ReflectionMapper {
 
     private String[] ruleNames;
+    private Class<? extends Lexer> lexerClass;
 
     private Map<String, Entity> classesToEntities = new HashMap<>();
 
-    public ReflectionMapper(String[] ruleNames) {
+    public ReflectionMapper(String[] ruleNames, Class<? extends Lexer> lexerClass) {
         this.ruleNames = ruleNames;
+        this.lexerClass = lexerClass;
     }
 
     private static Set<String> methodNamesToIgnore = new HashSet<>(Arrays.asList("enterRule", "exitRule", "getRuleIndex"));
@@ -28,6 +32,7 @@ public class ReflectionMapper {
     private Set<Class<? extends ParserRuleContext>> transparentEntities = new HashSet<>();
     private Set<Class<? extends ParserRuleContext>> toTreatAsToken = new HashSet<>();
     private Set<String> tokensToIgnore = new HashSet<>();
+    private Set<Integer> typesOfTokensToIgnore = new HashSet<>();
 
     public void markAsTransparent(Class<? extends ParserRuleContext> ruleClass) {
         transparentEntities.add(ruleClass);
@@ -35,6 +40,14 @@ public class ReflectionMapper {
 
     public void markAsTokenToIgnore(String token) {
         tokensToIgnore.add(token);
+        try {
+            int type = (Integer)lexerClass.getDeclaredField(token).get(null);
+            typesOfTokensToIgnore.add(type);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void markAsTreatAsToken(Class<? extends ParserRuleContext> ruleClass) {
@@ -224,15 +237,36 @@ public class ReflectionMapper {
         throw new UnsupportedOperationException();
     }
 
+    private boolean isTerminalToBeIgnored(ParseTree parseTree) {
+        if (parseTree instanceof TerminalNode) {
+            TerminalNode terminalNode = (TerminalNode)parseTree;
+            return this.typesOfTokensToIgnore.contains(terminalNode.getSymbol().getType());
+        } else {
+            return false;
+        }
+    }
+
+    private List<ParseTree> relevantChildren(ParserRuleContext astNode) {
+        List<ParseTree> children = new LinkedList<>();
+        for (int i=0;i<astNode.getChildCount();i++) {
+            ParseTree child = astNode.getChild(i);
+            if (!isTerminalToBeIgnored(child)) {
+                children.add(child);
+            }
+        }
+        return children;
+    }
+
     public OrderedElement toElement(ParserRuleContext astNode, Optional<OrderedElement> parent) {
         if (transparentEntities.contains(astNode.getClass())) {
-            if (astNode.getChildCount() != 1) {
+            List<ParseTree> children = relevantChildren(astNode);
+            if (children.size() != 1) {
                 throw new IllegalArgumentException("Transparent rules are expected to have exactly one child: " + astNode.getClass());
             }
-            if (!(astNode.getChild(0) instanceof ParserRuleContext)) {
+            if (!(children.get(0) instanceof ParserRuleContext)) {
                 throw new IllegalArgumentException("A transparent rule only child is expected to be a non-terminal: " + astNode.getClass());
             }
-            return toElement((ParserRuleContext) astNode.getChild(0), parent);
+            return toElement((ParserRuleContext) children.get(0), parent);
         }
         return new ReflectionElement(this, astNode, getEntity(astNode.getClass()), parent);
     }

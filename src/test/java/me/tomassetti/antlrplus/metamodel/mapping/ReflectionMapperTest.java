@@ -24,7 +24,7 @@ public class ReflectionMapperTest {
 
     @Test
     public void singleInput() {
-        Entity entity = new ReflectionMapper(Python3Parser.ruleNames).getEntity(Python3Parser.Single_inputContext.class);
+        Entity entity = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).getEntity(Python3Parser.Single_inputContext.class);
         assertEquals("Single_input", entity.getName());
         assertEquals(false, entity.getParent().isPresent());
         assertEquals(1, entity.getProperties().size());
@@ -46,7 +46,7 @@ public class ReflectionMapperTest {
 
     @Test
     public void passStmt() {
-        Entity entity = new ReflectionMapper(Python3Parser.ruleNames).getEntity(Python3Parser.Pass_stmtContext.class);
+        Entity entity = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).getEntity(Python3Parser.Pass_stmtContext.class);
         assertEquals("Pass_stmt", entity.getName());
         assertEquals(false, entity.getParent().isPresent());
         assertEquals(1, entity.getProperties().size());
@@ -56,7 +56,7 @@ public class ReflectionMapperTest {
 
     @Test
     public void ifStmt() {
-        Entity entity = new ReflectionMapper(Python3Parser.ruleNames).getEntity(Python3Parser.If_stmtContext.class);
+        Entity entity = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).getEntity(Python3Parser.If_stmtContext.class);
         assertEquals("If_stmt", entity.getName());
         assertEquals(false, entity.getParent().isPresent());
         assertEquals(2, entity.getProperties().size());
@@ -88,7 +88,7 @@ public class ReflectionMapperTest {
     @Test
     public void toElement() {
         Python3Parser.Single_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"));
-        Element element = new ReflectionMapper(Python3Parser.ruleNames).toElement(astRoot, Optional.empty());
+        Element element = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
         Entity entity = element.type();
         assertEquals(true, element.getSingleRelation(entity.getRelation("simple_stmt").get()).isPresent());
         assertEquals(false, element.getSingleRelation(entity.getRelation("compound_stmt").get()).isPresent());

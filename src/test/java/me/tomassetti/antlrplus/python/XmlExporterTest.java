@@ -66,7 +66,7 @@ public class XmlExporterTest {
     @Test
     public void toXml() {
         Python3Parser.Single_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"));
-        OrderedElement element = new ReflectionMapper(Python3Parser.ruleNames).toElement(astRoot, Optional.empty());
+        OrderedElement element = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
         assertEquals("<root type=\"Single_input\">\n" +
                 "    <simple_stmt type=\"Simple_stmt\">\n" +
                 "        <small_stmt type=\"Small_stmt\">\n" +
