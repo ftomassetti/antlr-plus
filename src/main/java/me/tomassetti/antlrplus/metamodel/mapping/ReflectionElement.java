@@ -242,6 +242,14 @@ class ReflectionElement implements OrderedElement {
         return children;
     }
 
+    private Interval toInterval(Object propertyValue) {
+        if (propertyValue instanceof ParseTree) {
+            return ((ParseTree) propertyValue).getSourceInterval();
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public List<ValueReference> getValuesOrder() {
         List<Pair<ValueReference, Interval>> positions = new LinkedList<>();
@@ -266,13 +274,13 @@ class ReflectionElement implements OrderedElement {
                 Optional<Object> raw = getSingleProperty(property);
                 if (raw.isPresent()) {
                     ValueReference vr = new ValueReference(property, 0);
-                    positions.add(new Pair<>(vr, ((ParseTree)raw.get()).getSourceInterval()));
+                    positions.add(new Pair<>(vr, toInterval(raw.get())));
                 }
             } else {
                 List<Object> raw = getMultipleProperty(property);
                 for (int i=0;i<raw.size();i++) {
                     ValueReference vr = new ValueReference(property, i);
-                    positions.add(new Pair<>(vr, ((ParseTree)raw.get(i)).getSourceInterval()));
+                    positions.add(new Pair<>(vr, toInterval(raw.get(i))));
                 }
             }
         }
@@ -280,6 +288,12 @@ class ReflectionElement implements OrderedElement {
         positions.sort((o1, o2) -> {
             Interval i1 = o1.getValue();
             Interval i2 = o2.getValue();
+            if (i1 == null) {
+                return -1;
+            }
+            if (i2 == null) {
+                return 1;
+            }
             if (i1.startsAfter(i2)) {
                 return 1;
             } else if (i2.startsAfter(i1)){

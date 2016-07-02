@@ -39,9 +39,17 @@ public class XmlExporter {
         return toXml(astNode, createDocument(), role);
     }
 
+    private String propertyValueToString(Object propertyValue) {
+        if (propertyValue instanceof ParseTree) {
+            return ((ParseTree)propertyValue).getText();
+        } else {
+            return propertyValue.toString();
+        }
+    }
+
     private Node propertyValueNode(Object value, Document document, String role) {
         org.w3c.dom.Element node = document.createElement(role);
-        node.appendChild(document.createCDATASection(((ParseTree)value).getText()));
+        node.appendChild(document.createCDATASection(propertyValueToString(value)));
         return node;
     }
 
