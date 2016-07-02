@@ -3,6 +3,7 @@ package me.tomassetti.antlrplus.metamodel.mapping;
 import me.tomassetti.antlrplus.metamodel.Entity;
 import me.tomassetti.antlrplus.metamodel.Property;
 import me.tomassetti.antlrplus.metamodel.Relation;
+import me.tomassetti.antlrplus.model.AbstractOrderedElement;
 import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.model.OrderedElement;
 import me.tomassetti.antlrplus.util.Pair;
@@ -15,28 +16,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class ReflectionElement implements OrderedElement {
+public class AntlrReflectionElement extends AbstractOrderedElement {
 
     private ParserRuleContext wrapped;
-    private Entity entity;
-    private ReflectionMapper reflectionMapper;
-    private Optional<OrderedElement> parent;
-
-    @Override
-    public Optional<Element> getSingleRelation(String name) {
-        return this.getSingleRelation(this.type().getRelation(name).get());
-    }
+    private AntlrReflectionMapper reflectionMapper;
 
     private static final int EOF_TOKEN_TYPE = -1;
 
     private Optional<Object> lookForCommonProperty(String name) {
-        if (name.equals(ReflectionMapper.START_LINE.getName())) {
+        if (name.equals(AntlrReflectionMapper.START_LINE.getName())) {
             return Optional.of(this.wrapped.getStart().getLine());
-        } else if (name.equals(ReflectionMapper.END_LINE.getName())) {
+        } else if (name.equals(AntlrReflectionMapper.END_LINE.getName())) {
             return Optional.of(this.wrapped.getStop().getLine() + this.wrapped.getStop().getText().split("\n", -1).length - 1);
-        } else if (name.equals(ReflectionMapper.START_COLUMN.getName())) {
+        } else if (name.equals(AntlrReflectionMapper.START_COLUMN.getName())) {
             return Optional.of(this.wrapped.getStart().getCharPositionInLine());
-        } else if (name.equals(ReflectionMapper.END_COLUMN.getName())) {
+        } else if (name.equals(AntlrReflectionMapper.END_COLUMN.getName())) {
             if (this.wrapped.getStop().getType() == EOF_TOKEN_TYPE) {
                 return Optional.of(this.wrapped.getStop().getCharPositionInLine());
             }
@@ -69,26 +63,10 @@ class ReflectionElement implements OrderedElement {
                 '}';
     }
 
-    @Override
-    public Optional<Element> getParent() {
-        if (parent.isPresent()) {
-            return Optional.of(parent.get());
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    public ReflectionElement(ReflectionMapper reflectionMapper, ParserRuleContext wrapped, Entity entity, Optional<OrderedElement> parent) {
+    public AntlrReflectionElement(AntlrReflectionMapper reflectionMapper, ParserRuleContext wrapped, Entity entity, Optional<OrderedElement> parent) {
+        super(entity, parent);
         this.reflectionMapper = reflectionMapper;
         this.wrapped = wrapped;
-        this.entity = entity;
-
-        this.parent = parent;
-    }
-
-    @Override
-    public Entity type() {
-        return entity;
     }
 
     @Override
@@ -138,28 +116,9 @@ class ReflectionElement implements OrderedElement {
     }
 
     @Override
-    public Optional<Element> firstChild() {
-        if (getAllChildren().isEmpty()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(getAllChildren().get(0));
-        }
-    }
-
-    @Override
     public Optional<Element> getSingleRelation(Relation relation) {
         Optional<ParserRuleContext> raw = getSingleRelationRaw(relation);
         return raw.map(e -> reflectionMapper.toElement(e, Optional.of(this)));
-    }
-
-    @Override
-    public void setSingleRelation(Relation relation, Element element) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int getMultipleRelationCount(Relation relation) {
-        throw new UnsupportedOperationException();
     }
 
     private List<? extends ParserRuleContext> getMultipleRelationRaw(Relation relation) {
@@ -189,26 +148,6 @@ class ReflectionElement implements OrderedElement {
     }
 
     @Override
-    public Element getMultipleRelationAt(Relation relation, int index) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addMultipleRelation(Relation relation, Element element) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void removeMultipleRelationAt(Relation relation, int index) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setSingleProperty(Property property, Object value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Optional<Object> getSingleProperty(Property property) {
         Optional<Object> res = lookForCommonProperty(property.getName());
         if (res.isPresent()) {
@@ -224,22 +163,6 @@ class ReflectionElement implements OrderedElement {
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public List<Element> getAllChildren() {
-        List<Element> children = new LinkedList<>();
-        for (Relation relation : this.type().getRelations()) {
-            if (relation.isSingle()) {
-                Optional<Element> child = this.getSingleRelation(relation);
-                if (child.isPresent()) {
-                    children.add(child.get());
-                }
-            } else {
-                children.addAll(this.getMultipleRelation(relation));
-            }
-        }
-        return children;
     }
 
     private Interval toInterval(Object propertyValue) {

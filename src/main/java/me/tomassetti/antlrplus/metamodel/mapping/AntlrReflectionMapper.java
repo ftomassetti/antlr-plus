@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ReflectionMapper {
+public class AntlrReflectionMapper {
 
     private String[] ruleNames;
     private Class<? extends Lexer> lexerClass;
@@ -31,7 +31,7 @@ public class ReflectionMapper {
 
     private Map<String, Entity> classesToEntities = new HashMap<>();
 
-    public ReflectionMapper(String[] ruleNames, Class<? extends Lexer> lexerClass) {
+    public AntlrReflectionMapper(String[] ruleNames, Class<? extends Lexer> lexerClass) {
         this.ruleNames = ruleNames;
         this.lexerClass = lexerClass;
     }
@@ -125,6 +125,10 @@ public class ReflectionMapper {
     public static final Property END_LINE = new Property("endLine", Property.Datatype.INTEGER, Multiplicity.ONE);
     public static final Property START_COLUMN = new Property("startColumn", Property.Datatype.INTEGER, Multiplicity.ONE);
     public static final Property END_COLUMN = new Property("endColumn", Property.Datatype.INTEGER, Multiplicity.ONE);
+
+    protected void postProcessEntity(Entity entity) {
+
+    }
 
     private void registerEntity(Class<? extends ParserRuleContext> ruleClass) {
         String name = ruleClass.getSimpleName();
@@ -230,6 +234,7 @@ public class ReflectionMapper {
                 }
             }
         }
+        postProcessEntity(entity);
     }
 
     private Class<? extends ParserRuleContext> getOnlySingleRelation(Class<? extends ParserRuleContext> ruleClass) {
@@ -290,6 +295,10 @@ public class ReflectionMapper {
             }
             return toElement((ParserRuleContext) children.get(0), parent);
         }
-        return new ReflectionElement(this, astNode, getEntity(astNode.getClass()), parent);
+        return instantiateElement(astNode, parent);
+    }
+
+    protected OrderedElement instantiateElement(ParserRuleContext astNode, Optional<OrderedElement> parent) {
+        return new AntlrReflectionElement(this, astNode, getEntity(astNode.getClass()), parent);
     }
 }

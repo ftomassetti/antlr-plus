@@ -1,8 +1,7 @@
 package me.tomassetti.antlrplus.python;
 
 import me.tomassetti.antlrplus.ParserFacade;
-import me.tomassetti.antlrplus.metamodel.mapping.ReflectionMapper;
-import me.tomassetti.antlrplus.model.Element;
+import me.tomassetti.antlrplus.metamodel.mapping.AntlrReflectionMapper;
 import me.tomassetti.antlrplus.model.OrderedElement;
 import me.tomassetti.antlrplus.xml.XmlExporter;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -66,7 +65,7 @@ public class XmlExporterTest {
     @Test
     public void toXml() {
         Python3Parser.Single_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"));
-        OrderedElement element = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
+        OrderedElement element = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
         assertEquals("<root type=\"Single_input\">\n" +
                 "    <simple_stmt type=\"Simple_stmt\">\n" +
                 "        <small_stmt type=\"Small_stmt\">\n" +

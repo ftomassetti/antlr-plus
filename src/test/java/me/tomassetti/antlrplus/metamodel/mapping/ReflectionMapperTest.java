@@ -6,7 +6,6 @@ import me.tomassetti.antlrplus.metamodel.Entity;
 import me.tomassetti.antlrplus.metamodel.Multiplicity;
 import me.tomassetti.antlrplus.metamodel.Property;
 import me.tomassetti.antlrplus.metamodel.Relation;
-import me.tomassetti.antlrplus.metamodel.mapping.ReflectionMapper;
 import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.python.Python3Lexer;
 import me.tomassetti.antlrplus.python.Python3Parser;
@@ -15,7 +14,6 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 import org.junit.Test;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,7 +23,7 @@ public class ReflectionMapperTest {
 
     @Test
     public void singleInput() {
-        Entity entity = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).getEntity(Python3Parser.Single_inputContext.class);
+        Entity entity = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).getEntity(Python3Parser.Single_inputContext.class);
         assertEquals("Single_input", entity.getName());
         assertEquals(false, entity.getParent().isPresent());
         assertEquals(1, entity.getProperties().size());
@@ -47,7 +45,7 @@ public class ReflectionMapperTest {
 
     @Test
     public void lineAndColumns() {
-        ReflectionMapper reflectionMapper = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class);
+        AntlrReflectionMapper reflectionMapper = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class);
         reflectionMapper.setAddPositions(true);
         Entity entity = reflectionMapper.getEntity(Python3Parser.Single_inputContext.class);
         assertEquals("Single_input", entity.getName());
@@ -60,7 +58,7 @@ public class ReflectionMapperTest {
 
     @Test
     public void passStmt() {
-        Entity entity = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).getEntity(Python3Parser.Pass_stmtContext.class);
+        Entity entity = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).getEntity(Python3Parser.Pass_stmtContext.class);
         assertEquals("Pass_stmt", entity.getName());
         assertEquals(false, entity.getParent().isPresent());
         assertEquals(1, entity.getProperties().size());
@@ -70,7 +68,7 @@ public class ReflectionMapperTest {
 
     @Test
     public void ifStmt() {
-        Entity entity = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).getEntity(Python3Parser.If_stmtContext.class);
+        Entity entity = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).getEntity(Python3Parser.If_stmtContext.class);
         assertEquals("If_stmt", entity.getName());
         assertEquals(false, entity.getParent().isPresent());
         assertEquals(2, entity.getProperties().size());
@@ -102,7 +100,7 @@ public class ReflectionMapperTest {
     @Test
     public void toElement() {
         Python3Parser.Single_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"));
-        Element element = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
+        Element element = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
         Entity entity = element.type();
         assertEquals(true, element.getSingleRelation(entity.getRelation("simple_stmt").get()).isPresent());
         assertEquals(false, element.getSingleRelation(entity.getRelation("compound_stmt").get()).isPresent());
@@ -110,11 +108,11 @@ public class ReflectionMapperTest {
 
     @Test
     public void testIsListOf() throws NoSuchFieldException {
-        assertEquals(true, ReflectionMapper.isListOf(Python3Parser.If_stmtContext.class.getField("elifs").getGenericType(), Python3Parser.ElifClauseContext.class));
+        assertEquals(true, AntlrReflectionMapper.isListOf(Python3Parser.If_stmtContext.class.getField("elifs").getGenericType(), Python3Parser.ElifClauseContext.class));
     }
 
     @Test
     public void testFieldsOfType() {
-        assertEquals(2, ReflectionMapper.fieldsOfType(Python3Parser.If_stmtContext.class, Python3Parser.ElifClauseContext.class).size());
+        assertEquals(2, AntlrReflectionMapper.fieldsOfType(Python3Parser.If_stmtContext.class, Python3Parser.ElifClauseContext.class).size());
     }
 }

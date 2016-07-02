@@ -34,11 +34,11 @@ public class ReflectionElementTest {
 
     @Test
     public void lineAndColumnsSimplest() {
-        ReflectionMapper reflectionMapper = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class);
+        AntlrReflectionMapper reflectionMapper = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class);
         reflectionMapper.setAddPositions(true);
 
         Python3Parser.File_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"));
-        OrderedElement rootElement = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
+        OrderedElement rootElement = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
 
         assertEquals(1, rootElement.getSingleProperty("startLine").get());
         assertEquals(2, rootElement.getSingleProperty("endLine").get());
@@ -48,11 +48,11 @@ public class ReflectionElementTest {
 
     @Test
     public void lineAndColumnsSimple() {
-        ReflectionMapper reflectionMapper = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class);
+        AntlrReflectionMapper reflectionMapper = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class);
         reflectionMapper.setAddPositions(true);
 
         Python3Parser.File_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/main.py"));
-        OrderedElement rootElement = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
+        OrderedElement rootElement = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
 
         assertEquals(1, rootElement.getSingleProperty("startLine").get());
         assertEquals(3, rootElement.getSingleProperty("endLine").get());
@@ -62,12 +62,12 @@ public class ReflectionElementTest {
 
     @Test
     public void lineAndColumnsCommon() {
-        ReflectionMapper reflectionMapper = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class);
+        AntlrReflectionMapper reflectionMapper = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class);
         reflectionMapper.setAddPositions(true);
 
         Python3Parser.File_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/common.py"));
 
-        OrderedElement rootElement = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
+        OrderedElement rootElement = new AntlrReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class).toElement(astRoot, Optional.empty());
 
         assertEquals(1, rootElement.getSingleProperty("startLine").get());
         assertEquals(120, rootElement.getSingleProperty("endLine").get());
