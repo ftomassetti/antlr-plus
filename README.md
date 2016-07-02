@@ -11,6 +11,8 @@ Once you have the AST you are on your own. At that point you may want to use ant
 Antlr-plus has been built to support ANTLR users in performing the typical operation that they want to perform on the AST,
 to reshape the data they obtained from the paerser and use it more easily.
 
+It is a lightweight alternative to more heavy platforms like [EMF](https://en.wikipedia.org/wiki/Eclipse_Modeling_Framework).
+
 ### Maintainer
 
 The creator and the  maintainer of the project is me, Federico Tomassetti. You can read about my thoughts on Language Engineering
