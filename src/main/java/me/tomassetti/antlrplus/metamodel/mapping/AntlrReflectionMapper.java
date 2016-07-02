@@ -284,6 +284,10 @@ public class AntlrReflectionMapper {
         return children;
     }
 
+    public OrderedElement toRootElement(ParserRuleContext astNode) {
+        return toElement(astNode, Optional.empty());
+    }
+
     public OrderedElement toElement(ParserRuleContext astNode, Optional<OrderedElement> parent) {
         if (transparentEntities.contains(astNode.getClass())) {
             List<ParseTree> children = relevantChildren(astNode);
