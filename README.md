@@ -13,6 +13,40 @@ to reshape the data they obtained from the paerser and use it more easily.
 
 It is a lightweight alternative to more heavy platforms like [EMF](https://en.wikipedia.org/wiki/Eclipse_Modeling_Framework).
 
+### Introduction
+
+The goal of antlr-plus is taking advantage of all the information available from the ANTLR parser and the AST. You can obtain for free a metamodel and a model.
+
+You have also the possibility to configure the mapping process, from the ANTLR parser to the metamodel and from the AST to the model.
+
+If this is not enough you can simply extends the framework as you wish by implementing the right interface or extending the right class.
+
+### Getting the metamodel
+
+```
+// You can get the corresponding definition for your rule in this way
+Entity entity = new AntlrReflectionMapper(MyAntlrParser.ruleNames, MyAntlrLexer.class).getEntity(MyAntlrParser.SomeRuleContext.class);
+// Once you have an entity you can ask it the properties or the relations to other rules
+entity.getProperties();
+entity.getRelations();
+```
+
+### Getting the model
+
+```
+AntlrReflectionMapper refMapper = new AntlrReflectionMapper(MyAntlrParser.ruleNames, MyAntlrLexer.class);
+// rootNode is the AST node obtained from ANTLR
+OrderedElement element = refMapper.toRootElement(rootNode);
+```
+
+### Dumping to XML
+
+```
+OrderedElement myElement;
+XmlExporter xmlExporter = new XmlExporter();
+xmlExporter.toXmlFile(myElement, new File("aFile.xml"));
+```
+
 ### Maintainer
 
 The creator and the  maintainer of the project is me, Federico Tomassetti. You can read about my thoughts on Language Engineering
