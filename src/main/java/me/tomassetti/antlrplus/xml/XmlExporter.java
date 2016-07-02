@@ -22,12 +22,28 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class XmlExporter {
 
+    public enum PropertySetting {
+        AS_NODE,
+        AS_NODE_WITH_CDATA,
+        AS_ATTRIBUTE
+    }
+
     public static final String ROOT_ROLE = "root";
+
+    private boolean useCDataByDefault = true;
+
+    public void setUseCDataByDefault(boolean useCDataByDefault) {
+        this.useCDataByDefault = useCDataByDefault;
+    }
+
+    private Map<Property, PropertySetting> propertySettings = new HashMap<>();
 
     private boolean printProperties = true;
 
@@ -39,6 +55,25 @@ public class XmlExporter {
         return toXml(astNode, createDocument(), role);
     }
 
+    public void setPropertySetting(Property property, PropertySetting setting) {
+        if (!property.isSingle() && setting==PropertySetting.AS_ATTRIBUTE) {
+            throw new IllegalArgumentException("Single property cannot be configured to be printed as attributes");
+        }
+        propertySettings.put(property, setting);
+    }
+
+    private PropertySetting getPropertySetting(Property property) {
+        if (propertySettings.containsKey(property)) {
+            return propertySettings.get(property);
+        } else {
+            if (useCDataByDefault) {
+                return PropertySetting.AS_NODE_WITH_CDATA;
+            } else {
+                return PropertySetting.AS_NODE;
+            }
+        }
+    }
+
     private String propertyValueToString(Object propertyValue) {
         if (propertyValue instanceof ParseTree) {
             return ((ParseTree)propertyValue).getText();
@@ -47,9 +82,13 @@ public class XmlExporter {
         }
     }
 
-    private Node propertyValueNode(Object value, Document document, String role) {
+    private Node propertyValueNode(Object value, Document document, String role, boolean useCdata) {
         org.w3c.dom.Element node = document.createElement(role);
-        node.appendChild(document.createCDATASection(propertyValueToString(value)));
+        if (useCdata) {
+            node.appendChild(document.createCDATASection(propertyValueToString(value)));
+        } else {
+            node.appendChild(document.createTextNode(propertyValueToString(value)));
+        }
         return node;
     }
 
@@ -77,7 +116,20 @@ public class XmlExporter {
         astNode.getValuesOrder().forEach(valueReference -> {
             if (valueReference.getFeature().isProperty()) {
                 if (printProperties) {
-                    node.appendChild(propertyValueNode(getPropertyValue(astNode, valueReference), document, valueReference.getFeature().getName()));
+                    PropertySetting ps = getPropertySetting(valueReference.getFeature().asProperty());
+                    switch (ps) {
+                        case AS_NODE:
+                        case AS_NODE_WITH_CDATA:
+                            node.appendChild(propertyValueNode(getPropertyValue(astNode, valueReference),
+                                    document, valueReference.getFeature().getName(), ps == PropertySetting.AS_NODE_WITH_CDATA));
+                            break;
+                        case AS_ATTRIBUTE:
+                            node.setAttribute(valueReference.getFeature().getName(),
+                                    propertyValueToString(getPropertyValue(astNode, valueReference)));
+                            break;
+                        default:
+                            throw new RuntimeException("Unknown value: " + ps);
+                    }
                 }
             } else {
                 node.appendChild(toXml(getRelationValue(astNode, valueReference), document, valueReference.getFeature().getName()));
