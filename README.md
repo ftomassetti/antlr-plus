@@ -1,5 +1,7 @@
 # antlr-plus
 
+[![Build Status](https://travis-ci.org/ftomassetti/antlr-plus.svg?branch=master)](https://travis-ci.org/ftomassetti/antlr-plus)
+
 Using ANTLR is a great way to define a parser. Once you have a parser you can get an Abstract Syntax Tree. 
 Once you have the AST you are on your own. At that point you may want to use antlr-plus to implement the next steps:
 
