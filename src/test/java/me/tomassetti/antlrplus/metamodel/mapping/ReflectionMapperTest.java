@@ -1,5 +1,6 @@
 package me.tomassetti.antlrplus.metamodel.mapping;
 
+import com.google.common.collect.ImmutableSet;
 import me.tomassetti.antlrplus.ParserFacade;
 import me.tomassetti.antlrplus.metamodel.Entity;
 import me.tomassetti.antlrplus.metamodel.Multiplicity;
@@ -42,6 +43,19 @@ public class ReflectionMapperTest {
         assertEquals(Multiplicity.ONE, compound_stmt.getMultiplicity());
         assertEquals("Single_input", compound_stmt.getSource().getName());
         assertEquals("Compound_stmt", compound_stmt.getTarget().getName());
+    }
+
+    @Test
+    public void lineAndColumns() {
+        ReflectionMapper reflectionMapper = new ReflectionMapper(Python3Parser.ruleNames, Python3Lexer.class);
+        reflectionMapper.setAddPositions(true);
+        Entity entity = reflectionMapper.getEntity(Python3Parser.Single_inputContext.class);
+        assertEquals("Single_input", entity.getName());
+        assertEquals(false, entity.getParent().isPresent());
+        assertEquals(5, entity.getProperties().size());
+        assertEquals(ImmutableSet.of("NEWLINE", "startLine", "endLine", "startColumn", "endColumn"),
+                entity.getProperties().stream().map(Property::getName).collect(Collectors.toSet()));
+
     }
 
     @Test

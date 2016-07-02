@@ -1,16 +1,14 @@
 package me.tomassetti.antlrplus.metamodel.mapping;
 
-import javafx.util.Pair;
 import me.tomassetti.antlrplus.metamodel.Entity;
-import me.tomassetti.antlrplus.metamodel.Feature;
 import me.tomassetti.antlrplus.metamodel.Property;
 import me.tomassetti.antlrplus.metamodel.Relation;
 import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.model.OrderedElement;
+import me.tomassetti.antlrplus.util.Pair;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -29,8 +27,37 @@ class ReflectionElement implements OrderedElement {
         return this.getSingleRelation(this.type().getRelation(name).get());
     }
 
+    private static final int EOF_TOKEN_TYPE = -1;
+
+    private Optional<Object> lookForCommonProperty(String name) {
+        if (name.equals(ReflectionMapper.START_LINE.getName())) {
+            return Optional.of(this.wrapped.getStart().getLine());
+        } else if (name.equals(ReflectionMapper.END_LINE.getName())) {
+            return Optional.of(this.wrapped.getStop().getLine() + this.wrapped.getStop().getText().split("\n", -1).length - 1);
+        } else if (name.equals(ReflectionMapper.START_COLUMN.getName())) {
+            return Optional.of(this.wrapped.getStart().getCharPositionInLine());
+        } else if (name.equals(ReflectionMapper.END_COLUMN.getName())) {
+            if (this.wrapped.getStop().getType() == EOF_TOKEN_TYPE) {
+                return Optional.of(this.wrapped.getStop().getCharPositionInLine());
+            }
+            String[] lines = this.wrapped.getStop().getText().split("\n", -1);
+            if (lines.length == 1) {
+                return Optional.of(this.wrapped.getStop().getCharPositionInLine() + this.wrapped.getStop().getText().length());
+            } else {
+                return Optional.of(lines[lines.length - 1].length());
+            }
+        } else {
+            return Optional.empty();
+        }
+    }
+
     @Override
     public Optional<Object> getSingleProperty(String name) {
+        Optional<Object> res = lookForCommonProperty(name);
+        if (res.isPresent()) {
+            return res;
+        }
+
         return this.getSingleProperty(this.type().getProperty(name).get());
     }
 
@@ -181,16 +208,12 @@ class ReflectionElement implements OrderedElement {
         throw new UnsupportedOperationException();
     }
 
-    /*private String toToken(Object value) {
-        if (value instanceof ParseTree) {
-            return ((ParseTree)value).getText();
-        } else {
-            throw new RuntimeException("Unexpected type: " + value.getClass().getCanonicalName());
-        }
-    }*/
-
     @Override
     public Optional<Object> getSingleProperty(Property property) {
+        Optional<Object> res = lookForCommonProperty(property.getName());
+        if (res.isPresent()) {
+            return res;
+        }
         try {
             Object result = wrapped.getClass().getMethod(property.getName()).invoke(wrapped);
             if (result == null) {

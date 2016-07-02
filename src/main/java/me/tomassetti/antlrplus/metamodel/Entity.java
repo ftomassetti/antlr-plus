@@ -23,7 +23,6 @@ public class Entity {
     @Override
     public String toString() {
         return "Entity{" +
-
                 "name='" + name + '\'' +
                 ", properties=" + properties +
                 ", relations=" + relations +

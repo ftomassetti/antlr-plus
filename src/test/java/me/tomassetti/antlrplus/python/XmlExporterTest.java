@@ -26,13 +26,13 @@ public class XmlExporterTest {
         Type listType = method.getGenericReturnType();
         if (listType instanceof ParameterizedType) {
             Type elementType = ((ParameterizedType) listType).getActualTypeArguments()[0];
-            System.out.println("ELEMENT TYPE "+elementType);
+            //System.out.println("ELEMENT TYPE "+elementType);
         }}
         {Method method = clazz.getMethod("NEWLINE");
             Type listType = method.getGenericReturnType();
             if (listType instanceof ParameterizedType) {
                 Type elementType = ((ParameterizedType) listType).getActualTypeArguments()[0];
-                System.out.println("ELEMENT TYPE "+elementType);
+               // System.out.println("ELEMENT TYPE "+elementType);
             }}
 
     }
@@ -58,7 +58,7 @@ public class XmlExporterTest {
     public void parse() {
         Python3Parser.Single_inputContext astRoot = parserFacade.parseStream(this.getClass().getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"));
         String name = Python3Parser.ruleNames[astRoot.getRuleIndex()];
-        System.out.println(name);
+        //System.out.println(name);
         //String xmlCode = new XmlExporter().toXmlString(astRoot);
 
     }

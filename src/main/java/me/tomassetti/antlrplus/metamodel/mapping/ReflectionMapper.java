@@ -1,7 +1,6 @@
 package me.tomassetti.antlrplus.metamodel.mapping;
 
 import me.tomassetti.antlrplus.metamodel.*;
-import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.model.OrderedElement;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -19,6 +18,16 @@ public class ReflectionMapper {
 
     private String[] ruleNames;
     private Class<? extends Lexer> lexerClass;
+
+    public boolean addPositions = false;
+
+    public boolean isAddPositions() {
+        return addPositions;
+    }
+
+    public void setAddPositions(boolean addPositions) {
+        this.addPositions = addPositions;
+    }
 
     private Map<String, Entity> classesToEntities = new HashMap<>();
 
@@ -112,12 +121,25 @@ public class ReflectionMapper {
         }
     }
 
+    public static final Property START_LINE = new Property("startLine", Property.Datatype.INTEGER, Multiplicity.ONE);
+    public static final Property END_LINE = new Property("endLine", Property.Datatype.INTEGER, Multiplicity.ONE);
+    public static final Property START_COLUMN = new Property("startColumn", Property.Datatype.INTEGER, Multiplicity.ONE);
+    public static final Property END_COLUMN = new Property("endColumn", Property.Datatype.INTEGER, Multiplicity.ONE);
+
     private void registerEntity(Class<? extends ParserRuleContext> ruleClass) {
         String name = ruleClass.getSimpleName();
         if (!name.endsWith("Context")) {
             throw new RuntimeException("Name is not ending in Context: "+name);
         }
         Entity entity = new Entity(name.substring(0, name.length() - "Context".length()));
+
+        if (this.addPositions) {
+            entity.addProperty(START_LINE);
+            entity.addProperty(END_LINE);
+            entity.addProperty(START_COLUMN);
+            entity.addProperty(END_COLUMN);
+        }
+
         // store immediately: so we can support recursive references
         classesToEntities.put(ruleClass.getCanonicalName(), entity);
 
