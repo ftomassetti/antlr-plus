@@ -8,6 +8,7 @@ import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.model.OrderedElement;
 import me.tomassetti.antlrplus.util.Pair;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -31,15 +32,16 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
         } else if (name.equals(AntlrReflectionMapper.START_COLUMN.getName())) {
             return Optional.of(this.wrapped.getStart().getCharPositionInLine());
         } else if (name.equals(AntlrReflectionMapper.END_COLUMN.getName())) {
-            if (this.wrapped.getStop() == null) {
-                throw new IllegalStateException("The node has no stop token. Wrapped class: "+wrapped.getClass().getCanonicalName());
+            Token stop = this.wrapped.getStop();
+            if (stop == null) {
+                stop = this.wrapped.getStart();
             }
-            if (this.wrapped.getStop().getType() == EOF_TOKEN_TYPE) {
-                return Optional.of(this.wrapped.getStop().getCharPositionInLine());
+            if (stop.getType() == EOF_TOKEN_TYPE) {
+                return Optional.of(stop.getCharPositionInLine());
             }
-            String[] lines = this.wrapped.getStop().getText().split("\n", -1);
+            String[] lines = stop.getText().split("\n", -1);
             if (lines.length == 1) {
-                return Optional.of(this.wrapped.getStop().getCharPositionInLine() + this.wrapped.getStop().getText().length());
+                return Optional.of(stop.getCharPositionInLine() + stop.getText().length());
             } else {
                 return Optional.of(lines[lines.length - 1].length());
             }
