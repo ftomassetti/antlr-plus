@@ -36,6 +36,18 @@ public class AntlrReflectionMapper {
         this.lexerClass = lexerClass;
     }
 
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    private boolean debug = false;
+
+    public void debugMsg(String msg) {
+        if (debug) {
+            System.out.println("ARM DEBUG " + msg);
+        }
+    }
+
     private static Set<String> methodNamesToIgnore = new HashSet<>(Arrays.asList("enterRule", "exitRule", "getRuleIndex"));
 
     private Set<Class<? extends ParserRuleContext>> transparentEntities = new HashSet<>();
@@ -50,8 +62,12 @@ public class AntlrReflectionMapper {
     public void markAsTokenToIgnore(String token) {
         tokensToIgnore.add(token);
         try {
-            int type = (Integer)lexerClass.getDeclaredField(token).get(null);
-            typesOfTokensToIgnore.add(type);
+            if (token.equals("EOF")) {
+                typesOfTokensToIgnore.add(-1);
+            } else {
+                int type = (Integer) lexerClass.getDeclaredField(token).get(null);
+                typesOfTokensToIgnore.add(type);
+            }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (NoSuchFieldException e) {
@@ -95,7 +111,7 @@ public class AntlrReflectionMapper {
 
     private static List<Field> notShadowedFieldsOfType(Class<? extends ParserRuleContext> ruleClass, Class<? extends ParserRuleContext> childType) {
         List<Field> fields = fieldsOfType(ruleClass, childType);
-        // a field is shadowed if it is name as the type and there are other fields containing a List of that type
+        // a field is shadowed if it is named as the type and there are other fields containing a List of that type
         if (fields.size() > 1) {
             List<Field> filtered = new LinkedList<>();
             for (Field field : fields) {
@@ -149,21 +165,28 @@ public class AntlrReflectionMapper {
 
         for (Method method : ruleClass.getDeclaredMethods()) {
             if (!methodNamesToIgnore.contains(method.getName()) && method.getParameterCount() == 0) {
+                debugMsg("Considering method "+method.getName());
                 if (method.getReturnType().getCanonicalName().equals(List.class.getCanonicalName())) {
+                    debugMsg("Method returning a list");
                     ParameterizedType listType = (ParameterizedType)method.getGenericReturnType();
                     Class elementType = (Class) listType.getActualTypeArguments()[0];
                     if (elementType.getCanonicalName().equals(TerminalNode.class.getCanonicalName())) {
+                        debugMsg("Method returning a list of terminals");
                         // for now we look at the method name to recognize the properties to ignore
                         if (!tokensToIgnore.contains(method.getName())) {
                             Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.MANY);
+                            debugMsg("Adding property " + property);
                             entity.addProperty(property);
                         }
                     } else {
                         Class<? extends ParserRuleContext> childType = (Class<? extends ParserRuleContext>)elementType;
+                        debugMsg("Method returning a list of non-terminals of type "+ childType);
                         if (notShadowedFieldsOfType(ruleClass, childType).isEmpty()) {
+                            debugMsg("All fields shadowed");
                             Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
                             if (toTreatAsToken.contains(effectiveChildType)) {
                                 Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.MANY);
+                                debugMsg("Adding property " + property);
                                 entity.addProperty(property);
                             } else {
                                 Entity target = getEntity(effectiveChildType);
@@ -172,13 +195,16 @@ public class AntlrReflectionMapper {
                                         Multiplicity.MANY,
                                         entity,
                                         target);
+                                debugMsg("Adding relation " + relation);
                                 entity.addRelation(relation);
                             }
                         } else {
+                            debugMsg("Not all fields shadowed");
                             for (Field f : notShadowedFieldsOfType(ruleClass, childType)) {
                                 Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
                                 if (toTreatAsToken.contains(effectiveChildType)) {
-                                    Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.MANY);
+                                    Property property = new Property(f.getName(), Property.Datatype.STRING, f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE);
+                                    debugMsg("Adding property " + property + " from field "+f);
                                     entity.addProperty(property);
                                 } else {
                                     Entity target = getEntity(effectiveChildType);
@@ -187,23 +213,28 @@ public class AntlrReflectionMapper {
                                             f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
                                             entity,
                                             target);
+                                    debugMsg("Adding relation " + relation + " from field "+f);
                                     entity.addRelation(relation);
                                 }
                             }
                         }
                     }
                 } else if (method.getReturnType().getCanonicalName().equals(TerminalNode.class.getCanonicalName())) {
+                    debugMsg("Method returning a single terminal");
                     // for now we look at the method name to recognize the properties to ignore
                     if (!tokensToIgnore.contains(method.getName())) {
                         Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.ONE);
+                        debugMsg("Adding property " + property);
                         entity.addProperty(property);
                     }
                 } else {
                     Class<? extends ParserRuleContext> childType = (Class<? extends ParserRuleContext>)method.getReturnType();
+                    debugMsg("Method returning a single non-terminal "+childType);
                     if (notShadowedFieldsOfType(ruleClass, childType).isEmpty()) {
                         Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
                         if (toTreatAsToken.contains(effectiveChildType)) {
                             Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.ONE);
+                            debugMsg("Adding property " + property);
                             entity.addProperty(property);
                         } else {
                             Entity target = getEntity(effectiveChildType);
@@ -212,13 +243,15 @@ public class AntlrReflectionMapper {
                                     Multiplicity.ONE,
                                     entity,
                                     target);
+                            debugMsg("Adding relation " + relation);
                             entity.addRelation(relation);
                         }
                     } else {
                         for (Field f : notShadowedFieldsOfType(ruleClass, childType)) {
                             Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
                             if (toTreatAsToken.contains(effectiveChildType)) {
-                                Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.ONE);
+                                Property property = new Property(f.getName(), Property.Datatype.STRING, f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE);
+                                debugMsg("Adding property " + property + " from field "+f);
                                 entity.addProperty(property);
                             } else {
                                 Entity target = getEntity(effectiveChildType);
@@ -227,6 +260,7 @@ public class AntlrReflectionMapper {
                                         f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
                                         entity,
                                         target);
+                                debugMsg("Adding relation " + relation + " from field "+f);
                                 entity.addRelation(relation);
                             }
                         }
@@ -292,7 +326,7 @@ public class AntlrReflectionMapper {
         if (transparentEntities.contains(astNode.getClass())) {
             List<ParseTree> children = relevantChildren(astNode);
             if (children.size() != 1) {
-                throw new IllegalArgumentException("Transparent rules are expected to have exactly one child: " + astNode.getClass());
+                throw new IllegalArgumentException("Transparent rules are expected to have exactly one child: " + astNode.getClass() + " while it has " + children.size());
             }
             if (!(children.get(0) instanceof ParserRuleContext)) {
                 throw new IllegalArgumentException("A transparent rule only child is expected to be a non-terminal: " + astNode.getClass());

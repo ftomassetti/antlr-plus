@@ -43,6 +43,9 @@ public class Entity {
     }
 
     public void addProperty(Property property) {
+        if (properties.stream().filter(p -> p.getName().equals(property.getName())).count() > 0) {
+            throw new IllegalArgumentException("Duplicate property name "+property.getName()+ " for entity "+this.getName());
+        }
         this.properties.add(property);
         this.features.add(property);
         this.properties.sort(new Comparator<Property>() {
@@ -54,6 +57,9 @@ public class Entity {
     }
 
     public void addRelation(Relation relation) {
+        if (relations.stream().filter(p -> p.getName().equals(relation.getName())).count() > 0) {
+            throw new IllegalArgumentException("Duplicate relation name "+relation.getName()+ " for entity "+this.getName());
+        }
         this.relations.add(relation);
         this.features.add(relation);
         this.relations.sort(new Comparator<Relation>() {

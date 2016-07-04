@@ -76,13 +76,20 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
         }
         List<Object> elements = new ArrayList<>();
         try {
-            List<? extends Object> result = (List<? extends Object>)wrapped.getClass().getMethod(property.getName()).invoke(wrapped);
+            List<? extends Object> result = (List<? extends Object>) wrapped.getClass().getMethod(property.getName()).invoke(wrapped);
 
             // if it was obtained from a Rule to be treated as token we need to convert it
             //result = result.stream().map(e -> toToken(e)).collect(Collectors.toList());
 
             elements.addAll(result);
-        } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
+            try {
+                List<? extends Object> result = (List<? extends Object>) wrapped.getClass().getField(property.getName()).get(wrapped);
+                elements.addAll(result);
+            } catch (IllegalAccessException|NoSuchFieldException e1) {
+                throw new RuntimeException(e1);
+            }
+        } catch (IllegalAccessException|InvocationTargetException e) {
             throw new RuntimeException(e);
         }
         return elements;
@@ -160,7 +167,18 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
             } else {
                 return Optional.of(result);
             }
-        } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
+            try {
+                Object result = wrapped.getClass().getField(property.getName()).get(wrapped);
+                if (result == null) {
+                    return Optional.empty();
+                } else {
+                    return Optional.of(result);
+                }
+            } catch (IllegalAccessException|NoSuchFieldException e1) {
+                throw new RuntimeException(e1);
+            }
+        } catch (IllegalAccessException|InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
