@@ -31,6 +31,9 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
         } else if (name.equals(AntlrReflectionMapper.START_COLUMN.getName())) {
             return Optional.of(this.wrapped.getStart().getCharPositionInLine());
         } else if (name.equals(AntlrReflectionMapper.END_COLUMN.getName())) {
+            if (this.wrapped.getStop() == null) {
+                throw new IllegalStateException("The node has no stop token. Wrapped class: "+wrapped.getClass().getCanonicalName());
+            }
             if (this.wrapped.getStop().getType() == EOF_TOKEN_TYPE) {
                 return Optional.of(this.wrapped.getStop().getCharPositionInLine());
             }
