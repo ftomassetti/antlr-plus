@@ -2,6 +2,7 @@ package me.tomassetti.antlrplus.xml;
 
 import me.tomassetti.antlrplus.metamodel.Property;
 import me.tomassetti.antlrplus.metamodel.Relation;
+import me.tomassetti.antlrplus.metamodel.mapping.AntlrReflectionMapper;
 import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.model.OrderedElement;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -22,10 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class XmlExporter {
 
@@ -39,6 +37,13 @@ public class XmlExporter {
 
     private boolean useCDataByDefault = true;
 
+    public void doNotPrintPositions() {
+        addPropertyToNotPrint(AntlrReflectionMapper.START_LINE.getName());
+        addPropertyToNotPrint(AntlrReflectionMapper.START_COLUMN.getName());
+        addPropertyToNotPrint(AntlrReflectionMapper.END_LINE.getName());
+        addPropertyToNotPrint(AntlrReflectionMapper.END_COLUMN.getName());
+    }
+
     public void setUseCDataByDefault(boolean useCDataByDefault) {
         this.useCDataByDefault = useCDataByDefault;
     }
@@ -46,6 +51,12 @@ public class XmlExporter {
     private Map<Property, PropertySetting> propertySettings = new HashMap<>();
 
     private boolean printProperties = true;
+
+    private Set<String> propertiesToNotPrint = new HashSet<>();
+
+    public void addPropertyToNotPrint(String propertyName) {
+        this.propertiesToNotPrint.add(propertyName);
+    }
 
     public void setPrintProperties(boolean printProperties) {
         this.printProperties = printProperties;
@@ -115,7 +126,7 @@ public class XmlExporter {
         node.setAttribute("type", astNode.type().getName());
         astNode.getValuesOrder().forEach(valueReference -> {
             if (valueReference.getFeature().isProperty()) {
-                if (printProperties) {
+                if (printProperties && !propertiesToNotPrint.contains(valueReference.getFeature().getName())) {
                     PropertySetting ps = getPropertySetting(valueReference.getFeature().asProperty());
                     switch (ps) {
                         case AS_NODE:

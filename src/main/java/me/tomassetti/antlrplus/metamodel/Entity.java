@@ -11,6 +11,15 @@ public class Entity {
     private List<Property> properties;
     private List<Relation> relations;
     private Optional<Entity> parent = Optional.empty();
+    private boolean _abstract;
+
+    public boolean isAbstract() {
+        return _abstract;
+    }
+
+    public void setAbstract(boolean _abstract) {
+        this._abstract = _abstract;
+    }
 
     public Optional<Entity> getParent() {
         return parent;
@@ -71,6 +80,14 @@ public class Entity {
     }
 
     public Entity(String name) {
+        this.name = name;
+        this.properties = new LinkedList<>();
+        this.relations = new LinkedList<>();
+        this.features = new LinkedList<>();
+    }
+
+    public Entity(String name, Entity parent) {
+        this.parent = Optional.of(parent);
         this.name = name;
         this.properties = new LinkedList<>();
         this.relations = new LinkedList<>();

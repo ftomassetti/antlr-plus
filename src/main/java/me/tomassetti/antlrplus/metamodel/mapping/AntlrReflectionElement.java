@@ -145,8 +145,12 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
 
     @Override
     public Optional<Element> getSingleRelation(Relation relation) {
-        Optional<ParserRuleContext> raw = getSingleRelationRaw(relation);
-        return raw.map(e -> reflectionMapper.toElement(e, Optional.of(this)));
+        try {
+            Optional<ParserRuleContext> raw = getSingleRelationRaw(relation);
+            return raw.map(e -> reflectionMapper.toElement(e, Optional.of(this)));
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Issue accessing relation "+relation, e);
+        }
     }
 
     private List<? extends ParserRuleContext> getMultipleRelationRaw(Relation relation) {
