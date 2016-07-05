@@ -23,6 +23,10 @@ public class AntlrReflectionMapper {
 
     public boolean addPositions = false;
 
+    public boolean isToBeDropped(Class<? extends ParserRuleContext> ruleClass) {
+        return this.rulesToDrop.contains(ruleClass);
+    }
+
     public boolean isAddPositions() {
         return addPositions;
     }
@@ -113,6 +117,9 @@ public class AntlrReflectionMapper {
         if (toTreatAsToken.contains(ruleClass)) {
             throw new IllegalArgumentException("Rule to be treated like a token, no corresponding Entity can be generated for "+ruleClass);
         }
+        if (rulesToDrop.contains(ruleClass)) {
+            throw new IllegalArgumentException("Rule to be dropped, no corresponding Entity can be generated for "+ruleClass);
+        }
         if (!classesToEntities.containsKey(ruleClass.getCanonicalName())) {
             registerEntity(ruleClass);
         }
@@ -172,6 +179,12 @@ public class AntlrReflectionMapper {
     public static final Property START_COLUMN = new Property("startColumn", Property.Datatype.INTEGER, Multiplicity.ONE);
     public static final Property END_COLUMN = new Property("endColumn", Property.Datatype.INTEGER, Multiplicity.ONE);
 
+    private Set<Class<? extends ParserRuleContext>> rulesToDrop = new HashSet<>();
+
+    public void addToRulesToDrop(Class<? extends ParserRuleContext> ruleClass) {
+        rulesToDrop.add(ruleClass);
+    }
+
     protected void postProcessEntity(Entity entity) {
 
     }
@@ -194,7 +207,9 @@ public class AntlrReflectionMapper {
     public void registerWholeParser(Class<? extends Parser> parserClass) {
         for (Class c : parserClass.getDeclaredClasses()) {
             if (ParserRuleContext.class.isAssignableFrom(c)) {
-                if (!this.isTransparent(c) && !this.toTreatAsToken.contains(c)) {
+                if (!this.isTransparent(c)
+                        && !this.toTreatAsToken.contains(c)
+                        && !this.rulesToDrop.contains(c)) {
                     // this force the registration
                     this.getEntity(c);
                 }
@@ -256,14 +271,16 @@ public class AntlrReflectionMapper {
                                     entity.addProperty(property);
                                 }
                             } else {
-                                Entity target = getEntity(effectiveChildType);
-                                Relation relation = new Relation(method.getName(),
-                                        Relation.Type.CONTAINMENT,
-                                        Multiplicity.MANY,
-                                        entity,
-                                        target);
-                                debugMsg("    Adding relation " + relation);
-                                entity.addRelation(relation);
+                                if (!rulesToDrop.contains(effectiveChildType)) {
+                                    Entity target = getEntity(effectiveChildType);
+                                    Relation relation = new Relation(method.getName(),
+                                            Relation.Type.CONTAINMENT,
+                                            Multiplicity.MANY,
+                                            entity,
+                                            target);
+                                    debugMsg("    Adding relation " + relation);
+                                    entity.addRelation(relation);
+                                }
                             }
                         } else {
                             debugMsg("   Not all fields shadowed");
@@ -276,14 +293,16 @@ public class AntlrReflectionMapper {
                                         entity.addProperty(property);
                                     }
                                 } else {
-                                    Entity target = getEntity(effectiveChildType);
-                                    Relation relation = new Relation(f.getName(),
-                                            Relation.Type.CONTAINMENT,
-                                            f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
-                                            entity,
-                                            target);
-                                    debugMsg("    Adding relation " + relation + " from field "+f);
-                                    entity.addRelation(relation);
+                                    if (!rulesToDrop.contains(effectiveChildType)) {
+                                        Entity target = getEntity(effectiveChildType);
+                                        Relation relation = new Relation(f.getName(),
+                                                Relation.Type.CONTAINMENT,
+                                                f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
+                                                entity,
+                                                target);
+                                        debugMsg("    Adding relation " + relation + " from field " + f);
+                                        entity.addRelation(relation);
+                                    }
                                 }
                             }
                         }
@@ -310,14 +329,16 @@ public class AntlrReflectionMapper {
                                 entity.addProperty(property);
                             }
                         } else {
-                            Entity target = getEntity(effectiveChildType);
-                            Relation relation = new Relation(method.getName(),
-                                    Relation.Type.CONTAINMENT,
-                                    Multiplicity.ONE,
-                                    entity,
-                                    target);
-                            debugMsg("   Adding relation " + relation);
-                            entity.addRelation(relation);
+                            if (!rulesToDrop.contains(effectiveChildType)) {
+                                Entity target = getEntity(effectiveChildType);
+                                Relation relation = new Relation(method.getName(),
+                                        Relation.Type.CONTAINMENT,
+                                        Multiplicity.ONE,
+                                        entity,
+                                        target);
+                                debugMsg("   Adding relation " + relation);
+                                entity.addRelation(relation);
+                            }
                         }
                     } else {
                         for (Field f : notShadowedFieldsOfType(ruleClass, childType)) {
@@ -329,14 +350,16 @@ public class AntlrReflectionMapper {
                                     entity.addProperty(property);
                                 }
                             } else {
-                                Entity target = getEntity(effectiveChildType);
-                                Relation relation = new Relation(f.getName(),
-                                        Relation.Type.CONTAINMENT,
-                                        f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
-                                        entity,
-                                        target);
-                                debugMsg("   Adding relation " + relation + " from field "+f);
-                                entity.addRelation(relation);
+                                if (!rulesToDrop.contains(effectiveChildType)) {
+                                    Entity target = getEntity(effectiveChildType);
+                                    Relation relation = new Relation(f.getName(),
+                                            Relation.Type.CONTAINMENT,
+                                            f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
+                                            entity,
+                                            target);
+                                    debugMsg("   Adding relation " + relation + " from field " + f);
+                                    entity.addRelation(relation);
+                                }
                             }
                         }
                     }
@@ -380,9 +403,11 @@ public class AntlrReflectionMapper {
                             entity.addProperty(property);
                         }
                     } else {
-                        Relation relation = new Relation(fieldName, Relation.Type.CONTAINMENT, Multiplicity.ONE, entity, getEntity(effectiveChildType));
-                        debugMsg("Adding relation because of field " + relation);
-                        entity.addRelation(relation);
+                        if (!rulesToDrop.contains(effectiveChildType)) {
+                            Relation relation = new Relation(fieldName, Relation.Type.CONTAINMENT, Multiplicity.ONE, entity, getEntity(effectiveChildType));
+                            debugMsg("Adding relation because of field " + relation);
+                            entity.addRelation(relation);
+                        }
                     }
                 }
             } catch (NoSuchFieldException e) {

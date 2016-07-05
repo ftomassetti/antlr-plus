@@ -36,6 +36,11 @@ public class XmlExporter {
     public static final String ROOT_ROLE = "root";
 
     private boolean useCDataByDefault = true;
+    private boolean avoidRedundantType = false;
+
+    public void setAvoidRedundantType(boolean avoidRedundantType) {
+        this.avoidRedundantType = avoidRedundantType;
+    }
 
     public void doNotPrintPositions() {
         addPropertyToNotPrint(AntlrReflectionMapper.START_LINE.getName());
@@ -123,7 +128,9 @@ public class XmlExporter {
 
     private Node toXml(OrderedElement astNode, Document document, String role) {
         org.w3c.dom.Element node = document.createElement(role);
-        node.setAttribute("type", astNode.type().getName());
+        if (!avoidRedundantType || !role.toLowerCase().equals(astNode.type().getName().toLowerCase())) {
+            node.setAttribute("type", astNode.type().getName());
+        }
         astNode.getValuesOrder().forEach(valueReference -> {
             if (valueReference.getFeature().isProperty()) {
                 if (printProperties && !propertiesToNotPrint.contains(valueReference.getFeature().getName())) {

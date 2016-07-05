@@ -22,6 +22,8 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
     private ParserRuleContext wrapped;
     private AntlrReflectionMapper reflectionMapper;
 
+
+
     private static final int EOF_TOKEN_TYPE = -1;
 
     private Optional<Object> lookForCommonProperty(String name) {
@@ -134,6 +136,9 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
             if (result == null) {
                 return Optional.empty();
             } else {
+                if (reflectionMapper.isToBeDropped(result.getClass())) {
+                    return Optional.empty();
+                }
                 return Optional.of(result);
             }
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
@@ -164,6 +169,7 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
             } else {
                 result = (List<? extends ParserRuleContext>)wrapped.getClass().getMethod(relation.getName()).invoke(wrapped);
             }
+            result = result.stream().filter(e -> !reflectionMapper.isToBeDropped(e.getClass())).collect(Collectors.toList());
             return result;
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
             throw new RuntimeException(e);
