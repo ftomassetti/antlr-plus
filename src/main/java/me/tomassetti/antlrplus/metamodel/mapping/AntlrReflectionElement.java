@@ -8,6 +8,7 @@ import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.model.OrderedElement;
 import me.tomassetti.antlrplus.util.Pair;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -99,7 +100,13 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
         } catch (NoSuchMethodException e) {
             try {
                 List<? extends Object> result = (List<? extends Object>) wrapped.getClass().getField(property.getName()).get(wrapped);
-                elements.addAll(result);
+                for (Object r : result) {
+                    if (r instanceof Token) {
+                        elements.add(((Token)r).getText());
+                    } else {
+                        elements.add(r);
+                    }
+                }
             } catch (IllegalAccessException|NoSuchFieldException e1) {
                 throw new RuntimeException(e1);
             }
@@ -187,6 +194,9 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
                 if (result == null) {
                     return Optional.empty();
                 } else {
+                    if (result instanceof Token) {
+                        return Optional.of(((Token)result).getText());
+                    }
                     return Optional.of(result);
                 }
             } catch (IllegalAccessException|NoSuchFieldException e1) {
