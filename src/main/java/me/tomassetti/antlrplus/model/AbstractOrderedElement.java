@@ -26,7 +26,11 @@ public abstract class AbstractOrderedElement implements OrderedElement {
 
     @Override
     public Optional<Element> getSingleRelation(String name) {
-        return this.getSingleRelation(this.type().getRelation(name).get());
+        Optional<Relation> relation = this.type().getRelation(name);
+        if (!relation.isPresent()) {
+            throw new IllegalArgumentException("Unknown relation " + name + " for entity "+entity.getName());
+        }
+        return this.getSingleRelation(relation.get());
     }
 
     @Override
