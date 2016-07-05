@@ -169,7 +169,7 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
             } else {
                 result = (List<? extends ParserRuleContext>)wrapped.getClass().getMethod(relation.getName()).invoke(wrapped);
             }
-            result = result.stream().filter(e -> !reflectionMapper.isToBeDropped(e.getClass())).collect(Collectors.toList());
+            result = result.stream().filter(e -> !reflectionMapper.isToBeDropped(e.getClass())).collect(Collectors.<ParserRuleContext>toList());
             return result;
         } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
             throw new RuntimeException(e);
