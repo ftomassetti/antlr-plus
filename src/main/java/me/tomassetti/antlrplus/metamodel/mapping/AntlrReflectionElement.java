@@ -21,12 +21,9 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
 
     private ParserRuleContext wrapped;
     private AntlrReflectionMapper reflectionMapper;
-
-
-
     private static final int EOF_TOKEN_TYPE = -1;
 
-    private Optional<Object> lookForCommonProperty(String name) {
+    protected Optional<Object> lookForCommonProperty(String name) {
         if (name.equals(AntlrReflectionMapper.START_LINE.getName())) {
             return Optional.of(this.wrapped.getStart().getLine());
         } else if (name.equals(AntlrReflectionMapper.END_LINE.getName())) {
