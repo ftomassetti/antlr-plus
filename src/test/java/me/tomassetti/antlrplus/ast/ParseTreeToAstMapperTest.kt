@@ -36,6 +36,8 @@ class ParseTreeToAstMapperTest {
     @Test fun pythonMetamodel() {
         val code = convert(this.javaClass.getResourceAsStream("/me/tomassetti/antlrplus/python/Python3.g4"))
         val metamodel = ParseTreeToAstMapper().produceMetamodel(code)
+
+        assertEquals(Entity("single_input", setOf(simpleToken("NEWLINE"), simpleChild("simple_stmt"), simpleChild("compound_stmt"))), metamodel.byName("single_input"))
     }
 
     @Test fun javaMetamodel() {
