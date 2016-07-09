@@ -69,13 +69,20 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
         return this.getSingleProperty(this.type().getProperty(name).get());
     }
 
+    public void setFeaturesNameMapping(Map<String, String> featuresNameMapping) {
+        this.featuresNameMapping = featuresNameMapping;
+    }
+
     @Override
     public String toString() {
         return "ReflectionElement{" +
                 "entity=" + entity +
                 ", wrapped=" + wrapped +
                 '}';
+
     }
+
+    private Map<String, String> featuresNameMapping = new HashMap<>();
 
     public AntlrReflectionElement(AntlrReflectionMapper reflectionMapper, ParserRuleContext wrapped, Entity entity, Optional<OrderedElement> parent) {
         super(entity, parent);
@@ -88,9 +95,10 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
         if (property.isSingle()) {
             throw new IllegalArgumentException();
         }
+        String name = toRawName(property.getName());
         List<Object> elements = new ArrayList<>();
         try {
-            List<? extends Object> result = (List<? extends Object>) wrapped.getClass().getMethod(property.getName()).invoke(wrapped);
+            List<? extends Object> result = (List<? extends Object>) wrapped.getClass().getMethod(name).invoke(wrapped);
 
             // if it was obtained from a Rule to be treated as token we need to convert it
             //result = result.stream().map(e -> toToken(e)).collect(Collectors.toList());
@@ -98,7 +106,7 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
             elements.addAll(result);
         } catch (NoSuchMethodException e) {
             try {
-                List<? extends Object> result = (List<? extends Object>) wrapped.getClass().getField(property.getName()).get(wrapped);
+                List<? extends Object> result = (List<? extends Object>) wrapped.getClass().getField(name).get(wrapped);
                 for (Object r : result) {
                     if (r instanceof Token) {
                         elements.add(((Token)r).getText());
@@ -119,16 +127,25 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
         return Arrays.stream(clazz.getFields()).filter(f -> f.getName().equals(fieldName)).findFirst();
     }
 
+    private String toRawName(String featureName) {
+        if (this.featuresNameMapping.containsKey(featureName)) {
+            return this.featuresNameMapping.get(featureName);
+        } else {
+            return featureName;
+        }
+    }
+
     private Optional<ParserRuleContext> getSingleRelationRaw(Relation relation) {
         if (!relation.isSingle()) {
             throw new IllegalArgumentException();
         }
+        String name = toRawName(relation.getName());
         try {
             ParserRuleContext result;
-            if (getField(wrapped.getClass(), relation.getName()).isPresent()) {
-                result = (ParserRuleContext) getField(wrapped.getClass(), relation.getName()).get().get(wrapped);
+            if (getField(wrapped.getClass(), name).isPresent()) {
+                result = (ParserRuleContext) getField(wrapped.getClass(), name).get().get(wrapped);
             } else {
-                result = (ParserRuleContext) wrapped.getClass().getMethod(relation.getName()).invoke(wrapped);
+                result = (ParserRuleContext) wrapped.getClass().getMethod(name).invoke(wrapped);
             }
             if (result == null) {
                 return Optional.empty();
@@ -159,12 +176,13 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
         if (relation.isSingle()) {
             throw new IllegalArgumentException();
         }
+        String name = toRawName(relation.getName());
         try {
             List<? extends ParserRuleContext> result;
             if (getField(wrapped.getClass(), relation.getName()).isPresent()) {
-                result = (List<? extends ParserRuleContext>) getField(wrapped.getClass(), relation.getName()).get().get(wrapped);
+                result = (List<? extends ParserRuleContext>) getField(wrapped.getClass(), name).get().get(wrapped);
             } else {
-                result = (List<? extends ParserRuleContext>)wrapped.getClass().getMethod(relation.getName()).invoke(wrapped);
+                result = (List<? extends ParserRuleContext>)wrapped.getClass().getMethod(name).invoke(wrapped);
             }
             result = result.stream().filter(e -> !reflectionMapper.isToBeDropped(e.getClass())).collect(Collectors.<ParserRuleContext>toList());
             return result;
@@ -188,8 +206,9 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
         if (res.isPresent()) {
             return res;
         }
+        String name = toRawName(property.getName());
         try {
-            Object result = wrapped.getClass().getMethod(property.getName()).invoke(wrapped);
+            Object result = wrapped.getClass().getMethod(name).invoke(wrapped);
             if (result == null) {
                 return Optional.empty();
             } else {
@@ -197,7 +216,7 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
             }
         } catch (NoSuchMethodException e) {
             try {
-                Object result = wrapped.getClass().getField(property.getName()).get(wrapped);
+                Object result = wrapped.getClass().getField(name).get(wrapped);
                 if (result == null) {
                     return Optional.empty();
                 } else {

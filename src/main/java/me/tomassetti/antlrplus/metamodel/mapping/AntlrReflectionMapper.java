@@ -252,7 +252,7 @@ public class AntlrReflectionMapper {
                         debugMsg("  Method returning a list of terminals");
                         // for now we look at the method name to recognize the properties to ignore
                         if (!tokensToIgnore.contains(method.getName())) {
-                            Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.MANY);
+                            Property property = new Property(ruleConfiguration.fromReflectionName(method.getName()), Property.Datatype.STRING, Multiplicity.MANY);
                             if (ruleConfiguration.canAdd(property)) {
                                 debugMsg("   Adding property " + property);
                                 entity.addProperty(property);
@@ -265,7 +265,7 @@ public class AntlrReflectionMapper {
                             debugMsg("   All fields shadowed");
                             Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
                             if (toTreatAsToken.contains(effectiveChildType)) {
-                                Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.MANY);
+                                Property property = new Property(ruleConfiguration.fromReflectionName(method.getName()), Property.Datatype.STRING, Multiplicity.MANY);
                                 if (ruleConfiguration.canAdd(property)) {
                                     debugMsg("    Adding property " + property);
                                     entity.addProperty(property);
@@ -273,7 +273,7 @@ public class AntlrReflectionMapper {
                             } else {
                                 if (!rulesToDrop.contains(effectiveChildType)) {
                                     Entity target = getEntity(effectiveChildType);
-                                    Relation relation = new Relation(method.getName(),
+                                    Relation relation = new Relation(ruleConfiguration.fromReflectionName(method.getName()),
                                             Relation.Type.CONTAINMENT,
                                             Multiplicity.MANY,
                                             entity,
@@ -287,7 +287,7 @@ public class AntlrReflectionMapper {
                             for (Field f : notShadowedFieldsOfType(ruleClass, childType)) {
                                 Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
                                 if (toTreatAsToken.contains(effectiveChildType)) {
-                                    Property property = new Property(f.getName(), Property.Datatype.STRING, f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE);
+                                    Property property = new Property(ruleConfiguration.fromReflectionName(f.getName()), Property.Datatype.STRING, f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE);
                                     if (ruleConfiguration.canAdd(property)) {
                                         debugMsg("    Adding property " + property + " from field " + f);
                                         entity.addProperty(property);
@@ -295,7 +295,7 @@ public class AntlrReflectionMapper {
                                 } else {
                                     if (!rulesToDrop.contains(effectiveChildType)) {
                                         Entity target = getEntity(effectiveChildType);
-                                        Relation relation = new Relation(f.getName(),
+                                        Relation relation = new Relation(ruleConfiguration.fromReflectionName(f.getName()),
                                                 Relation.Type.CONTAINMENT,
                                                 f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
                                                 entity,
@@ -311,7 +311,7 @@ public class AntlrReflectionMapper {
                     debugMsg("  Method returning a single terminal");
                     // for now we look at the method name to recognize the properties to ignore
                     if (!tokensToIgnore.contains(method.getName())) {
-                        Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.ONE);
+                        Property property = new Property(ruleConfiguration.fromReflectionName(method.getName()), Property.Datatype.STRING, Multiplicity.ONE);
                         if (ruleConfiguration.canAdd(property)) {
                             debugMsg("   Adding property " + property);
                             entity.addProperty(property);
@@ -323,7 +323,7 @@ public class AntlrReflectionMapper {
                     if (notShadowedFieldsOfType(ruleClass, childType).isEmpty()) {
                         Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
                         if (toTreatAsToken.contains(effectiveChildType)) {
-                            Property property = new Property(method.getName(), Property.Datatype.STRING, Multiplicity.ONE);
+                            Property property = new Property(ruleConfiguration.fromReflectionName(method.getName()), Property.Datatype.STRING, Multiplicity.ONE);
                             if (ruleConfiguration.canAdd(property)) {
                                 debugMsg("   Adding property " + property);
                                 entity.addProperty(property);
@@ -331,7 +331,7 @@ public class AntlrReflectionMapper {
                         } else {
                             if (!rulesToDrop.contains(effectiveChildType)) {
                                 Entity target = getEntity(effectiveChildType);
-                                Relation relation = new Relation(method.getName(),
+                                Relation relation = new Relation(ruleConfiguration.fromReflectionName(method.getName()),
                                         Relation.Type.CONTAINMENT,
                                         Multiplicity.ONE,
                                         entity,
@@ -344,7 +344,7 @@ public class AntlrReflectionMapper {
                         for (Field f : notShadowedFieldsOfType(ruleClass, childType)) {
                             Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(childType);
                             if (toTreatAsToken.contains(effectiveChildType)) {
-                                Property property = new Property(f.getName(), Property.Datatype.STRING, f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE);
+                                Property property = new Property(ruleConfiguration.fromReflectionName(f.getName()), Property.Datatype.STRING, f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE);
                                 if (ruleConfiguration.canAdd(property)) {
                                     debugMsg("   Adding property " + property + " from field " + f);
                                     entity.addProperty(property);
@@ -352,7 +352,7 @@ public class AntlrReflectionMapper {
                             } else {
                                 if (!rulesToDrop.contains(effectiveChildType)) {
                                     Entity target = getEntity(effectiveChildType);
-                                    Relation relation = new Relation(f.getName(),
+                                    Relation relation = new Relation(ruleConfiguration.fromReflectionName(f.getName()),
                                             Relation.Type.CONTAINMENT,
                                             f.getType().getCanonicalName().equals(List.class.getCanonicalName()) ? Multiplicity.MANY : Multiplicity.ONE,
                                             entity,
@@ -373,13 +373,13 @@ public class AntlrReflectionMapper {
                     ParameterizedType listType = (ParameterizedType)field.getGenericType();
                     Class elementType = (Class) listType.getActualTypeArguments()[0];
                     if (elementType.getCanonicalName().equals(TerminalNode.class.getCanonicalName()) || elementType.getCanonicalName().equals(Token.class.getCanonicalName())) {
-                        Property property = new Property(fieldName, Property.Datatype.STRING, Multiplicity.MANY);
+                        Property property = new Property(ruleConfiguration.fromReflectionName(fieldName), Property.Datatype.STRING, Multiplicity.MANY);
                         debugMsg("Adding property because of field " + property);
                         entity.addProperty(property);
                     } else {
                         Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses(elementType);
                         if (toTreatAsToken.contains(effectiveChildType)) {
-                            Property property = new Property(fieldName, Property.Datatype.STRING, Multiplicity.MANY);
+                            Property property = new Property(ruleConfiguration.fromReflectionName(fieldName), Property.Datatype.STRING, Multiplicity.MANY);
                             if (ruleConfiguration.canAdd(property)) {
                                 debugMsg("Adding property " + property + " from field " + field);
                                 entity.addProperty(property);
@@ -397,14 +397,14 @@ public class AntlrReflectionMapper {
                 } else {
                     Class<? extends ParserRuleContext> effectiveChildType = skipTransparentClasses((Class<? extends ParserRuleContext>) field.getType());
                     if (toTreatAsToken.contains(effectiveChildType)) {
-                        Property property = new Property(fieldName, Property.Datatype.STRING, Multiplicity.ONE);
+                        Property property = new Property(ruleConfiguration.fromReflectionName(fieldName), Property.Datatype.STRING, Multiplicity.ONE);
                         if (ruleConfiguration.canAdd(property)) {
                             debugMsg("Adding property " + property + " from field " + field);
                             entity.addProperty(property);
                         }
                     } else {
                         if (!rulesToDrop.contains(effectiveChildType)) {
-                            Relation relation = new Relation(fieldName, Relation.Type.CONTAINMENT, Multiplicity.ONE, entity, getEntity(effectiveChildType));
+                            Relation relation = new Relation(ruleConfiguration.fromReflectionName(fieldName), Relation.Type.CONTAINMENT, Multiplicity.ONE, entity, getEntity(effectiveChildType));
                             debugMsg("Adding relation because of field " + relation);
                             entity.addRelation(relation);
                         }
@@ -485,6 +485,8 @@ public class AntlrReflectionMapper {
     }
 
     protected OrderedElement instantiateElement(ParserRuleContext astNode, Optional<OrderedElement> parent) {
-        return new AntlrReflectionElement(this, astNode, getEntity(astNode.getClass()), parent);
+        AntlrReflectionElement element = new AntlrReflectionElement(this, astNode, getEntity(astNode.getClass()), parent);
+        element.setFeaturesNameMapping(ruleConfigurations.get(astNode.getClass()).getFeaturessRenamedReversed());
+        return element;
     }
 }
