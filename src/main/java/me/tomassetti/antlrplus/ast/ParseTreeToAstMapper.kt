@@ -8,9 +8,15 @@ import org.antlr.v4.tool.ast.RuleRefAST
 import org.antlr.v4.tool.ast.TerminalAST
 import java.util.*
 
+val TOKEN_TYPE = "<String>"
+
 data class Element(val name: String, val type: String, val multiple: Boolean, val toExclude: List<String> = LinkedList<String>())
 
-class Entity(val name: String, val elements: List<Element>, val superclass: Entity? = null, val isAbstract: Boolean = false) {
+fun simpleToken(name: String) = Element(name, TOKEN_TYPE, false)
+
+fun simpleChild(name: String, type: String = name) = Element(name, type, false)
+
+class Entity(val name: String, val elements: Set<Element>, val superclass: Entity? = null, val isAbstract: Boolean = false) {
     override fun toString(): String{
         return "Entity(name='$name', elements=$elements, superclass=${superclass?.name}, isAbstract=$isAbstract)"
     }
@@ -49,10 +55,8 @@ class Metamodel(val entities : List<Entity>) {
 
 class ParseTreeToAstMapper() {
 
-    private val TOKEN_TYPE = "<String>"
-
-    private fun considerAlternative(alt : Alternative) : List<Element>{
-        val res = LinkedList<Element>()
+    private fun considerAlternative(alt : Alternative) : Set<Element>{
+        val res = HashSet<Element>()
         alt.labelDefs.forEach { s, mutableList ->
 
         }
@@ -85,7 +89,7 @@ class ParseTreeToAstMapper() {
         return res
     }
 
-    private fun processSingleLabel(e: LabelElementPair, labelledTypes: java.util.HashMap<String, MutableList<String>>, res: LinkedList<Element>) {
+    private fun processSingleLabel(e: LabelElementPair, labelledTypes: java.util.HashMap<String, MutableList<String>>, res: MutableSet<Element>) {
         when (e.type) {
             LabelType.RULE_LIST_LABEL -> {
                 val type = (e.element as RuleRefAST).text
@@ -140,7 +144,7 @@ class ParseTreeToAstMapper() {
         grammar.rules.forEach { s, rule ->
             try {
                 if (rule is LeftRecursiveRule) {
-                    val superclass = Entity(s, LinkedList<Element>(), isAbstract = true)
+                    val superclass = Entity(s, emptySet(), isAbstract = true)
                     entities.add(superclass)
                     if (rule.altLabels != null) {
                         rule.altLabels.forEach { altLabel ->
@@ -164,7 +168,7 @@ class ParseTreeToAstMapper() {
     }
 
     private fun processAlternatives(alternativesRaw: Collection<Alternative>, entities: LinkedList<Entity>, s: String) {
-        val elements: MutableList<Element> = LinkedList<Element>()
+        val elements: MutableSet<Element> = HashSet<Element>()
         val alternatives = alternativesRaw.filter { alt -> alt != null }
         if (alternatives.size == 0) {
             throw IllegalArgumentException("No alternatives for $s")
@@ -187,7 +191,7 @@ class ParseTreeToAstMapper() {
     }
 
     private fun processAltAsts(altAsts: Collection<AltAST>, entities: LinkedList<Entity>, s: String, externalSuperclass: Entity?) {
-        val elements: MutableList<Element> = LinkedList<Element>()
+        val elements: MutableSet<Element> = HashSet()
         if (altAsts.size == 0) {
             throw IllegalArgumentException("No alternatives for $s")
         }
