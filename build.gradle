@@ -57,6 +57,7 @@ sourceSets {
     }
 }
 compileJava.source sourceSets.antlrdeps.java, sourceSets.generated.java, sourceSets.main.java
+compileKotlin.source sourceSets.antlrdeps.java, sourceSets.generated.java, sourceSets.main.kotlin
 
 generateTestGrammarSource {
     maxHeapSize = "64m"
