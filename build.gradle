@@ -47,6 +47,7 @@ generateGrammarSource {
     outputDirectory = new File("generated-src/antlr/main/me/tomassetti/antlrplus/antlrparser".toString())
 }
 compileJava.dependsOn generateGrammarSource
+compileKotlin.dependsOn generateGrammarSource
 sourceSets {
     antlrdeps {
         java.srcDir 'src/main/antlr-deps/'
@@ -63,6 +64,7 @@ generateTestGrammarSource {
     outputDirectory = new File("generated-src/antlr/test/me/tomassetti/antlrplus/python".toString())
 }
 compileTestJava.dependsOn generateTestGrammarSource
+compileTestKotlin.dependsOn generateTestGrammarSource
 sourceSets {
     test_generated {
         java.srcDir 'generated-src/antlr/test/'
