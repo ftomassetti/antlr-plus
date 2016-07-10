@@ -32,6 +32,12 @@ class ParseTreeToAstMapper() {
 
     var debug = false
 
+    private var tokensToIgnore = HashSet<String>()
+
+    fun alwaysIgnoreThisToken(token: String) {
+        tokensToIgnore.add(token)
+    }
+
     private fun debugMsg(msg: String) {
         if (debug) {
             println("DEBUG $msg")
@@ -54,7 +60,9 @@ class ParseTreeToAstMapper() {
         val labelledTypes : java.util.HashMap<String, MutableList<String>> = HashMap<String, MutableList<String>>()
         alt.labelDefs.forEach { s, mutableList ->
             mutableList.forEach { e ->
-                processSingleLabel(entityName, e, labelledTypes, res, extractors, parserClass)
+                if (!tokensToIgnore.contains((e.element as RuleRefAST).text)) {
+                    processSingleLabel(entityName, e, labelledTypes, res, extractors, parserClass)
+                }
             }
         }
         alt.ruleRefs.forEach { s, mutableList ->
@@ -77,7 +85,7 @@ class ParseTreeToAstMapper() {
             }
         }
         alt.tokenRefs.forEach { s, mutableList ->
-            if (!s.startsWith("'")) {
+            if (!s.startsWith("'") && !tokensToIgnore.contains(s)) {
                 val nLabels = labelledTypes.getOrDefault(s, LinkedList<String>()).size
                 // Either all the elements have labels or none of them should have labels
                 // If they have labels we ignore them here
@@ -124,14 +132,16 @@ class ParseTreeToAstMapper() {
             }
             LabelType.TOKEN_LABEL -> {
                 val type = (e.element as GrammarAST).text
-                val name = (e.label as GrammarAST).text
-                if (!(labelledTypes.containsKey(type))) {
-                    labelledTypes.put(type, LinkedList<String>())
-                }
-                labelledTypes.get(type)?.add(name)
-                res.add(Feature(name, TOKEN_TYPE, false))
-                if (parserClass != null) {
-                    extractors.addTokenExtractor(parserClass, entityName, name)
+                if (!tokensToIgnore.contains(type)) {
+                    val name = (e.label as GrammarAST).text
+                    if (!(labelledTypes.containsKey(type))) {
+                        labelledTypes.put(type, LinkedList<String>())
+                    }
+                    labelledTypes.get(type)?.add(name)
+                    res.add(Feature(name, TOKEN_TYPE, false))
+                    if (parserClass != null) {
+                        extractors.addTokenExtractor(parserClass, entityName, name)
+                    }
                 }
             }
             else -> throw UnsupportedOperationException("Label type ${e.type}")
@@ -242,10 +252,12 @@ class ParseTreeToAstMapper() {
             altAst.children.forEach { el ->
                 when (el) {
                     is TerminalAST -> {
-                        debugMsg("      Adding terminal ${el.token.text}")
-                        elements.add(Feature(el.token.text, TOKEN_TYPE, false))
-                        if (parserClass != null) {
-                            extractors.addTokenExtractor(parserClass, entityName, el.token.text)
+                        if (!tokensToIgnore.contains(el.token.text)) {
+                            debugMsg("      Adding terminal ${el.token.text}")
+                            elements.add(Feature(el.token.text, TOKEN_TYPE, false))
+                            if (parserClass != null) {
+                                extractors.addTokenExtractor(parserClass, entityName, el.token.text)
+                            }
                         }
                     }
                     is RuleRefAST -> {
