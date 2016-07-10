@@ -1,20 +1,29 @@
 package me.tomassetti.ast
 
+import org.antlr.runtime.tree.CommonTree
 import org.antlr.v4.Tool
 import org.antlr.v4.tool.*
-import org.antlr.v4.tool.ast.AltAST
-import org.antlr.v4.tool.ast.GrammarAST
-import org.antlr.v4.tool.ast.RuleRefAST
-import org.antlr.v4.tool.ast.TerminalAST
+import org.antlr.v4.tool.ast.*
 import java.util.*
 
 val TOKEN_TYPE = "<String>"
 
-data class Element(val name: String, val type: String, val multiple: Boolean, val toExclude: List<String> = LinkedList<String>())
+data class Element(val name: String, val type: String, val multiple: Boolean, val toExclude: List<String> = LinkedList<String>()) {
+    override fun toString(): String {
+        val desc = if (type == TOKEN_TYPE) "Token" else type
+        val mult = if (multiple) "*" else ""
+        val excl = if (toExclude.isEmpty()) "" else " (excl: $toExclude)"
+        return "$name:$desc$mult $excl"
+    }
+}
 
 fun simpleToken(name: String) = Element(name, TOKEN_TYPE, false)
 
+fun multipleToken(name: String) = Element(name, TOKEN_TYPE, true)
+
 fun simpleChild(name: String, type: String = name) = Element(name, type, false)
+
+fun multipleChild(name: String, type: String = name) = Element(name, type, true)
 
 class Entity(val name: String, val elements: Set<Element>, val superclass: Entity? = null, val isAbstract: Boolean = false) {
     override fun toString(): String{
@@ -55,11 +64,27 @@ class Metamodel(val entities : List<Entity>) {
 
 class ParseTreeToAstMapper() {
 
-    private fun considerAlternative(alt : Alternative) : Set<Element>{
-        val res = HashSet<Element>()
-        alt.labelDefs.forEach { s, mutableList ->
+    var debug = false
 
+    private fun debugMsg(msg: String) {
+        if (debug) {
+            println("DEBUG $msg")
         }
+    }
+
+    private fun isMultiple(ast: CommonTree?) : Boolean {
+        when (ast?.parent) {
+            null -> return false
+            is Rule -> return false
+            is StarBlockAST -> return true
+            is PlusBlockAST -> return true
+            else -> return isMultiple(ast?.parent)
+        }
+    }
+
+    private fun considerAlternative(alt : Alternative) : Set<Element>{
+        debugMsg("  Considering alternative")
+        val res = HashSet<Element>()
         val labelledTypes : java.util.HashMap<String, MutableList<String>> = HashMap<String, MutableList<String>>()
         alt.labelDefs.forEach { s, mutableList ->
             mutableList.forEach { e ->
@@ -71,19 +96,25 @@ class ParseTreeToAstMapper() {
             // Either all the elements have labels or none of them should have labels
             // If they have labels we ignore them here
             if (labels.size > 0 && mutableList.size != labels.size) {
+                debugMsg("    Adding elements excluded by $s")
                 res.add(Element(s, s, mutableList.size > 1, toExclude = labels))
             } else if (labels.size == 0) {
-                res.add(Element(s, s, mutableList.size > 1))
+                debugMsg("    Adding elements not labelled $s")
+                val multiple = mutableList.size > 1 || isMultiple(mutableList[0])
+                res.add(Element(s, s, multiple))
             }
         }
         alt.tokenRefs.forEach { s, mutableList ->
-            val nLabels = labelledTypes.getOrDefault(s, LinkedList<String>()).size
-            // Either all the elements have labels or none of them should have labels
-            // If they have labels we ignore them here
-            if (nLabels > 0 && mutableList.size != nLabels) {
-                throw UnsupportedOperationException()
-            } else if (nLabels == 0) {
-                res.add(Element(s, TOKEN_TYPE, mutableList.size > 1))
+            if (!s.startsWith("'")) {
+                val nLabels = labelledTypes.getOrDefault(s, LinkedList<String>()).size
+                // Either all the elements have labels or none of them should have labels
+                // If they have labels we ignore them here
+                if (nLabels > 0 && mutableList.size != nLabels) {
+                    throw UnsupportedOperationException()
+                } else if (nLabels == 0) {
+                    val multiple = mutableList.size > 1 || isMultiple(mutableList[0])
+                    res.add(Element(s, TOKEN_TYPE, multiple))
+                }
             }
         }
         return res
@@ -143,7 +174,9 @@ class ParseTreeToAstMapper() {
 
         grammar.rules.forEach { s, rule ->
             try {
+                debugMsg("Considering rule $s")
                 if (rule is LeftRecursiveRule) {
+                    debugMsg("  It is recursice ($s)")
                     val superclass = Entity(s, emptySet(), isAbstract = true)
                     entities.add(superclass)
                     if (rule.altLabels != null) {
