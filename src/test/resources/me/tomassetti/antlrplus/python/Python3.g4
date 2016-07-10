@@ -486,7 +486,7 @@ comparison
  : star_expr ( comp_op star_expr )*
  ;
 
-/// # <> isn't actually a valid comparison operator in Python. It's here for the
+/// # <> isn't actually a valid comparison operator in Python. It'entityName here for the
 /// # sake of a __future__ import described in PEP 401
 /// comp_op: '<'|'>'|'=='|'>='|'<='|'<>'|'!='|'in'|'not' 'in'|'is'|'is' 'not'
 comp_op
@@ -644,7 +644,7 @@ arglist
  ;
 
 /// # The reason that keywords are test nodes instead of NAME is that using NAME
-/// # results in an ambiguity. ast.c makes sure it's a NAME.
+/// # results in an ambiguity. ast.c makes sure it'entityName a NAME.
 /// argument: test [comp_for] | test '=' test  # Really [keyword '='] test
 argument
  : test comp_for?
