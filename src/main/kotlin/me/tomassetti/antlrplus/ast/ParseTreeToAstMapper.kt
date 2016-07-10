@@ -10,15 +10,19 @@ import org.antlr.v4.tool.ast.*
 import java.util.*
 
 
-class ReflectionFeature(val entity: Entity, val extractors: Map<String, Extractor>, val instance: ParserRuleContext) {
-    fun get(name: String) : Any {
+class ReflectionElement(val entity: Entity, val extractors: Map<String, Extractor>, val instance: ParserRuleContext) {
+    fun get(name: String) : Any? {
         return (extractors[name] ?: throw IllegalArgumentException(name)).get(instance, entity.byName(name))
+    }
+
+    override fun toString(): String{
+        return "ReflectionElement(entity=$entity)"
     }
 }
 
 class ParseTreeToAstMapper() {
 
-    var debug = false
+    var debug = true
 
     private fun debugMsg(msg: String) {
         if (debug) {
@@ -140,8 +144,6 @@ class ParseTreeToAstMapper() {
     private fun internalProduceMetamodel(antlrGrammarCode: String, parserClass: Class<out Parser>? = null) : Pair<Metamodel, ExtractorsMap> {
         val grammar = grammarFrom(antlrGrammarCode)
 
-        val entities = LinkedList<Entity>()
-
         val metamodel = Metamodel()
         val extractors = ExtractorsMap(metamodel)
 
@@ -151,10 +153,11 @@ class ParseTreeToAstMapper() {
                 if (rule is LeftRecursiveRule) {
                     debugMsg("  It is recursive ($s)")
                     val superclass = Entity(s, emptySet(), isAbstract = true)
-                    entities.add(superclass)
+                    metamodel.addEntity(superclass)
                     if (rule.altLabels != null) {
                         rule.altLabels.forEach { altLabel ->
                             val name = altLabel.key
+                            debugMsg("    Considering label $altLabel")
                             val altAlts = altLabel.value.map { el -> el.b }
                             processAltAsts(altAlts, metamodel, extractors, name, parserClass, externalSuperclass = superclass)
                         }
@@ -231,12 +234,14 @@ class ParseTreeToAstMapper() {
             altAst.children.forEach { el ->
                 when (el) {
                     is TerminalAST -> {
+                        debugMsg("      Adding terminal ${el.token.text}")
                         elements.add(Feature(el.token.text, TOKEN_TYPE, false))
                         if (parserClass != null) {
                             extractors.addTokenExtractor(parserClass, entityName, el.token.text)
                         }
                     }
                     is RuleRefAST -> {
+                        debugMsg("      Adding rule ${el.text}")
                         elements.add(Feature(el.text, el.text, false))
                         if (parserClass != null) {
                             extractors.addTokenExtractor(parserClass, entityName, el.text)
@@ -249,7 +254,8 @@ class ParseTreeToAstMapper() {
                         val subEl = el.children[1]
                         when (subEl) {
                             is RuleRefAST -> {
-                                elements.add(Feature(name, el.text, false))
+                                debugMsg("      Adding rule with label (name: '$name', subEl: ${subEl.text})")
+                                elements.add(Feature(name, subEl.text, false))
                                 if (parserClass != null) {
                                     extractors.addNodeExtractor(parserClass, entityName, name)
                                 }

@@ -12,9 +12,9 @@ data class Feature(val name: String, val type: String, val multiple: Boolean) {
     }
 }
 
-class Entity(val name: String, val elements: Set<Feature>, val superclass: Entity? = null, val isAbstract: Boolean = false) {
+class Entity(val name: String, val features: Set<Feature>, val superclass: Entity? = null, val isAbstract: Boolean = false) {
     override fun toString(): String{
-        return "Entity(name='$name', elements=$elements, superclass=${superclass?.name}, isAbstract=$isAbstract)"
+        return "Entity(name='$name', features=$features, superclass=${superclass?.name}, isAbstract=$isAbstract)"
     }
 
     override fun equals(other: Any?): Boolean{
@@ -22,7 +22,7 @@ class Entity(val name: String, val elements: Set<Feature>, val superclass: Entit
         if (other !is Entity) return false
 
         if (name != other.name) return false
-        if (elements != other.elements) return false
+        if (features != other.features) return false
         if (superclass != other.superclass) return false
         if (isAbstract != other.isAbstract) return false
 
@@ -31,14 +31,14 @@ class Entity(val name: String, val elements: Set<Feature>, val superclass: Entit
 
     override fun hashCode(): Int{
         var result = name.hashCode()
-        result = 31 * result + elements.hashCode()
+        result = 31 * result + features.hashCode()
         result = 31 * result + (superclass?.hashCode() ?: 0)
         result = 31 * result + isAbstract.hashCode()
         return result
     }
 
     fun byName(name: String) : Feature {
-        return elements.find { e -> e.name == name } ?: throw IllegalArgumentException(name)
+        return features.find { e -> e.name == name } ?: throw IllegalArgumentException(name)
     }
 }
 
