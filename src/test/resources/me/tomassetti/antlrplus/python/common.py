@@ -50,7 +50,7 @@ class Counter(object):
         string = ""
         keys = sorted(self.c.keys())
         for w in keys:
-            string += "%s : %i" % (w, self.c[w])
+            string += "%entityName : %i" % (w, self.c[w])
             string += "\n"
         return string
 

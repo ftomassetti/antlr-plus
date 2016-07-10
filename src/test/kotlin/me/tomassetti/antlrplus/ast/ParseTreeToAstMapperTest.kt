@@ -1,5 +1,6 @@
 package me.tomassetti.ast
 
+import me.tomassetti.antlrplus.python.Python3Parser
 import kotlin.collections.*
 
 import org.antlr.v4.Tool
@@ -127,6 +128,11 @@ class ParseTreeToAstMapperTest {
                         simpleToken("Identifier"),
                         simpleChild("typeArguments"))),
                 metamodel.byName("classType_lfno_classOrInterfaceType"))
+    }
+
+    @Test fun pythonExtractors() {
+        val code = convert(this.javaClass.getResourceAsStream("/me/tomassetti/antlrplus/python/Python3.g4"))
+        val metamodel = ParseTreeToAstMapper().produceMetamodel(code, Python3Parser::class.java)
     }
 
 }
