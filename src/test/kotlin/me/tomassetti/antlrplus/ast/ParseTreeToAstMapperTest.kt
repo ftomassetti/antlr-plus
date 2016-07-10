@@ -19,10 +19,7 @@ import org.antlr.v4.tool.Alternative
 import org.antlr.v4.tool.LabelType
 import org.antlr.v4.tool.ast.*
 import org.junit.Test
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.StringReader
+import java.io.*
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -236,24 +233,13 @@ class ParseTreeToAstMapperTest {
                 metamodel.byName("decimalLiteral"))
     }
 
-    fun printTree(role:String, el:ReflectionElement, indentation:String="") {
-        println("${indentation}${role}: ${el.entity.name}")
-        el.entity.features.forEach { f ->
-            val res = el.get(f.name)
-            when (res) {
-                null -> "nothing to do"
-                is ReflectionElement -> printTree(f.name, res, indentation + "  ")
-                is String -> println("${indentation}  ${f.name}: '${res}'")
-                is List<*> -> res.forEach { el ->
-                    when (el) {
-                        is ReflectionElement -> printTree(f.name, el, indentation + "  ")
-                        is String -> println("${indentation}  ${f.name}: '${el}'")
-                        else -> throw IllegalArgumentException("${el?.javaClass}")
-                    }
-                }
-                else -> throw IllegalArgumentException("${res?.javaClass}")
-            }
-        }
+    fun printTreeToString(code: String, extractors: ExtractorsMap) : String {
+        val astRoot = sandyParserFacade.parseString("var a = 1 + 2")
+        val root = extractors.toElement(astRoot)
+        val ss = ByteArrayOutputStream()
+        val ps = PrintStream(ss)
+        printTree("root", root, destination = ps)
+        return ss.toString(Charsets.UTF_8.name())
     }
 
     @Test fun sandyExtractors() {
@@ -263,9 +249,22 @@ class ParseTreeToAstMapperTest {
         val metamodel = pair.first
         val extractors = pair.second
 
-        val astRoot = sandyParserFacade.parseString("var a = 1 + 2")
-        val root = extractors.toElement(astRoot)
-        printTree("root", root)
+        assertEquals("""root: sandyFile
+  lines: line
+    statement: varDeclarationStatement
+      varDeclaration: varDeclaration
+        assignment: assignment
+          ASSIGN: '='
+          expression: binaryOperation
+            right: intLiteral
+              INTLIT: '2'
+            operator: '+'
+            left: intLiteral
+              INTLIT: '1'
+          ID: 'a'
+        VAR: 'var'
+    EOF: '<EOF>'
+""", printTreeToString("var a = 1 + 2", extractors))
     }
 
     /*@Test fun pythonExtractors() {
