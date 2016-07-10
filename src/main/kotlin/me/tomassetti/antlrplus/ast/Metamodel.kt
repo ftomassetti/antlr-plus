@@ -53,7 +53,7 @@ class Metamodel() {
     fun byName(name: String) : Entity {
         val e = entities.find { e -> e.name == name }
         if (e == null) {
-            throw IllegalArgumentException("Unknown entity $name")
+            throw IllegalArgumentException("Unknown entity $name. Knowns are: ${entities.map { e -> e.name }}")
         } else {
             return e
         }
