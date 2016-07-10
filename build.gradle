@@ -72,6 +72,7 @@ sourceSets {
     }
 }
 compileTestJava.source sourceSets.test_generated.java, sourceSets.test.java
+compileTestKotlin.source sourceSets.test_generated.java, sourceSets.test.kotlin
 
 clean{
     delete "generated-src"
