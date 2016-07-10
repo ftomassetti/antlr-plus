@@ -1,11 +1,16 @@
 package me.tomassetti.ast
 
+import me.tomassetti.antlrplus.ParserFacade
+import me.tomassetti.antlrplus.ast.*
+import me.tomassetti.antlrplus.python.Python3Lexer
 import me.tomassetti.antlrplus.python.Python3Parser
 import kotlin.collections.*
 
 import org.antlr.v4.Tool
 import org.antlr.v4.parse.ANTLRParser
 import org.antlr.v4.runtime.ANTLRInputStream
+import org.antlr.v4.runtime.Lexer
+import org.antlr.v4.runtime.TokenStream
 import org.antlr.v4.tool.ANTLRMessage
 import org.antlr.v4.tool.ANTLRToolListener
 import org.antlr.v4.tool.Alternative
@@ -20,6 +25,20 @@ import java.util.*
 import kotlin.test.assertEquals
 
 class ParseTreeToAstMapperTest {
+
+    private val parserFacade = object : ParserFacade<Python3Parser.Single_inputContext, Python3Parser>() {
+        override fun getLexer(antlrInputStream: ANTLRInputStream): Lexer {
+            return Python3Lexer(antlrInputStream)
+        }
+
+        override fun getParser(tokens: TokenStream): Python3Parser {
+            return Python3Parser(tokens)
+        }
+
+        override fun getRoot(parser: Python3Parser): Python3Parser.Single_inputContext {
+            return parser.single_input()
+        }
+    }
 
     fun convert(inputStream: InputStream) : String {
         val result = ByteArrayOutputStream()
@@ -132,7 +151,17 @@ class ParseTreeToAstMapperTest {
 
     @Test fun pythonExtractors() {
         val code = convert(this.javaClass.getResourceAsStream("/me/tomassetti/antlrplus/python/Python3.g4"))
-        val metamodel = ParseTreeToAstMapper().produceMetamodel(code, Python3Parser::class.java)
+        val mapper = ParseTreeToAstMapper()
+        val pair = mapper.produceMetamodelAndExtractors(code, Python3Parser::class.java)
+        val metamodel = pair.first
+        val extractors = pair.second
+
+        val astRoot = parserFacade.parseStream(this.javaClass.getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"))
+        println(astRoot.javaClass)
+        ///val = metamodel.byName("single_input").byName("simple_stmt")
+        val res = extractors.toElement(astRoot, metamodel)
+        println(res)
+        //println(mapper.extractors.get("single_input", "simple_stmt").get(astRoot, el))
     }
 
 }
