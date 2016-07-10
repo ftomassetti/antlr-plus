@@ -4,6 +4,7 @@ import me.tomassetti.antlrplus.ParserFacade
 import me.tomassetti.antlrplus.ast.*
 import me.tomassetti.antlrplus.python.Python3Lexer
 import me.tomassetti.antlrplus.python.Python3Parser
+import me.tomassetti.antlrplus.python.SandyLexer
 import me.tomassetti.antlrplus.python.SandyParser
 import kotlin.collections.*
 
@@ -27,7 +28,7 @@ import kotlin.test.assertEquals
 
 class ParseTreeToAstMapperTest {
 
-    private val parserFacade = object : ParserFacade<Python3Parser.Single_inputContext, Python3Parser>() {
+    private val pythonParserFacade = object : ParserFacade<Python3Parser.Single_inputContext, Python3Parser>() {
         override fun getLexer(antlrInputStream: ANTLRInputStream): Lexer {
             return Python3Lexer(antlrInputStream)
         }
@@ -38,6 +39,20 @@ class ParseTreeToAstMapperTest {
 
         override fun getRoot(parser: Python3Parser): Python3Parser.Single_inputContext {
             return parser.single_input()
+        }
+    }
+
+    private val sandyParserFacade = object : ParserFacade<SandyParser.SandyFileContext, SandyParser>() {
+        override fun getLexer(antlrInputStream: ANTLRInputStream): Lexer {
+            return SandyLexer(antlrInputStream)
+        }
+
+        override fun getParser(tokens: TokenStream): SandyParser {
+            return SandyParser(tokens)
+        }
+
+        override fun getRoot(parser: SandyParser): SandyParser.SandyFileContext {
+            return parser.sandyFile()
         }
     }
 
@@ -150,26 +165,6 @@ class ParseTreeToAstMapperTest {
                 metamodel.byName("classType_lfno_classOrInterfaceType"))
     }
 
-    fun printTree(role:String, el:ReflectionElement, indentation:String="") {
-        println("${indentation}${role}: ${el.entity.name}")
-        el.entity.features.forEach { f ->
-            val res = el.get(f.name)
-            when (res) {
-                null -> "nothing to do"
-                is ReflectionElement -> printTree(f.name, res, indentation + "  ")
-                is String -> println("${indentation}  ${f.name}: '${res}'")
-                is List<*> -> res.forEach { el ->
-                    when (el) {
-                        is ReflectionElement -> printTree(f.name, el, indentation + "  ")
-                        is String -> println("${indentation}  ${f.name}: '${el}'")
-                        else -> throw IllegalArgumentException("${el?.javaClass}")
-                    }
-                }
-                else -> throw IllegalArgumentException("${res?.javaClass}")
-            }
-        }
-    }
-
     @Test fun sandyMetamodel() {
         val code = convert(this.javaClass.getResourceAsStream("/SandyParser.g4"))
         val mapper = ParseTreeToAstMapper()
@@ -241,13 +236,37 @@ class ParseTreeToAstMapperTest {
                 metamodel.byName("decimalLiteral"))
     }
 
-    /*@Test fun sandyExtractors() {
+    fun printTree(role:String, el:ReflectionElement, indentation:String="") {
+        println("${indentation}${role}: ${el.entity.name}")
+        el.entity.features.forEach { f ->
+            val res = el.get(f.name)
+            when (res) {
+                null -> "nothing to do"
+                is ReflectionElement -> printTree(f.name, res, indentation + "  ")
+                is String -> println("${indentation}  ${f.name}: '${res}'")
+                is List<*> -> res.forEach { el ->
+                    when (el) {
+                        is ReflectionElement -> printTree(f.name, el, indentation + "  ")
+                        is String -> println("${indentation}  ${f.name}: '${el}'")
+                        else -> throw IllegalArgumentException("${el?.javaClass}")
+                    }
+                }
+                else -> throw IllegalArgumentException("${res?.javaClass}")
+            }
+        }
+    }
+
+    @Test fun sandyExtractors() {
         val code = convert(this.javaClass.getResourceAsStream("/SandyParser.g4"))
         val mapper = ParseTreeToAstMapper()
         val pair = mapper.produceMetamodelAndExtractors(code, SandyParser::class.java)
         val metamodel = pair.first
         val extractors = pair.second
-    }*/
+
+        val astRoot = sandyParserFacade.parseString("var a = 1 + 2")
+        val root = extractors.toElement(astRoot)
+        printTree("root", root)
+    }
 
     /*@Test fun pythonExtractors() {
         val code = convert(this.javaClass.getResourceAsStream("/me/tomassetti/antlrplus/python/Python3.g4"))
@@ -256,7 +275,7 @@ class ParseTreeToAstMapperTest {
         val metamodel = pair.first
         val extractors = pair.second
 
-        val astRoot = parserFacade.parseStream(this.javaClass.getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"))
+        val astRoot = pythonParserFacade.parseStream(this.javaClass.getResourceAsStream("/me/tomassetti/antlrplus/python/hello_world.py"))
         println(astRoot.javaClass)
         ///val = metamodel.byName("single_input").byName("simple_stmt")
         val res = extractors.toElement(astRoot, metamodel)

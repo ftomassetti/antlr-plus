@@ -10,9 +10,17 @@ import org.antlr.v4.tool.ast.*
 import java.util.*
 
 
-class ReflectionElement(val entity: Entity, val extractors: Map<String, Extractor>, val instance: ParserRuleContext) {
-    fun get(name: String) : Any? {
-        return (extractors[name] ?: throw IllegalArgumentException(name)).get(instance, entity.byName(name))
+class ReflectionElement(val entity: Entity,
+                        val extractors: Map<String, Extractor>,
+                        val instance: ParserRuleContext,
+                        val parent: Element? = null) : Element {
+
+    override fun entity(): Entity = entity
+
+    override fun parent(): Element? = parent
+
+    override fun get(name: String) : Any? {
+        return (extractors[name] ?: throw IllegalArgumentException(name)).get(instance, entity.byName(name), this)
     }
 
     override fun toString(): String{
@@ -22,7 +30,7 @@ class ReflectionElement(val entity: Entity, val extractors: Map<String, Extracto
 
 class ParseTreeToAstMapper() {
 
-    var debug = true
+    var debug = false
 
     private fun debugMsg(msg: String) {
         if (debug) {
@@ -209,7 +217,7 @@ class ParseTreeToAstMapper() {
             val superclass = Entity(s, elements, isAbstract = true)
             metamodel.addEntity(superclass)
             alternatives.forEach { alt ->
-                metamodel.addEntity(Entity(alt.ast.altLabel.text, considerAlternative(s, alt, extractors, parserClass), superclass = superclass))
+                metamodel.addEntity(Entity(alt.ast.altLabel.text, considerAlternative(alt.ast.altLabel.text, alt, extractors, parserClass), superclass = superclass))
             }
         } else {
             alternatives.forEach { alt -> elements.addAll(considerAlternative(s, alt, extractors, parserClass)) }
