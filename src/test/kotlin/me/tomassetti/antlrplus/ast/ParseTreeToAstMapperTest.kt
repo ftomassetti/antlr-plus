@@ -267,6 +267,31 @@ class ParseTreeToAstMapperTest {
 """, printTreeToString("var a = 1 + 2", extractors))
     }
 
+    @Test fun alwaysIgnoreToken() {
+        val code = convert(this.javaClass.getResourceAsStream("/SandyParser.g4"))
+        val mapper = ParseTreeToAstMapper()
+        mapper.alwaysIgnoreThisToken("EOF")
+        mapper.alwaysIgnoreThisToken("VAR")
+        mapper.alwaysIgnoreThisToken("ASSIGN")
+        val pair = mapper.produceMetamodelAndExtractors(code, SandyParser::class.java)
+        val metamodel = pair.first
+        val extractors = pair.second
+
+        assertEquals("""root: sandyFile
+  lines: line
+    statement: varDeclarationStatement
+      varDeclaration: varDeclaration
+        assignment: assignment
+          expression: binaryOperation
+            right: intLiteral
+              INTLIT: '2'
+            operator: '+'
+            left: intLiteral
+              INTLIT: '1'
+          ID: 'a'
+""", printTreeToString("var a = 1 + 2", extractors))
+    }
+
     /*@Test fun pythonExtractors() {
         val code = convert(this.javaClass.getResourceAsStream("/me/tomassetti/antlrplus/python/Python3.g4"))
         val mapper = ParseTreeToAstMapper()
