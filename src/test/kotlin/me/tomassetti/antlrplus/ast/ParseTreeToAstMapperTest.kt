@@ -4,6 +4,7 @@ import me.tomassetti.antlrplus.ParserFacade
 import me.tomassetti.antlrplus.ast.*
 import me.tomassetti.antlrplus.python.Python3Lexer
 import me.tomassetti.antlrplus.python.Python3Parser
+import me.tomassetti.antlrplus.python.SandyParser
 import kotlin.collections.*
 
 import org.antlr.v4.Tool
@@ -149,7 +150,106 @@ class ParseTreeToAstMapperTest {
                 metamodel.byName("classType_lfno_classOrInterfaceType"))
     }
 
-    @Test fun pythonExtractors() {
+    fun printTree(role:String, el:ReflectionElement, indentation:String="") {
+        println("${indentation}${role}: ${el.entity.name}")
+        el.entity.features.forEach { f ->
+            val res = el.get(f.name)
+            when (res) {
+                null -> "nothing to do"
+                is ReflectionElement -> printTree(f.name, res, indentation + "  ")
+                is String -> println("${indentation}  ${f.name}: '${res}'")
+                is List<*> -> res.forEach { el ->
+                    when (el) {
+                        is ReflectionElement -> printTree(f.name, el, indentation + "  ")
+                        is String -> println("${indentation}  ${f.name}: '${el}'")
+                        else -> throw IllegalArgumentException("${el?.javaClass}")
+                    }
+                }
+                else -> throw IllegalArgumentException("${res?.javaClass}")
+            }
+        }
+    }
+
+    @Test fun sandyMetamodel() {
+        val code = convert(this.javaClass.getResourceAsStream("/SandyParser.g4"))
+        val mapper = ParseTreeToAstMapper()
+        val metamodel = mapper.produceMetamodel(code)
+
+        assertEquals(
+                Entity("sandyFile", setOf(
+                        multipleChild("lines", "line"))),
+                metamodel.byName("sandyFile"))
+
+        assertEquals(
+                Entity("line", setOf(
+                        simpleChild("statement"),
+                        simpleToken("NEWLINE"),
+                        simpleToken("EOF"))),
+                metamodel.byName("line"))
+
+        assertEquals(
+                Entity("statement", setOf(), isAbstract = true),
+                metamodel.byName("statement"))
+
+        assertEquals(
+                Entity("varDeclarationStatement", setOf(
+                        simpleChild("varDeclaration")), superclass = metamodel.byName("statement")),
+                metamodel.byName("varDeclarationStatement"))
+
+        assertEquals(
+                Entity("assignmentStatement", setOf(
+                        simpleChild("assignment")), superclass = metamodel.byName("statement")),
+                metamodel.byName("assignmentStatement"))
+
+        assertEquals(
+                Entity("expression", setOf(), isAbstract = true),
+                metamodel.byName("expression"))
+
+        assertEquals(
+                Entity("binaryOperation", setOf(
+                        simpleChild("left", "expression"),
+                        simpleChild("right", "expression"),
+                        simpleToken("operator")), superclass = metamodel.byName("expression")),
+                metamodel.byName("binaryOperation"))
+
+        assertEquals(
+                Entity("parenExpression", setOf(
+                        simpleChild("expression"),
+                        simpleToken("LPAREN"),
+                        simpleToken("RPAREN")), superclass = metamodel.byName("expression")),
+                metamodel.byName("parenExpression"))
+
+        assertEquals(
+                Entity("varReference", setOf(
+                        simpleToken("ID")), superclass = metamodel.byName("expression")),
+                metamodel.byName("varReference"))
+
+        assertEquals(
+                Entity("minusExpression", setOf(
+                        simpleChild("expression"),
+                        simpleToken("MINUS")), superclass = metamodel.byName("expression")),
+                metamodel.byName("minusExpression"))
+
+        assertEquals(
+                Entity("intLiteral", setOf(
+                        simpleToken("INTLIT")), superclass = metamodel.byName("expression")),
+                metamodel.byName("intLiteral"))
+
+        assertEquals(
+                Entity("decimalLiteral", setOf(
+                        simpleToken("DECLIT")), superclass = metamodel.byName("expression")),
+                metamodel.byName("decimalLiteral"))
+    }
+
+    /*@Test fun sandyExtractors() {
+        val code = convert(this.javaClass.getResourceAsStream("/SandyParser.g4"))
+        val mapper = ParseTreeToAstMapper()
+        val pair = mapper.produceMetamodelAndExtractors(code, SandyParser::class.java)
+        val metamodel = pair.first
+        val extractors = pair.second
+    }*/
+
+    /*@Test fun pythonExtractors() {
         val code = convert(this.javaClass.getResourceAsStream("/me/tomassetti/antlrplus/python/Python3.g4"))
         val mapper = ParseTreeToAstMapper()
         val pair = mapper.produceMetamodelAndExtractors(code, Python3Parser::class.java)
@@ -160,8 +260,12 @@ class ParseTreeToAstMapperTest {
         println(astRoot.javaClass)
         ///val = metamodel.byName("single_input").byName("simple_stmt")
         val res = extractors.toElement(astRoot, metamodel)
-        println(res)
+        println(res.entity)
+        printTree("root", res)
+        println(res.get("NEWLINE"))
+        println(res.get("compound_stmt"))
+        println(res.get("simple_stmt"))
         //println(mapper.extractors.get("single_input", "simple_stmt").get(astRoot, el))
-    }
+    }*/
 
 }
