@@ -90,6 +90,24 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
         this.wrapped = wrapped;
     }
 
+    private class TokenAdapter {
+        private Token token;
+
+        public TokenAdapter(Token token) {
+            this.token = token;
+        }
+
+        public Interval getInterval() {
+            int a = token.getStartIndex();
+            int b = token.getStopIndex();
+            return new Interval(a, b);
+        }
+
+        public String toString() {
+            return token.getText();
+        }
+    }
+
     @Override
     public List<Object> getMultipleProperty(Property property) {
         if (property.isSingle()) {
@@ -109,7 +127,7 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
                 List<? extends Object> result = (List<? extends Object>) wrapped.getClass().getField(name).get(wrapped);
                 for (Object r : result) {
                     if (r instanceof Token) {
-                        elements.add(((Token)r).getText());
+                        elements.add(new TokenAdapter((Token)r));
                     } else {
                         elements.add(r);
                     }
@@ -221,7 +239,7 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
                     return Optional.empty();
                 } else {
                     if (result instanceof Token) {
-                        return Optional.of(((Token)result).getText());
+                        return Optional.of(new TokenAdapter((Token)result));
                     }
                     return Optional.of(result);
                 }
@@ -236,7 +254,10 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
     private Interval toInterval(Object propertyValue) {
         if (propertyValue instanceof ParseTree) {
             return ((ParseTree) propertyValue).getSourceInterval();
+        } else if (propertyValue instanceof TokenAdapter) {
+            return ((TokenAdapter)propertyValue).getInterval();
         } else {
+            //System.err.println("NO POSITION FOR "+propertyValue+ " "+propertyValue.getClass());
             return null;
         }
     }
@@ -280,10 +301,17 @@ public class AntlrReflectionElement extends AbstractOrderedElement {
             Interval i1 = o1.getValue();
             Interval i2 = o2.getValue();
             if (i1 == null) {
+                //if (!AntlrReflectionMapper.POSITIONS_PROPERTIES.contains(o1.getFirst().getFeature())) {
+                //    System.err.println("NO POSITIONS FOR " + o1.getKey());
+                //}
                 return -1;
+                //return -1;
             }
             if (i2 == null) {
-                return 1;
+                //if (AntlrReflectionMapper.POSITIONS_PROPERTIES.contains(o2.getFirst().getFeature())) {
+                //    System.err.println("NO POSITIONS FOR " + o2.getKey());
+                //}
+                return -1;
             }
             if (i1.startsAfter(i2)) {
                 return 1;

@@ -34,6 +34,9 @@ public class AntlrReflectionMapper {
     private Map<Class<? extends ParserRuleContext>, RuleMappingConfiguration> ruleConfigurations = new HashMap<>();
 
     public void setRuleConfiguration(Class<? extends ParserRuleContext> rule, RuleMappingConfiguration configuration) {
+        if (ruleConfigurations.containsKey(rule)) {
+            throw new IllegalStateException("No overriding allowed");
+        }
         ruleConfigurations.put(rule, configuration);
     }
 
@@ -178,6 +181,8 @@ public class AntlrReflectionMapper {
     public static final Property END_LINE = new Property("endLine", Property.Datatype.INTEGER, Multiplicity.ONE);
     public static final Property START_COLUMN = new Property("startColumn", Property.Datatype.INTEGER, Multiplicity.ONE);
     public static final Property END_COLUMN = new Property("endColumn", Property.Datatype.INTEGER, Multiplicity.ONE);
+
+    public static final List<Property> POSITIONS_PROPERTIES = Arrays.asList(START_LINE, START_COLUMN, END_LINE, END_COLUMN);
 
     private Set<Class<? extends ParserRuleContext>> rulesToDrop = new HashSet<>();
 
