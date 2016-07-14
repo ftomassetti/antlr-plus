@@ -28,3 +28,7 @@ data class Reference(val name: String, val type: PtEntity, val multiple: Boolean
     override fun name() = name
     override fun isMultiple() = multiple
 }
+
+data class Entity(val name:String) {
+
+}
