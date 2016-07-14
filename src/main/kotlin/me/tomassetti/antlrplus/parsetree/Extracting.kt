@@ -1,29 +1,17 @@
 package me.tomassetti.antlrplus.parsetree
 
-import me.tomassetti.antlrplus.parsetree.Element
 import org.antlr.v4.runtime.CommonToken
 import org.antlr.v4.runtime.Parser
 import org.antlr.v4.runtime.ParserRuleContext
-import org.antlr.v4.runtime.tree.ParseTree
 import org.antlr.v4.runtime.tree.TerminalNodeImpl
 import java.util.*
 
 interface Extractor {
-    fun get(instance:Any, feature: PtFeature, element: Element) : Any?
+    fun get(instance:Any, feature: PtFeature, element: PtElement) : Any?
 }
 
 class ExtractorsMap(val metamodel: PtMetamodel) {
     private val map = HashMap<String, MutableMap<String, Extractor>>()
-    private val transparentEntities = HashSet<String>()
-    private val transparentTokens = HashSet<Int>()
-
-    fun markAsTransparentType(type: String) {
-        transparentEntities.add(type)
-    }
-
-    fun markAsTransparentTokenType(type: Int) {
-        transparentTokens.add(type)
-    }
 
     fun get(entityName:String, elementName: String) : Extractor {
         val res = map[entityName]?.get(elementName)
@@ -37,7 +25,7 @@ class ExtractorsMap(val metamodel: PtMetamodel) {
     }
 
     abstract class BasicExtractor(val extractorsMap: ExtractorsMap) : Extractor {
-        fun convert(raw: Any?, parent: Element) : Any? {
+        fun convert(raw: Any?, parent: PtElement) : Any? {
             if (raw == null) {
                 return null
             }
@@ -53,27 +41,11 @@ class ExtractorsMap(val metamodel: PtMetamodel) {
 
     fun toEntityName(ruleClass: Class<out ParserRuleContext>) = ruleClass.simpleName.removeSuffix("Context").decapitalize()
 
-    fun toElement(raw: ParserRuleContext, parent: Element? = null) : ReflectionElement? {
+    fun toElement(raw: ParserRuleContext, parent: PtElement? = null) : ReflectionPtElement? {
         val entityName = toEntityName(raw.javaClass)
-        if (this.transparentEntities.contains(entityName)) {
-            val children = raw.children.filter { f -> !isToBeIgnored(f) }
-            when (children.size) {
-                0 -> return null
-                1 -> return toElement(children[0] as ParserRuleContext, parent)
-                else -> throw IllegalStateException()
-            }
-        }
         val entity = metamodel.byName(entityName)
         val extractors = map[entityName] ?: throw IllegalArgumentException()
-        return ReflectionElement(entity, extractors, raw, parent)
-    }
-
-    private fun isToBeIgnored(pt: ParseTree): Boolean {
-        when (pt) {
-            is ParserRuleContext -> return false//return !transparentEntities.contains(toEntityName(pt.javaClass))
-            is TerminalNodeImpl -> return transparentTokens.contains(pt.symbol.type)
-            else -> throw IllegalArgumentException(pt.javaClass.canonicalName)
-        }
+        return ReflectionPtElement(entity, extractors, raw, parent)
     }
 
     fun addTokenExtractor(parserClass: Class<out Parser>, entityName: String, propertyName: String) {
@@ -87,13 +59,13 @@ class ExtractorsMap(val metamodel: PtMetamodel) {
         var extractor : Extractor? = null
         if (field != null) {
             extractor = object : BasicExtractor(this) {
-                override fun get(instance: Any, feature: PtFeature, element: Element): Any? {
+                override fun get(instance: Any, feature: PtFeature, element: PtElement): Any? {
                     return convert(field.get(instance), element)
                 }
             }
         } else if (field == null && method != null){
             extractor = object : BasicExtractor(this) {
-                override fun get(instance: Any, feature: PtFeature, element: Element): Any? {
+                override fun get(instance: Any, feature: PtFeature, element: PtElement): Any? {
                     return convert(method.invoke(instance), element)
                 }
             }
@@ -117,13 +89,13 @@ class ExtractorsMap(val metamodel: PtMetamodel) {
         var extractor : Extractor? = null
         if (field == null) {
             extractor = object : Extractor {
-                override fun get(instance: Any, feature: PtFeature, element: Element): Any {
+                override fun get(instance: Any, feature: PtFeature, element: PtElement): Any {
                     throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
             }
         } else {
             extractor = object : Extractor {
-                override fun get(instance: Any, feature: PtFeature, element: Element): Any {
+                override fun get(instance: Any, feature: PtFeature, element: PtElement): Any {
                     throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
             }

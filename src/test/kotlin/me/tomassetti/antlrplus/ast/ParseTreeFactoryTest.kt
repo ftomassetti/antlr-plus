@@ -6,7 +6,7 @@ import me.tomassetti.antlrplus.Python3Lexer
 import me.tomassetti.antlrplus.Python3Parser
 import me.tomassetti.antlrplus.SandyLexer
 import me.tomassetti.antlrplus.SandyParser
-import me.tomassetti.antlrplus.parsetree.Element
+import me.tomassetti.antlrplus.parsetree.PtElement
 import me.tomassetti.antlrplus.parsetree.ExtractorsMap
 import me.tomassetti.antlrplus.parsetree.ParseTreeToAstMapper
 import me.tomassetti.antlrplus.parsetree.printTree
@@ -27,7 +27,7 @@ import java.io.*
 import java.util.*
 import kotlin.test.assertEquals
 
-class ParseTreeToAstMapperTest {
+class ParseTreeFactoryTest {
 
     private val pythonParserFacade = object : ParserFacade<Python3Parser.Single_inputContext, Python3Parser>() {
         override fun getLexer(antlrInputStream: ANTLRInputStream): Lexer {
@@ -239,7 +239,7 @@ class ParseTreeToAstMapperTest {
 
     fun printTreeToString(code: String, extractors: ExtractorsMap) : String {
         val astRoot = sandyParserFacade.parseString("var a = 1 + 2")
-        val root = extractors.toElement(astRoot) as Element
+        val root = extractors.toElement(astRoot) as PtElement
         val ss = ByteArrayOutputStream()
         val ps = PrintStream(ss)
         printTree("root", root, destination = ps)
@@ -271,7 +271,7 @@ class ParseTreeToAstMapperTest {
 """, printTreeToString("var a = 1 + 2", extractors))
     }
 
-    @Test fun alwaysIgnoreToken() {
+    /*@Test fun alwaysIgnoreToken() {
         val code = convert(this.javaClass.getResourceAsStream("/SandyParser.g4"))
         val mapper = ParseTreeToAstMapper()
         mapper.alwaysIgnoreThisToken("EOF")
@@ -364,7 +364,7 @@ class ParseTreeToAstMapperTest {
                 "binaryOperation", "varReference"), metamodel.entities.map { e -> e.name }.toSet())
         assertEquals(PtEntity("sandyFile", setOf(multipleChild("lines", "statement"))), metamodel.byName("sandyFile"))
         assertEquals(PtEntity("varDeclaration", setOf(simpleChild("assignment"))), metamodel.byName("varDeclaration"))
-    }
+    }*/
 
     /*@Test fun pythonExtractors() {
         val code = convert(this.javaClass.getResourceAsStream("/me/tomassetti/antlrplus/python/Python3.g4"))
