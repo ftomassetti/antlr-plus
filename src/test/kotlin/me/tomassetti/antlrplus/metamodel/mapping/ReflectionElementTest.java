@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
+
 public class ReflectionElementTest {
 
     private ParserFacade<Python3Parser.File_inputContext, Python3Parser> parserFacade = new ParserFacade<Python3Parser.File_inputContext, Python3Parser>() {
