@@ -3,9 +3,7 @@ package me.tomassetti.antlrplus.xml;
 import me.tomassetti.antlrplus.metamodel.Property;
 import me.tomassetti.antlrplus.metamodel.Relation;
 import me.tomassetti.antlrplus.metamodel.mapping.AntlrReflectionMapper;
-import me.tomassetti.antlrplus.model.Element;
 import me.tomassetti.antlrplus.model.OrderedElement;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -23,7 +21,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class XmlExporter {
 
@@ -72,7 +73,7 @@ public class XmlExporter {
     }
 
     public void setPropertySetting(Property property, PropertySetting setting) {
-        if (!property.isSingle() && setting==PropertySetting.AS_ATTRIBUTE) {
+        if (!property.isSingle() && setting== PropertySetting.AS_ATTRIBUTE) {
             throw new IllegalArgumentException("Single property cannot be configured to be printed as attributes");
         }
         propertySettings.put(property, setting);

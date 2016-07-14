@@ -3,6 +3,7 @@ package me.tomassetti.antlrplus.python;
 import me.tomassetti.antlrplus.ParserFacade;
 import me.tomassetti.antlrplus.metamodel.mapping.AntlrReflectionMapper;
 import me.tomassetti.antlrplus.model.OrderedElement;
+
 import me.tomassetti.antlrplus.xml.XmlExporter;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
@@ -13,8 +14,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 public class XmlExporterTest {
 

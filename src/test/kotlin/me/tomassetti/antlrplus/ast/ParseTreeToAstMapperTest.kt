@@ -1,4 +1,4 @@
-package me.tomassetti.ast
+package me.tomassetti.antlrplus.ast
 
 import me.tomassetti.antlrplus.ParserFacade
 import me.tomassetti.antlrplus.ast.*
@@ -235,7 +235,7 @@ class ParseTreeToAstMapperTest {
 
     fun printTreeToString(code: String, extractors: ExtractorsMap) : String {
         val astRoot = sandyParserFacade.parseString("var a = 1 + 2")
-        val root = extractors.toElement(astRoot)
+        val root = extractors.toElement(astRoot) as Element
         val ss = ByteArrayOutputStream()
         val ps = PrintStream(ss)
         printTree("root", root, destination = ps)
@@ -290,6 +290,76 @@ class ParseTreeToAstMapperTest {
               INTLIT: '1'
           ID: 'a'
 """, printTreeToString("var a = 1 + 2", extractors))
+    }
+
+    @Test fun markAsTransparentOneStep() {
+        val code = convert(this.javaClass.getResourceAsStream("/SandyParser.g4"))
+        val mapper = ParseTreeToAstMapper()
+        mapper.alwaysIgnoreThisToken("EOF", -1)
+        mapper.alwaysIgnoreThisToken("NEWLINE")
+        mapper.alwaysIgnoreThisToken("VAR")
+        mapper.alwaysIgnoreThisToken("ASSIGN")
+        mapper.markAsTransparent("varDeclarationStatement")
+        val pair = mapper.produceMetamodelAndExtractors(code, SandyParser::class.java)
+        val metamodel = pair.first
+        val extractors = pair.second
+
+        assertEquals("""root: sandyFile
+  lines: line
+    statement: varDeclaration
+      assignment: assignment
+        expression: binaryOperation
+          right: intLiteral
+            INTLIT: '2'
+          operator: '+'
+          left: intLiteral
+            INTLIT: '1'
+        ID: 'a'
+""", printTreeToString("var a = 1 + 2", extractors))
+    }
+
+    @Test fun markAsTransparentTwoConsecutiveStepsExtraction() {
+        val code = convert(this.javaClass.getResourceAsStream("/SandyParser.g4"))
+        val mapper = ParseTreeToAstMapper()
+        mapper.alwaysIgnoreThisToken("EOF", -1)
+        mapper.alwaysIgnoreThisToken("NEWLINE")
+        mapper.alwaysIgnoreThisToken("VAR")
+        mapper.alwaysIgnoreThisToken("ASSIGN")
+        mapper.markAsTransparent("line")
+        mapper.markAsTransparent("varDeclarationStatement")
+        val pair = mapper.produceMetamodelAndExtractors(code, SandyParser::class.java)
+        val metamodel = pair.first
+        val extractors = pair.second
+
+        assertEquals("""root: sandyFile
+  lines: varDeclaration
+    assignment: assignment
+      expression: binaryOperation
+        right: intLiteral
+          INTLIT: '2'
+        operator: '+'
+        left: intLiteral
+          INTLIT: '1'
+      ID: 'a'
+""", printTreeToString("var a = 1 + 2", extractors))
+    }
+
+    @Test fun markAsTransparentTwoConsecutiveStepsMetamodel() {
+        val code = convert(this.javaClass.getResourceAsStream("/SandyParser.g4"))
+        val mapper = ParseTreeToAstMapper()
+        mapper.alwaysIgnoreThisToken("EOF", -1)
+        mapper.alwaysIgnoreThisToken("NEWLINE")
+        mapper.alwaysIgnoreThisToken("VAR")
+        mapper.alwaysIgnoreThisToken("ASSIGN")
+        mapper.markAsTransparent("line")
+        mapper.markAsTransparent("varDeclarationStatement")
+        val pair = mapper.produceMetamodelAndExtractors(code, SandyParser::class.java)
+        val metamodel = pair.first
+        assertEquals(setOf("sandyFile", "statement", "assignmentStatement", "varDeclaration", "assignment",
+                "expression", "decimalLiteral", "minusExpression", "intLiteral", "parenExpression",
+                "binaryOperation", "varReference"), metamodel.entities.map { e -> e.name }.toSet())
+        assertEquals(Entity("sandyFile", setOf(multipleChild("lines", "statement"))), metamodel.byName("sandyFile"))
+        assertEquals(Entity("varDeclaration", setOf(simpleChild("assignment"))), metamodel.byName("varDeclaration"))
     }
 
     /*@Test fun pythonExtractors() {

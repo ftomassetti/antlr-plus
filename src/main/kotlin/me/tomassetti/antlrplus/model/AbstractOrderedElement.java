@@ -3,8 +3,6 @@ package me.tomassetti.antlrplus.model;
 import me.tomassetti.antlrplus.metamodel.Entity;
 import me.tomassetti.antlrplus.metamodel.Property;
 import me.tomassetti.antlrplus.metamodel.Relation;
-import me.tomassetti.antlrplus.model.Element;
-import me.tomassetti.antlrplus.model.OrderedElement;
 
 import java.util.LinkedList;
 import java.util.List;

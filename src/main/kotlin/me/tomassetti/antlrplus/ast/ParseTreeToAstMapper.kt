@@ -1,4 +1,4 @@
-package me.tomassetti.ast
+package me.tomassetti.antlrplus.ast
 
 import me.tomassetti.antlrplus.ast.*
 import org.antlr.runtime.tree.CommonTree
@@ -8,7 +8,6 @@ import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.tool.*
 import org.antlr.v4.tool.ast.*
 import java.util.*
-
 
 class ReflectionElement(val entity: Entity,
                         val extractors: Map<String, Extractor>,
@@ -33,9 +32,18 @@ class ParseTreeToAstMapper() {
     var debug = false
 
     private var tokensToIgnore = HashSet<String>()
+    private var tokensTypesToIgnore = HashSet<Int>()
+    private var transparentEntities = HashSet<String>()
 
-    fun alwaysIgnoreThisToken(token: String) {
+    fun alwaysIgnoreThisToken(token: String, type: Int? = null) {
         tokensToIgnore.add(token)
+        if (type != null) {
+            tokensTypesToIgnore.add(type)
+        }
+    }
+
+    fun markAsTransparent(type: String) {
+        transparentEntities.add(type)
     }
 
     private fun debugMsg(msg: String) {
@@ -57,7 +65,7 @@ class ParseTreeToAstMapper() {
     private fun considerAlternative(entityName: String, alt : Alternative, extractors: ExtractorsMap, parserClass: Class<out Parser>?) : Set<Feature>{
         debugMsg("  Considering alternative")
         val res = HashSet<Feature>()
-        val labelledTypes : java.util.HashMap<String, MutableList<String>> = HashMap<String, MutableList<String>>()
+        val labelledTypes : java.util.HashMap<String, MutableList<String>> = HashMap()
         alt.labelDefs.forEach { s, mutableList ->
             mutableList.forEach { e ->
                 if (!tokensToIgnore.contains((e.element as RuleRefAST).text)) {
@@ -112,7 +120,7 @@ class ParseTreeToAstMapper() {
                 if (!(labelledTypes.containsKey(type))) {
                     labelledTypes.put(type, LinkedList<String>())
                 }
-                labelledTypes.get(type)?.add(name)
+                labelledTypes[type]?.add(name)
                 res.add(Feature(name, type, true))
                 if (parserClass != null) {
                     extractors.addNodeExtractor(parserClass, entityName, name)
@@ -124,7 +132,7 @@ class ParseTreeToAstMapper() {
                 if (!(labelledTypes.containsKey(type))) {
                     labelledTypes.put(type, LinkedList<String>())
                 }
-                labelledTypes.get(type)?.add(name)
+                labelledTypes[type]?.add(name)
                 res.add(Feature(name, type, false))
                 if (parserClass != null) {
                     extractors.addNodeExtractor(parserClass, entityName, name)
@@ -137,7 +145,7 @@ class ParseTreeToAstMapper() {
                     if (!(labelledTypes.containsKey(type))) {
                         labelledTypes.put(type, LinkedList<String>())
                     }
-                    labelledTypes.get(type)?.add(name)
+                    labelledTypes[type]?.add(name)
                     res.add(Feature(name, TOKEN_TYPE, false))
                     if (parserClass != null) {
                         extractors.addTokenExtractor(parserClass, entityName, name)
@@ -164,11 +172,17 @@ class ParseTreeToAstMapper() {
 
         val metamodel = Metamodel()
         val extractors = ExtractorsMap(metamodel)
+        transparentEntities.forEach { te -> extractors.markAsTransparentType(te) }
+        tokensTypesToIgnore.forEach { tt -> extractors.markAsTransparentTokenType(tt) }
+        val transparentEntitiesMapping = HashMap<String, String>()
 
         grammar.rules.forEach { s, rule ->
             try {
                 debugMsg("Considering rule $s")
                 if (rule is LeftRecursiveRule) {
+                    if (transparentEntities.contains(s)) {
+                        throw IllegalStateException()
+                    }
                     debugMsg("  It is recursive ($s)")
                     val superclass = Entity(s, emptySet(), isAbstract = true)
                     metamodel.addEntity(superclass)
@@ -181,12 +195,35 @@ class ParseTreeToAstMapper() {
                         }
                     }
                 } else {
-                    processRule(metamodel, extractors, rule, s, parserClass)
+                    val e = processRule(metamodel, extractors, rule, s, parserClass)
+                    if (transparentEntities.contains(s)) {
+                        if (e.isAbstract) {
+                            throw IllegalArgumentException()
+                        }
+                        if (e.features.size != 1){
+                            throw IllegalArgumentException("Type $s is marked as transparent, so it should have one feature but instead it has ${e.features.size}: ${e.features}")
+                        }
+                        val f = e.features.iterator().next()
+                        if (f.multiple || f.type == TOKEN_TYPE) {
+                            throw IllegalArgumentException()
+                        }
+                        transparentEntitiesMapping[s] = f.type
+                    }
                 }
             } catch (e: RuntimeException) {
                 throw RuntimeException("Error processing rule $s", e)
             }
         }
+
+        metamodel.entities.removeAll { e -> transparentEntities.contains(e.name) }
+        metamodel.entities.forEach { e ->
+            e.features.forEach { f ->
+                if (transparentEntitiesMapping.containsKey(f.type)) {
+                    f.type = transparentEntitiesMapping[f.type]!!
+                }
+            }
+        }
+
         return Pair(metamodel, extractors)
     }
 
@@ -211,13 +248,13 @@ class ParseTreeToAstMapper() {
         return grammar
     }
 
-    private fun processRule(metamodel: Metamodel, extractors: ExtractorsMap, rule: Rule, s: String, parserClass: Class<out Parser>?) {
-        processAlternatives(rule.alt.toList(), metamodel, extractors, s, parserClass)
+    private fun processRule(metamodel: Metamodel, extractors: ExtractorsMap, rule: Rule, s: String, parserClass: Class<out Parser>?) : Entity {
+        return processAlternatives(rule.alt.toList(), metamodel, extractors, s, parserClass)
     }
 
     private fun processAlternatives(alternativesRaw: Collection<Alternative>, metamodel: Metamodel, extractors: ExtractorsMap, s: String,
-                                    parserClass: Class<out Parser>?) {
-        val elements: MutableSet<Feature> = HashSet<Feature>()
+                                    parserClass: Class<out Parser>?)  : Entity {
+        val elements: MutableSet<Feature> = HashSet()
         val alternatives = alternativesRaw.filter { alt -> alt != null }
         if (alternatives.size == 0) {
             throw IllegalArgumentException("No alternatives for $s")
@@ -229,9 +266,12 @@ class ParseTreeToAstMapper() {
             alternatives.forEach { alt ->
                 metamodel.addEntity(Entity(alt.ast.altLabel.text, considerAlternative(alt.ast.altLabel.text, alt, extractors, parserClass), superclass = superclass))
             }
+            return superclass
         } else {
             alternatives.forEach { alt -> elements.addAll(considerAlternative(s, alt, extractors, parserClass)) }
-            metamodel.addEntity(Entity(s, elements))
+            val e = Entity(s, elements)
+            metamodel.addEntity(e)
+            return e
         }
     }
 

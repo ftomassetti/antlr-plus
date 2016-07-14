@@ -1,7 +1,7 @@
 package me.tomassetti.antlrplus;
 
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.Collections;
 import java.util.Iterator;
