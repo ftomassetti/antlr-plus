@@ -1,6 +1,5 @@
 package me.tomassetti.antlrplus.ast
 
-import me.tomassetti.antlrplus.ast.*
 import org.antlr.runtime.tree.CommonTree
 import org.antlr.v4.Tool
 import org.antlr.v4.runtime.Parser

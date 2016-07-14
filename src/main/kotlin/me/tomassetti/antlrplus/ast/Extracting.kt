@@ -1,6 +1,5 @@
 package me.tomassetti.antlrplus.ast
 
-import me.tomassetti.antlrplus.ast.ReflectionElement
 import org.antlr.v4.runtime.CommonToken
 import org.antlr.v4.runtime.Parser
 import org.antlr.v4.runtime.ParserRuleContext
@@ -56,7 +55,7 @@ class ExtractorsMap(val metamodel: Metamodel) {
     fun toElement(raw: ParserRuleContext, parent: Element? = null) : ReflectionElement? {
         val entityName = toEntityName(raw.javaClass)
         if (this.transparentEntities.contains(entityName)) {
-            val children = raw.children.filter { f -> isNotTransparent(f) }
+            val children = raw.children.filter { f -> !isToBeIgnored(f) }
             when (children.size) {
                 0 -> return null
                 1 -> return toElement(children[0] as ParserRuleContext, parent)
@@ -68,10 +67,10 @@ class ExtractorsMap(val metamodel: Metamodel) {
         return ReflectionElement(entity, extractors, raw, parent)
     }
 
-    private fun isNotTransparent(pt: ParseTree): Boolean {
+    private fun isToBeIgnored(pt: ParseTree): Boolean {
         when (pt) {
-            is ParserRuleContext -> return !transparentEntities.contains(toEntityName(pt.javaClass))
-            is TerminalNodeImpl -> return !transparentTokens.contains(pt.symbol.type)
+            is ParserRuleContext -> return false//return !transparentEntities.contains(toEntityName(pt.javaClass))
+            is TerminalNodeImpl -> return transparentTokens.contains(pt.symbol.type)
             else -> throw IllegalArgumentException(pt.javaClass.canonicalName)
         }
     }
