@@ -64,10 +64,11 @@ generateTestGrammarSource {
 compileTestKotlin.dependsOn generateTestGrammarSource
 sourceSets {
     test_generated {
-        kotlin.srcDir 'generated-src/antlr/test/'
+        java.srcDir 'generated-src/antlr/test/'
     }
 }
-compileTestKotlin.source sourceSets.test_generated.kotlin, sourceSets.test.kotlin
+compileTestJava.source sourceSets.test_generated.java
+compileTestKotlin.source sourceSets.test.kotlin, sourceSets.test_generated.java
 
 clean{
     delete "generated-src"
