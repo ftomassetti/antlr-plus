@@ -8,7 +8,7 @@ import java.util.*
 
 val TOKEN_TYPE = "<String>"
 
-data class Feature(val name: String, var type: String, val multiple: Boolean) {
+data class PtFeature(val name: String, var type: String, val multiple: Boolean) {
     override fun toString(): String {
         val desc = if (type == TOKEN_TYPE) "Token" else type
         val mult = if (multiple) "*" else ""
@@ -16,14 +16,14 @@ data class Feature(val name: String, var type: String, val multiple: Boolean) {
     }
 }
 
-class Entity(val name: String, val features: Set<Feature>, val superclass: Entity? = null, val isAbstract: Boolean = false) {
+class PtEntity(val name: String, val features: Set<PtFeature>, val superclass: PtEntity? = null, val isAbstract: Boolean = false) {
     override fun toString(): String{
         return "Entity(name='$name', features=$features, superclass=${superclass?.name}, isAbstract=$isAbstract)"
     }
 
     override fun equals(other: Any?): Boolean{
         if (this === other) return true
-        if (other !is Entity) return false
+        if (other !is PtEntity) return false
 
         if (name != other.name) return false
         if (features != other.features) return false
@@ -41,20 +41,20 @@ class Entity(val name: String, val features: Set<Feature>, val superclass: Entit
         return result
     }
 
-    fun byName(name: String) : Feature {
+    fun byName(name: String) : PtFeature {
         return features.find { e -> e.name == name } ?: throw IllegalArgumentException(name)
     }
 }
 
-class Metamodel() {
+class PtMetamodel() {
 
-    val entities : MutableList<Entity> = LinkedList<Entity>()
+    val entities : MutableList<PtEntity> = LinkedList<PtEntity>()
 
-    fun addEntity(entity: Entity) {
+    fun addEntity(entity: PtEntity) {
         entities.add(entity)
     }
 
-    fun byName(name: String) : Entity {
+    fun byName(name: String) : PtEntity {
         val e = entities.find { e -> e.name == name }
         if (e == null) {
             throw IllegalArgumentException("Unknown entity $name. Knowns are: ${entities.map { e -> e.name }}")
@@ -64,10 +64,10 @@ class Metamodel() {
     }
 }
 
-fun simpleToken(name: String) = Feature(name, TOKEN_TYPE, false)
+fun simpleToken(name: String) = PtFeature(name, TOKEN_TYPE, false)
 
-fun multipleToken(name: String) = Feature(name, TOKEN_TYPE, true)
+fun multipleToken(name: String) = PtFeature(name, TOKEN_TYPE, true)
 
-fun simpleChild(name: String, type: String = name) = Feature(name, type, false)
+fun simpleChild(name: String, type: String = name) = PtFeature(name, type, false)
 
-fun multipleChild(name: String, type: String = name) = Feature(name, type, true)
+fun multipleChild(name: String, type: String = name) = PtFeature(name, type, true)

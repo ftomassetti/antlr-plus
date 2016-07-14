@@ -1,11 +1,10 @@
-package me.tomassetti.antlrplus.ast
+package me.tomassetti.antlrplus.parsetree
 
-import me.tomassetti.antlrplus.parsetree.ReflectionElement
 import java.io.PrintStream
 import java.lang.System.out
 
 interface Element {
-    fun entity() : Entity
+    fun entity() : PtEntity
     fun parent() : Element?
     fun get(name: String) : Any?
 }

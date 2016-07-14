@@ -1,8 +1,6 @@
 package me.tomassetti.antlrplus.parsetree
 
-import me.tomassetti.antlrplus.ast.Element
-import me.tomassetti.antlrplus.ast.Feature
-import me.tomassetti.antlrplus.parsetree.ReflectionElement
+import me.tomassetti.antlrplus.parsetree.Element
 import org.antlr.v4.runtime.CommonToken
 import org.antlr.v4.runtime.Parser
 import org.antlr.v4.runtime.ParserRuleContext
@@ -11,10 +9,10 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl
 import java.util.*
 
 interface Extractor {
-    fun get(instance:Any, feature: Feature, element: Element) : Any?
+    fun get(instance:Any, feature: PtFeature, element: Element) : Any?
 }
 
-class ExtractorsMap(val metamodel: Metamodel) {
+class ExtractorsMap(val metamodel: PtMetamodel) {
     private val map = HashMap<String, MutableMap<String, Extractor>>()
     private val transparentEntities = HashSet<String>()
     private val transparentTokens = HashSet<Int>()
@@ -89,13 +87,13 @@ class ExtractorsMap(val metamodel: Metamodel) {
         var extractor : Extractor? = null
         if (field != null) {
             extractor = object : BasicExtractor(this) {
-                override fun get(instance: Any, feature: Feature, element: Element): Any? {
+                override fun get(instance: Any, feature: PtFeature, element: Element): Any? {
                     return convert(field.get(instance), element)
                 }
             }
         } else if (field == null && method != null){
             extractor = object : BasicExtractor(this) {
-                override fun get(instance: Any, feature: Feature, element: Element): Any? {
+                override fun get(instance: Any, feature: PtFeature, element: Element): Any? {
                     return convert(method.invoke(instance), element)
                 }
             }
@@ -119,13 +117,13 @@ class ExtractorsMap(val metamodel: Metamodel) {
         var extractor : Extractor? = null
         if (field == null) {
             extractor = object : Extractor {
-                override fun get(instance: Any, feature: Feature, element: Element): Any {
+                override fun get(instance: Any, feature: PtFeature, element: Element): Any {
                     throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
             }
         } else {
             extractor = object : Extractor {
-                override fun get(instance: Any, feature: Feature, element: Element): Any {
+                override fun get(instance: Any, feature: PtFeature, element: Element): Any {
                     throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
             }

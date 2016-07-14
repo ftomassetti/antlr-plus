@@ -1,8 +1,6 @@
 package me.tomassetti.antlrplus.parsetree
 
-import me.tomassetti.antlrplus.ast.Element
-import me.tomassetti.antlrplus.parsetree.Extractor
-import me.tomassetti.antlrplus.parsetree.ExtractorsMap
+import me.tomassetti.antlrplus.parsetree.Element
 import org.antlr.runtime.tree.CommonTree
 import org.antlr.v4.Tool
 import org.antlr.v4.runtime.Parser
@@ -11,12 +9,12 @@ import org.antlr.v4.tool.*
 import org.antlr.v4.tool.ast.*
 import java.util.*
 
-class ReflectionElement(val entity: Entity,
+class ReflectionElement(val entity: PtEntity,
                         val extractors: Map<String, Extractor>,
                         val instance: ParserRuleContext,
                         val parent: Element? = null) : Element {
 
-    override fun entity(): Entity = entity
+    override fun entity(): PtEntity = entity
 
     override fun parent(): Element? = parent
 
@@ -64,9 +62,9 @@ class ParseTreeToAstMapper() {
         }
     }
 
-    private fun considerAlternative(entityName: String, alt : Alternative, extractors: ExtractorsMap, parserClass: Class<out Parser>?) : Set<me.tomassetti.antlrplus.ast.Feature>{
+    private fun considerAlternative(entityName: String, alt : Alternative, extractors: ExtractorsMap, parserClass: Class<out Parser>?) : Set<PtFeature>{
         debugMsg("  Considering alternative")
-        val res = HashSet<me.tomassetti.antlrplus.ast.Feature>()
+        val res = HashSet<PtFeature>()
         val labelledTypes : HashMap<String, MutableList<String>> = HashMap()
         alt.labelDefs.forEach { s, mutableList ->
             mutableList.forEach { e ->
@@ -81,14 +79,14 @@ class ParseTreeToAstMapper() {
             // If they have labels we ignore them here
             if (labels.size > 0 && mutableList.size != labels.size) {
                 debugMsg("    Adding elements excluded by $s")
-                res.add(Feature(s, s, mutableList.size > 1))
+                res.add(PtFeature(s, s, mutableList.size > 1))
                 if (parserClass != null) {
                     extractors.addTokenExtractorWithExclusions(parserClass, entityName, s, labels)
                 }
             } else if (labels.size == 0) {
                 debugMsg("    Adding elements not labelled $s")
                 val multiple = mutableList.size > 1 || isMultiple(mutableList[0])
-                res.add(Feature(s, s, multiple))
+                res.add(PtFeature(s, s, multiple))
                 if (parserClass != null) {
                     extractors.addTokenExtractor(parserClass, entityName, s)
                 }
@@ -103,7 +101,7 @@ class ParseTreeToAstMapper() {
                     throw UnsupportedOperationException()
                 } else if (nLabels == 0) {
                     val multiple = mutableList.size > 1 || isMultiple(mutableList[0])
-                    res.add(Feature(s, TOKEN_TYPE, multiple))
+                    res.add(PtFeature(s, TOKEN_TYPE, multiple))
                     if (parserClass != null) {
                         extractors.addTokenExtractor(parserClass, entityName, s)
                     }
@@ -114,7 +112,7 @@ class ParseTreeToAstMapper() {
     }
 
     private fun processSingleLabel(entityName:String, e: LabelElementPair, labelledTypes: HashMap<String, MutableList<String>>,
-                                   res: MutableSet<me.tomassetti.antlrplus.ast.Feature>, extractors: ExtractorsMap, parserClass: Class<out Parser>?) {
+                                   res: MutableSet<PtFeature>, extractors: ExtractorsMap, parserClass: Class<out Parser>?) {
         when (e.type) {
             LabelType.RULE_LIST_LABEL -> {
                 val type = (e.element as RuleRefAST).text
@@ -123,7 +121,7 @@ class ParseTreeToAstMapper() {
                     labelledTypes.put(type, LinkedList<String>())
                 }
                 labelledTypes[type]?.add(name)
-                res.add(Feature(name, type, true))
+                res.add(PtFeature(name, type, true))
                 if (parserClass != null) {
                     extractors.addNodeExtractor(parserClass, entityName, name)
                 }
@@ -135,7 +133,7 @@ class ParseTreeToAstMapper() {
                     labelledTypes.put(type, LinkedList<String>())
                 }
                 labelledTypes[type]?.add(name)
-                res.add(Feature(name, type, false))
+                res.add(PtFeature(name, type, false))
                 if (parserClass != null) {
                     extractors.addNodeExtractor(parserClass, entityName, name)
                 }
@@ -148,7 +146,7 @@ class ParseTreeToAstMapper() {
                         labelledTypes.put(type, LinkedList<String>())
                     }
                     labelledTypes[type]?.add(name)
-                    res.add(Feature(name, TOKEN_TYPE, false))
+                    res.add(PtFeature(name, TOKEN_TYPE, false))
                     if (parserClass != null) {
                         extractors.addTokenExtractor(parserClass, entityName, name)
                     }
@@ -158,21 +156,21 @@ class ParseTreeToAstMapper() {
         }
     }
 
-    fun produceMetamodel(antlrGrammarCode: String) : Metamodel {
+    fun produceMetamodel(antlrGrammarCode: String) : PtMetamodel {
         return internalProduceMetamodel(antlrGrammarCode, null).first
     }
 
-    fun produceMetamodelAndExtractors(antlrGrammarCode: String, parserClass: Class<out Parser>) : Pair<Metamodel, ExtractorsMap> {
+    fun produceMetamodelAndExtractors(antlrGrammarCode: String, parserClass: Class<out Parser>) : Pair<PtMetamodel, ExtractorsMap> {
         return internalProduceMetamodel(antlrGrammarCode, parserClass)
     }
 
     /**
      * If the parserClass is passed it also describe the mapping
      */
-    private fun internalProduceMetamodel(antlrGrammarCode: String, parserClass: Class<out Parser>? = null) : Pair<Metamodel, ExtractorsMap> {
+    private fun internalProduceMetamodel(antlrGrammarCode: String, parserClass: Class<out Parser>? = null) : Pair<PtMetamodel, ExtractorsMap> {
         val grammar = grammarFrom(antlrGrammarCode)
 
-        val metamodel = Metamodel()
+        val metamodel = PtMetamodel()
         val extractors = ExtractorsMap(metamodel)
         transparentEntities.forEach { te -> extractors.markAsTransparentType(te) }
         tokensTypesToIgnore.forEach { tt -> extractors.markAsTransparentTokenType(tt) }
@@ -186,7 +184,7 @@ class ParseTreeToAstMapper() {
                         throw IllegalStateException("The rule is transparent: $s")
                     }
                     debugMsg("  It is recursive ($s)")
-                    val superclass = Entity(s, emptySet(), isAbstract = true)
+                    val superclass = PtEntity(s, emptySet(), isAbstract = true)
                     metamodel.addEntity(superclass)
                     if (rule.altLabels != null) {
                         rule.altLabels.forEach { altLabel ->
@@ -250,28 +248,28 @@ class ParseTreeToAstMapper() {
         return grammar
     }
 
-    private fun processRule(metamodel: Metamodel, extractors: ExtractorsMap, rule: Rule, s: String, parserClass: Class<out Parser>?) : Entity {
+    private fun processRule(metamodel: PtMetamodel, extractors: ExtractorsMap, rule: Rule, s: String, parserClass: Class<out Parser>?) : PtEntity {
         return processAlternatives(rule.alt.toList(), metamodel, extractors, s, parserClass)
     }
 
-    private fun processAlternatives(alternativesRaw: Collection<Alternative>, metamodel: Metamodel, extractors: ExtractorsMap, s: String,
-                                    parserClass: Class<out Parser>?)  : Entity {
-        val elements: MutableSet<me.tomassetti.antlrplus.ast.Feature> = HashSet()
+    private fun processAlternatives(alternativesRaw: Collection<Alternative>, metamodel: PtMetamodel, extractors: ExtractorsMap, s: String,
+                                    parserClass: Class<out Parser>?)  : PtEntity {
+        val elements: MutableSet<PtFeature> = HashSet()
         val alternatives = alternativesRaw.filter { alt -> alt != null }
         if (alternatives.size == 0) {
             throw IllegalArgumentException("No alternatives for $s")
         }
         if (alternatives[0].ast.altLabel != null) {
             // this is abstract
-            val superclass = Entity(s, elements, isAbstract = true)
+            val superclass = PtEntity(s, elements, isAbstract = true)
             metamodel.addEntity(superclass)
             alternatives.forEach { alt ->
-                metamodel.addEntity(Entity(alt.ast.altLabel.text, considerAlternative(alt.ast.altLabel.text, alt, extractors, parserClass), superclass = superclass))
+                metamodel.addEntity(PtEntity(alt.ast.altLabel.text, considerAlternative(alt.ast.altLabel.text, alt, extractors, parserClass), superclass = superclass))
             }
             return superclass
         } else {
             alternatives.forEach { alt -> elements.addAll(considerAlternative(s, alt, extractors, parserClass)) }
-            val e = Entity(s, elements)
+            val e = PtEntity(s, elements)
             metamodel.addEntity(e)
             return e
         }
@@ -282,11 +280,11 @@ class ParseTreeToAstMapper() {
     }
 
     private fun processAltAsts(altAsts: Collection<AltAST>,
-                               metamodel: Metamodel,
+                               metamodel: PtMetamodel,
                                extractors: ExtractorsMap,
                                entityName: String, parserClass: Class<out Parser>?,
-                               externalSuperclass: Entity?) {
-        val elements: MutableSet<me.tomassetti.antlrplus.ast.Feature> = HashSet()
+                               externalSuperclass: PtEntity?) {
+        val elements: MutableSet<PtFeature> = HashSet()
         if (altAsts.size == 0) {
             throw IllegalArgumentException("No alternatives for $entityName")
         }
@@ -296,7 +294,7 @@ class ParseTreeToAstMapper() {
                     is TerminalAST -> {
                         if (!tokensToIgnore.contains(el.token.text)) {
                             debugMsg("      Adding terminal ${el.token.text}")
-                            elements.add(Feature(el.token.text, TOKEN_TYPE, false))
+                            elements.add(PtFeature(el.token.text, TOKEN_TYPE, false))
                             if (parserClass != null) {
                                 extractors.addTokenExtractor(parserClass, entityName, el.token.text)
                             }
@@ -304,7 +302,7 @@ class ParseTreeToAstMapper() {
                     }
                     is RuleRefAST -> {
                         debugMsg("      Adding rule ${el.text}")
-                        elements.add(Feature(el.text, el.text, false))
+                        elements.add(PtFeature(el.text, el.text, false))
                         if (parserClass != null) {
                             extractors.addTokenExtractor(parserClass, entityName, el.text)
                         }
@@ -317,13 +315,13 @@ class ParseTreeToAstMapper() {
                         when (subEl) {
                             is RuleRefAST -> {
                                 debugMsg("      Adding rule with label (name: '$name', subEl: ${subEl.text})")
-                                elements.add(Feature(name, subEl.text, false))
+                                elements.add(PtFeature(name, subEl.text, false))
                                 if (parserClass != null) {
                                     extractors.addNodeExtractor(parserClass, entityName, name)
                                 }
                             }
                             is GrammarAST -> if (isToken(subEl)) {
-                                elements.add(Feature(name, TOKEN_TYPE, false))
+                                elements.add(PtFeature(name, TOKEN_TYPE, false))
                                 if (parserClass != null) {
                                     extractors.addTokenExtractor(parserClass, entityName, name)
                                 }
@@ -348,10 +346,10 @@ class ParseTreeToAstMapper() {
                 } }
                 val multiple = elementsToMerge.find{ e -> e.multiple} != null
                 elements.removeAll(elementsToMerge)
-                elements.add(Feature(name, elementsToMerge[0].type, multiple))
+                elements.add(PtFeature(name, elementsToMerge[0].type, multiple))
             }
         }
-        val entity = Entity(entityName, elements, superclass=externalSuperclass)
+        val entity = PtEntity(entityName, elements, superclass=externalSuperclass)
         metamodel.addEntity(entity)
     }
 

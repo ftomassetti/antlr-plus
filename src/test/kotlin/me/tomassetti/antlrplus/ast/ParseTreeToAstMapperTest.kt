@@ -1,13 +1,15 @@
 package me.tomassetti.antlrplus.ast
 
 import me.tomassetti.antlrplus.ParserFacade
-import me.tomassetti.antlrplus.ast.*
+import me.tomassetti.antlrplus.parsetree.*
 import me.tomassetti.antlrplus.Python3Lexer
 import me.tomassetti.antlrplus.Python3Parser
 import me.tomassetti.antlrplus.SandyLexer
 import me.tomassetti.antlrplus.SandyParser
+import me.tomassetti.antlrplus.parsetree.Element
 import me.tomassetti.antlrplus.parsetree.ExtractorsMap
 import me.tomassetti.antlrplus.parsetree.ParseTreeToAstMapper
+import me.tomassetti.antlrplus.parsetree.printTree
 import kotlin.collections.*
 
 import org.antlr.v4.Tool
@@ -73,47 +75,47 @@ class ParseTreeToAstMapperTest {
         val metamodel = ParseTreeToAstMapper().produceMetamodel(code)
 
         assertEquals(
-                Entity("single_input", setOf(
+                PtEntity("single_input", setOf(
                     simpleToken("NEWLINE"),
                     simpleChild("simple_stmt"),
                     simpleChild("compound_stmt"))),
                 metamodel.byName("single_input"))
 
         assertEquals(
-                Entity("file_input", setOf(
+                PtEntity("file_input", setOf(
                         multipleToken("NEWLINE"),
                         simpleToken("EOF"),
                         multipleChild("stmt"))),
                 metamodel.byName("file_input"))
 
         assertEquals(
-                Entity("eval_input", setOf(
+                PtEntity("eval_input", setOf(
                         multipleToken("NEWLINE"),
                         simpleToken("EOF"),
                         simpleChild("testlist"))),
                 metamodel.byName("eval_input"))
 
         assertEquals(
-                Entity("decorator", setOf(
+                PtEntity("decorator", setOf(
                         simpleToken("NEWLINE"),
                         simpleChild("dotted_name"),
                         simpleChild("arglist"))),
                 metamodel.byName("decorator"))
 
         assertEquals(
-                Entity("decorators", setOf(
+                PtEntity("decorators", setOf(
                         multipleChild("decorator"))),
                 metamodel.byName("decorators"))
 
         assertEquals(
-                Entity("decorated", setOf(
+                PtEntity("decorated", setOf(
                         simpleChild("classdef"),
                         simpleChild("funcdef"),
                         simpleChild("decorators"))),
                 metamodel.byName("decorated"))
 
         assertEquals(
-                Entity("funcdef", setOf(
+                PtEntity("funcdef", setOf(
                         simpleToken("DEF"),
                         simpleToken("NAME"),
                         simpleChild("parameters"),
@@ -122,7 +124,7 @@ class ParseTreeToAstMapperTest {
                 metamodel.byName("funcdef"))
 
         assertEquals(
-                Entity("expr_stmt", setOf(
+                PtEntity("expr_stmt", setOf(
                         multipleChild("testlist_star_expr"),
                         simpleChild("augassign"),
                         multipleChild("yield_expr"),
@@ -130,7 +132,7 @@ class ParseTreeToAstMapperTest {
                 metamodel.byName("expr_stmt"))
 
         assertEquals(
-                Entity("testlist_star_expr", setOf(
+                PtEntity("testlist_star_expr", setOf(
                         multipleChild("test"),
                         multipleChild("star_expr"))),
                 metamodel.byName("testlist_star_expr"))
@@ -142,7 +144,7 @@ class ParseTreeToAstMapperTest {
         val metamodel = ParseTreeToAstMapper().produceMetamodel(code)
 
         assertEquals(
-                Entity("classType", setOf(
+                PtEntity("classType", setOf(
                         multipleChild("annotation"),
                         simpleToken("Identifier"),
                         simpleChild("typeArguments"),
@@ -150,14 +152,14 @@ class ParseTreeToAstMapperTest {
                 metamodel.byName("classType"))
 
         assertEquals(
-                Entity("classType_lf_classOrInterfaceType", setOf(
+                PtEntity("classType_lf_classOrInterfaceType", setOf(
                         multipleChild("annotation"),
                         simpleToken("Identifier"),
                         simpleChild("typeArguments"))),
                 metamodel.byName("classType_lf_classOrInterfaceType"))
 
         assertEquals(
-                Entity("classType_lfno_classOrInterfaceType", setOf(
+                PtEntity("classType_lfno_classOrInterfaceType", setOf(
                         multipleChild("annotation"),
                         simpleToken("Identifier"),
                         simpleChild("typeArguments"))),
@@ -170,67 +172,67 @@ class ParseTreeToAstMapperTest {
         val metamodel = mapper.produceMetamodel(code)
 
         assertEquals(
-                Entity("sandyFile", setOf(
+                PtEntity("sandyFile", setOf(
                         multipleChild("lines", "line"))),
                 metamodel.byName("sandyFile"))
 
         assertEquals(
-                Entity("line", setOf(
+                PtEntity("line", setOf(
                         simpleChild("statement"),
                         simpleToken("NEWLINE"),
                         simpleToken("EOF"))),
                 metamodel.byName("line"))
 
         assertEquals(
-                Entity("statement", setOf(), isAbstract = true),
+                PtEntity("statement", setOf(), isAbstract = true),
                 metamodel.byName("statement"))
 
         assertEquals(
-                Entity("varDeclarationStatement", setOf(
+                PtEntity("varDeclarationStatement", setOf(
                         simpleChild("varDeclaration")), superclass = metamodel.byName("statement")),
                 metamodel.byName("varDeclarationStatement"))
 
         assertEquals(
-                Entity("assignmentStatement", setOf(
+                PtEntity("assignmentStatement", setOf(
                         simpleChild("assignment")), superclass = metamodel.byName("statement")),
                 metamodel.byName("assignmentStatement"))
 
         assertEquals(
-                Entity("expression", setOf(), isAbstract = true),
+                PtEntity("expression", setOf(), isAbstract = true),
                 metamodel.byName("expression"))
 
         assertEquals(
-                Entity("binaryOperation", setOf(
+                PtEntity("binaryOperation", setOf(
                         simpleChild("left", "expression"),
                         simpleChild("right", "expression"),
                         simpleToken("operator")), superclass = metamodel.byName("expression")),
                 metamodel.byName("binaryOperation"))
 
         assertEquals(
-                Entity("parenExpression", setOf(
+                PtEntity("parenExpression", setOf(
                         simpleChild("expression"),
                         simpleToken("LPAREN"),
                         simpleToken("RPAREN")), superclass = metamodel.byName("expression")),
                 metamodel.byName("parenExpression"))
 
         assertEquals(
-                Entity("varReference", setOf(
+                PtEntity("varReference", setOf(
                         simpleToken("ID")), superclass = metamodel.byName("expression")),
                 metamodel.byName("varReference"))
 
         assertEquals(
-                Entity("minusExpression", setOf(
+                PtEntity("minusExpression", setOf(
                         simpleChild("expression"),
                         simpleToken("MINUS")), superclass = metamodel.byName("expression")),
                 metamodel.byName("minusExpression"))
 
         assertEquals(
-                Entity("intLiteral", setOf(
+                PtEntity("intLiteral", setOf(
                         simpleToken("INTLIT")), superclass = metamodel.byName("expression")),
                 metamodel.byName("intLiteral"))
 
         assertEquals(
-                Entity("decimalLiteral", setOf(
+                PtEntity("decimalLiteral", setOf(
                         simpleToken("DECLIT")), superclass = metamodel.byName("expression")),
                 metamodel.byName("decimalLiteral"))
     }
@@ -360,8 +362,8 @@ class ParseTreeToAstMapperTest {
         assertEquals(setOf("sandyFile", "statement", "assignmentStatement", "varDeclaration", "assignment",
                 "expression", "decimalLiteral", "minusExpression", "intLiteral", "parenExpression",
                 "binaryOperation", "varReference"), metamodel.entities.map { e -> e.name }.toSet())
-        assertEquals(Entity("sandyFile", setOf(multipleChild("lines", "statement"))), metamodel.byName("sandyFile"))
-        assertEquals(Entity("varDeclaration", setOf(simpleChild("assignment"))), metamodel.byName("varDeclaration"))
+        assertEquals(PtEntity("sandyFile", setOf(multipleChild("lines", "statement"))), metamodel.byName("sandyFile"))
+        assertEquals(PtEntity("varDeclaration", setOf(simpleChild("assignment"))), metamodel.byName("varDeclaration"))
     }
 
     /*@Test fun pythonExtractors() {
@@ -375,7 +377,7 @@ class ParseTreeToAstMapperTest {
         println(astRoot.javaClass)
         ///val = metamodel.byName("single_input").byName("simple_stmt")
         val res = extractors.toElement(astRoot, metamodel)
-        println(res.entity)
+        println(res.PtEntity)
         printTree("root", res)
         println(res.get("NEWLINE"))
         println(res.get("compound_stmt"))
