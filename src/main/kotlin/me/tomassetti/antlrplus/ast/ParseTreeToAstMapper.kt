@@ -180,7 +180,7 @@ class ParseTreeToAstMapper() {
                 debugMsg("Considering rule $s")
                 if (rule is LeftRecursiveRule) {
                     if (transparentEntities.contains(s)) {
-                        throw IllegalStateException()
+                        throw IllegalStateException("The rule is transparent: $s")
                     }
                     debugMsg("  It is recursive ($s)")
                     val superclass = Entity(s, emptySet(), isAbstract = true)

@@ -5,7 +5,6 @@ import me.tomassetti.antlrplus.Python3Lexer;
 import me.tomassetti.antlrplus.Python3Parser;
 import me.tomassetti.antlrplus.metamodel.mapping.AntlrReflectionMapper;
 import me.tomassetti.antlrplus.model.OrderedElement;
-
 import me.tomassetti.antlrplus.xml.XmlExporter;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
