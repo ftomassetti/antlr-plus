@@ -58,8 +58,8 @@ compileKotlin.source sourceSets.antlrdeps.kotlin, sourceSets.generated.kotlin, s
 
 generateTestGrammarSource {
     maxHeapSize = "64m"
-    arguments += ['-package', 'me.tomassetti.antlrplus.python']
-    outputDirectory = new File("generated-src/antlr/test/me/tomassetti/antlrplus/python".toString())
+    arguments += ['-package', 'me.tomassetti.antlrplus']
+    outputDirectory = new File("generated-src/antlr/test/me/tomassetti/antlrplus".toString())
 }
 compileTestKotlin.dependsOn generateTestGrammarSource
 sourceSets {

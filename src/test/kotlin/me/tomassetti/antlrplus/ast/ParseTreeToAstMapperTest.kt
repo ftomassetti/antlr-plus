@@ -2,10 +2,10 @@ package me.tomassetti.antlrplus.ast
 
 import me.tomassetti.antlrplus.ParserFacade
 import me.tomassetti.antlrplus.ast.*
-import me.tomassetti.antlrplus.python.Python3Lexer
-import me.tomassetti.antlrplus.python.Python3Parser
-import me.tomassetti.antlrplus.python.SandyLexer
-import me.tomassetti.antlrplus.python.SandyParser
+import me.tomassetti.antlrplus.Python3Lexer
+import me.tomassetti.antlrplus.Python3Parser
+import me.tomassetti.antlrplus.SandyLexer
+import me.tomassetti.antlrplus.SandyParser
 import kotlin.collections.*
 
 import org.antlr.v4.Tool

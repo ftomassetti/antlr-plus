@@ -1,8 +1,8 @@
 package me.tomassetti.antlrplus.python;
 
 import me.tomassetti.antlrplus.ParserFacade;
-import me.tomassetti.antlrplus.python.Python3Lexer;
-import me.tomassetti.antlrplus.python.Python3Parser;
+import me.tomassetti.antlrplus.Python3Lexer;
+import me.tomassetti.antlrplus.Python3Parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;

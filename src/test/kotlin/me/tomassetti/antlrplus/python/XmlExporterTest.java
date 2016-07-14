@@ -1,6 +1,8 @@
 package me.tomassetti.antlrplus.python;
 
 import me.tomassetti.antlrplus.ParserFacade;
+import me.tomassetti.antlrplus.Python3Lexer;
+import me.tomassetti.antlrplus.Python3Parser;
 import me.tomassetti.antlrplus.metamodel.mapping.AntlrReflectionMapper;
 import me.tomassetti.antlrplus.model.OrderedElement;
 
