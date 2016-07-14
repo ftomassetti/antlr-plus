@@ -1,4 +1,4 @@
-package me.tomassetti.antlrplus.ast
+package me.tomassetti.antlrplus.parsetree
 
 import me.tomassetti.antlrplus.ParserFacade
 import me.tomassetti.antlrplus.parsetree.*

@@ -24,16 +24,21 @@ data class Containment(val name: String, val type: Entity, val multiple: Boolean
     override fun isMultiple() = multiple
 }
 
+fun containMany(type: Entity, name: String) = Containment(name, type, true)
+fun containOne(type: Entity, name: String = type.name) = Containment(name, type, false)
+
 data class Reference(val name: String, val type: Entity, val multiple: Boolean) : me.tomassetti.antlrplus.ast.Feature {
     override fun name() = name
     override fun isMultiple() = multiple
 }
 
-data class Entity(val name:String, val features:List<Feature>) {
+data class Entity(val name:String, val features:Set<Feature>,
+                  var abstract: Boolean = false,
+                  val superEntities: Set<Entity> = emptySet()) {
 
 }
 
-data class Metamodel(val entities: MutableList<Entity> = LinkedList<Entity>()) {
+data class Metamodel(val entities: MutableSet<Entity> = HashSet<Entity>()) {
     fun  hasEntity(name: String) : Boolean = entities.any { it.name == name }
 
     fun  addEntity(entity: Entity) : Unit {
