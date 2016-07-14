@@ -4,6 +4,7 @@ import me.tomassetti.antlrplus.parsetree.PtEntity
 import me.tomassetti.antlrplus.parsetree.PtFeature
 import me.tomassetti.antlrplus.parsetree.PtMetamodel
 import me.tomassetti.antlrplus.parsetree.TOKEN_TYPE
+import java.util.*
 
 /**
  * Map the PtMetamodel to the AST Metamodel and the PtElements to the AST Elements
@@ -35,8 +36,33 @@ class Mapper {
 }
 
 /**
+ * Given a Model (-> a root element) it produces a transformed Model
+ */
+interface ModelTransformer {
+    fun transform(original:Element) : Element
+}
+
+/**
  * Transform the AST metamodel
  */
-class Transformer {
+class MetamodelTransformation(val originalMetamodel: Metamodel) {
+    private var specificTransformers = HashMap<String, ModelTransformer>()
+
+
+    /**
+     * It returns me something with the interface of an Element
+     * which transforms values before returning them to me, so lazily.
+     */
+    fun transform(original: Element) = transformer.transform(original)
+
+    private fun drop(entity: Entity, feature: Feature) {
+
+    }
+}
+
+object IdentityModelTransformer : ModelTransformer {
+    override fun transform(original: Element): Element {
+        return original
+    }
 
 }
