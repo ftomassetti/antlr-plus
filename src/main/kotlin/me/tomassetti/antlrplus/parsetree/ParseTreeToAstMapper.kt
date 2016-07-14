@@ -1,5 +1,8 @@
-package me.tomassetti.antlrplus.ast
+package me.tomassetti.antlrplus.parsetree
 
+import me.tomassetti.antlrplus.ast.Element
+import me.tomassetti.antlrplus.parsetree.Extractor
+import me.tomassetti.antlrplus.parsetree.ExtractorsMap
 import org.antlr.runtime.tree.CommonTree
 import org.antlr.v4.Tool
 import org.antlr.v4.runtime.Parser
@@ -61,10 +64,10 @@ class ParseTreeToAstMapper() {
         }
     }
 
-    private fun considerAlternative(entityName: String, alt : Alternative, extractors: ExtractorsMap, parserClass: Class<out Parser>?) : Set<Feature>{
+    private fun considerAlternative(entityName: String, alt : Alternative, extractors: ExtractorsMap, parserClass: Class<out Parser>?) : Set<me.tomassetti.antlrplus.ast.Feature>{
         debugMsg("  Considering alternative")
-        val res = HashSet<Feature>()
-        val labelledTypes : java.util.HashMap<String, MutableList<String>> = HashMap()
+        val res = HashSet<me.tomassetti.antlrplus.ast.Feature>()
+        val labelledTypes : HashMap<String, MutableList<String>> = HashMap()
         alt.labelDefs.forEach { s, mutableList ->
             mutableList.forEach { e ->
                 if (!tokensToIgnore.contains((e.element as RuleRefAST).text)) {
@@ -110,8 +113,8 @@ class ParseTreeToAstMapper() {
         return res
     }
 
-    private fun processSingleLabel(entityName:String, e: LabelElementPair, labelledTypes: java.util.HashMap<String, MutableList<String>>,
-                                   res: MutableSet<Feature>, extractors: ExtractorsMap, parserClass: Class<out Parser>?) {
+    private fun processSingleLabel(entityName:String, e: LabelElementPair, labelledTypes: HashMap<String, MutableList<String>>,
+                                   res: MutableSet<me.tomassetti.antlrplus.ast.Feature>, extractors: ExtractorsMap, parserClass: Class<out Parser>?) {
         when (e.type) {
             LabelType.RULE_LIST_LABEL -> {
                 val type = (e.element as RuleRefAST).text
@@ -253,7 +256,7 @@ class ParseTreeToAstMapper() {
 
     private fun processAlternatives(alternativesRaw: Collection<Alternative>, metamodel: Metamodel, extractors: ExtractorsMap, s: String,
                                     parserClass: Class<out Parser>?)  : Entity {
-        val elements: MutableSet<Feature> = HashSet()
+        val elements: MutableSet<me.tomassetti.antlrplus.ast.Feature> = HashSet()
         val alternatives = alternativesRaw.filter { alt -> alt != null }
         if (alternatives.size == 0) {
             throw IllegalArgumentException("No alternatives for $s")
@@ -283,7 +286,7 @@ class ParseTreeToAstMapper() {
                                extractors: ExtractorsMap,
                                entityName: String, parserClass: Class<out Parser>?,
                                externalSuperclass: Entity?) {
-        val elements: MutableSet<Feature> = HashSet()
+        val elements: MutableSet<me.tomassetti.antlrplus.ast.Feature> = HashSet()
         if (altAsts.size == 0) {
             throw IllegalArgumentException("No alternatives for $entityName")
         }

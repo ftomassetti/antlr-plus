@@ -6,6 +6,8 @@ import me.tomassetti.antlrplus.Python3Lexer
 import me.tomassetti.antlrplus.Python3Parser
 import me.tomassetti.antlrplus.SandyLexer
 import me.tomassetti.antlrplus.SandyParser
+import me.tomassetti.antlrplus.parsetree.ExtractorsMap
+import me.tomassetti.antlrplus.parsetree.ParseTreeToAstMapper
 import kotlin.collections.*
 
 import org.antlr.v4.Tool

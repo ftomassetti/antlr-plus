@@ -1,5 +1,8 @@
-package me.tomassetti.antlrplus.ast
+package me.tomassetti.antlrplus.parsetree
 
+import me.tomassetti.antlrplus.ast.Element
+import me.tomassetti.antlrplus.ast.Feature
+import me.tomassetti.antlrplus.parsetree.ReflectionElement
 import org.antlr.v4.runtime.CommonToken
 import org.antlr.v4.runtime.Parser
 import org.antlr.v4.runtime.ParserRuleContext
