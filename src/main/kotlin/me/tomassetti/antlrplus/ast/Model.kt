@@ -1,6 +1,6 @@
 package me.tomassetti.antlrplus.ast
 
-import me.tomassetti.ast.ReflectionElement
+import me.tomassetti.antlrplus.ast.ReflectionElement
 import java.io.PrintStream
 import java.lang.System.out
 

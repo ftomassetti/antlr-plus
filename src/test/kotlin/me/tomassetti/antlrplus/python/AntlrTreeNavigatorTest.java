@@ -1,7 +1,8 @@
 package me.tomassetti.antlrplus.python;
 
-import me.tomassetti.antlrplus.AntlrTreeNavigator;
 import me.tomassetti.antlrplus.ParserFacade;
+import me.tomassetti.antlrplus.python.Python3Lexer;
+import me.tomassetti.antlrplus.python.Python3Parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
@@ -10,9 +11,9 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
-import static org.junit.Assert.*;
 
 import static me.tomassetti.antlrplus.AntlrTreeNavigator.allChildrenIterable;
+import static org.junit.Assert.assertEquals;
 
 public class AntlrTreeNavigatorTest {
 

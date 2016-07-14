@@ -1,15 +1,13 @@
 package me.tomassetti.antlrplus;
 
-import me.tomassetti.antlrplus.antlrparser.ANTLRv4Parser;
 import me.tomassetti.antlrplus.antlrparser.Antlr4ParserFacade;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.v4.parse.*;
+import me.tomassetti.antlrplus.antlrparser.ANTLRv4Parser;
 
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
-
-import org.antlr.v4.Tool;
 
 /**
  * Created by federico on 28/05/16.

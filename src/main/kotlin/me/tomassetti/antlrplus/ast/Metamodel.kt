@@ -4,7 +4,7 @@ import java.util.*
 
 val TOKEN_TYPE = "<String>"
 
-data class Feature(val name: String, val type: String, val multiple: Boolean) {
+data class Feature(val name: String, var type: String, val multiple: Boolean) {
     override fun toString(): String {
         val desc = if (type == TOKEN_TYPE) "Token" else type
         val mult = if (multiple) "*" else ""

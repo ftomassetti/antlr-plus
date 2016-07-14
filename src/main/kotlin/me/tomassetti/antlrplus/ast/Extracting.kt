@@ -1,9 +1,10 @@
 package me.tomassetti.antlrplus.ast
 
-import me.tomassetti.ast.ReflectionElement
+import me.tomassetti.antlrplus.ast.ReflectionElement
 import org.antlr.v4.runtime.CommonToken
 import org.antlr.v4.runtime.Parser
 import org.antlr.v4.runtime.ParserRuleContext
+import org.antlr.v4.runtime.tree.ParseTree
 import org.antlr.v4.runtime.tree.TerminalNodeImpl
 import java.util.*
 
@@ -13,6 +14,16 @@ interface Extractor {
 
 class ExtractorsMap(val metamodel: Metamodel) {
     private val map = HashMap<String, MutableMap<String, Extractor>>()
+    private val transparentEntities = HashSet<String>()
+    private val transparentTokens = HashSet<Int>()
+
+    fun markAsTransparentType(type: String) {
+        transparentEntities.add(type)
+    }
+
+    fun markAsTransparentTokenType(type: Int) {
+        transparentTokens.add(type)
+    }
 
     fun get(entityName:String, elementName: String) : Extractor {
         val res = map[entityName]?.get(elementName)
@@ -34,17 +45,35 @@ class ExtractorsMap(val metamodel: Metamodel) {
                 is ParserRuleContext -> return extractorsMap.toElement(raw, parent)
                 is TerminalNodeImpl -> return raw.text
                 is CommonToken -> return raw.text
-                is List<*> -> return raw.map { e -> convert(e, parent) }
+                is List<*> -> return raw.map { e -> convert(e, parent) }.filter { e -> e != null }
                 else -> throw UnsupportedOperationException("${raw.javaClass}")
             }
         }
     }
 
-    fun toElement(raw: ParserRuleContext, parent: Element? = null) : ReflectionElement {
-        val entityName = raw.javaClass.simpleName.removeSuffix("Context").decapitalize()
+    fun toEntityName(ruleClass: Class<out ParserRuleContext>) = ruleClass.simpleName.removeSuffix("Context").decapitalize()
+
+    fun toElement(raw: ParserRuleContext, parent: Element? = null) : ReflectionElement? {
+        val entityName = toEntityName(raw.javaClass)
+        if (this.transparentEntities.contains(entityName)) {
+            val children = raw.children.filter { f -> isNotTransparent(f) }
+            when (children.size) {
+                0 -> return null
+                1 -> return toElement(children[0] as ParserRuleContext, parent)
+                else -> throw IllegalStateException()
+            }
+        }
         val entity = metamodel.byName(entityName)
         val extractors = map[entityName] ?: throw IllegalArgumentException()
         return ReflectionElement(entity, extractors, raw, parent)
+    }
+
+    private fun isNotTransparent(pt: ParseTree): Boolean {
+        when (pt) {
+            is ParserRuleContext -> return !transparentEntities.contains(toEntityName(pt.javaClass))
+            is TerminalNodeImpl -> return !transparentTokens.contains(pt.symbol.type)
+            else -> throw IllegalArgumentException(pt.javaClass.canonicalName)
+        }
     }
 
     fun addTokenExtractor(parserClass: Class<out Parser>, entityName: String, propertyName: String) {
