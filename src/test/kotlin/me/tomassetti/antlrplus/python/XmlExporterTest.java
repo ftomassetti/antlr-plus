@@ -15,6 +15,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
+
 public class XmlExporterTest {
 
     @Test
