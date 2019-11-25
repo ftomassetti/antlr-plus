@@ -1,7 +1,9 @@
 package com.strumenta.antlrplus
 
 import me.tomassetti.antlrplus.antlrparser.Antlr4ParserFacade
+import java.io.File
 
 fun main(args: Array<String>) {
-    Antlr4ParserFacade
+    val antlr4ParserFacade = Antlr4ParserFacade()
+    val grammar = antlr4ParserFacade.parseFile(File("/Users/federico/repos/VerilogParser/src/main/antlr/VerilogParser.g4"))
 }

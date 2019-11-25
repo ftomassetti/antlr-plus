@@ -1,7 +1,11 @@
 package me.tomassetti.antlrplus.antlrparser;
 
+import com.strumenta.antlrplus.antlrparser.ANTLRv4Lexer;
+import com.strumenta.antlrplus.antlrparser.ANTLRv4Parser;
 import org.antlr.v4.parse.ANTLRParser;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.TokenStream;
 
 import java.io.*;
@@ -20,7 +24,7 @@ public class Antlr4ParserFacade {
 
     public ANTLRv4Parser.GrammarSpecContext parseStream(InputStream inputStream) {
         try {
-            ANTLRv4Lexer lexer = new ANTLRv4Lexer(new org.antlr.v4.runtime.ANTLRInputStream(inputStream));
+            ANTLRv4Lexer lexer = new ANTLRv4Lexer(CharStreams.fromStream(inputStream));
             TokenStream tokens = new CommonTokenStream(lexer);
             ANTLRv4Parser parser = new ANTLRv4Parser(tokens);
             return parser.grammarSpec();
