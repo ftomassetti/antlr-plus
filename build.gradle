@@ -30,11 +30,60 @@ repositories {
     maven { url 'file://' + System.getProperty('user.home') + '/.m2/repository/' }
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
+//task version {
+//    doLast {
+//        print "Version ${kolasuVersion}"
+//    }
+//}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
         }
+    }
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+task generatePom {
+    doLast {
+        def generatedPom = pom {
+            project {
+                name project.name
+                version project.version
+                packaging 'jar'
+
+                licenses {
+                    license {
+                        name 'Apache Licenve V2.0'
+                        url 'https://www.apache.org/licenses/LICENSE-2.0'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'ftomassetti'
+                        name = 'Federico Tomassetti'
+                        email = 'federico@strumenta.com'
+                    }
+                }
+            }
+        }
+        generatedPom.writeTo("$buildDir/pom.xml")
     }
 }
 
