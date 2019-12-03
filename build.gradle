@@ -40,7 +40,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile group: 'com.google.guava', name: 'guava', version: '19.0'
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    //compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "com.github.ftomassetti:kolasu:2ab4b6e201"
