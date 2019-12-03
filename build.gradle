@@ -64,15 +64,15 @@ generateGrammarSource {
 }
 compileJava.dependsOn generateGrammarSource
 compileJava.source generatedMainFile, sourceSets.main.java
-//sourceSets {
-//    antlrdeps {
-//        java.srcDir 'src/main/antlr-deps/'
-//    }
-//    generated {
-//        java.srcDir 'generated-src/antlr/main/'
-//    }
-//}
-//compileJava.source sourceSets.antlrdeps.java, sourceSets.generated.java, sourceSets.main.java
+sourceSets {
+    antlrdeps {
+        java.srcDir 'src/main/antlr-deps/'
+    }
+    generated {
+        java.srcDir 'generated-src/antlr/main/'
+    }
+}
+compileJava.source sourceSets.antlrdeps.java, sourceSets.generated.java, sourceSets.main.java
 compileKotlin {
     source generatedMainFile, sourceSets.main.java, sourceSets.main.kotlin
     kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlin.ExperimentalUnsignedTypes"]

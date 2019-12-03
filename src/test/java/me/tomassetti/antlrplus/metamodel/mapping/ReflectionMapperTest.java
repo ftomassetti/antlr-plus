@@ -12,6 +12,7 @@ import com.strumenta.antlrplus.python.Python3Parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
+@Ignore
 public class ReflectionMapperTest {
 
     @Test

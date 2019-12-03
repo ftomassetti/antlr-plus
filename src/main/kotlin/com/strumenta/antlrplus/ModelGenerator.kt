@@ -1,12 +1,5 @@
 package com.strumenta.antlrplus
 
-import com.strumenta.antlrplus.antlrparser.Antlr4ParserFacade
-import me.tomassetti.antlrplus.metamodel.mapping.AntlrReflectionMapper
-import java.io.File
-import org.snt.inmemantlr.GenericParser
-
-
-
 fun main(args: Array<String>) {
 //    val antlr4ParserFacade = Antlr4ParserFacade()
 //    val grammarParseTree = antlr4ParserFacade.parseFile(File("/Users/federico/repos/VerilogParser/src/main/antlr/VerilogParser.g4"))
@@ -19,7 +12,7 @@ fun main(args: Array<String>) {
 //            }
 //        }
 //    }
-    //AntlrReflectionMapper()
+    // AntlrReflectionMapper()
 
 //    val grammarLexerFile = File("/Users/federico/repos/VerilogParser/src/main/antlr/VerilogLexer.g4")
 //    val grammarParserFile = File("/Users/federico/repos/VerilogParser/src/main/antlr/VerilogParser.g4")

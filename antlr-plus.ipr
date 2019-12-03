@@ -167,6 +167,3556 @@
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="SVCompilerDirectivesDefines">
+    <option name="defines">
+      <map>
+        <entry key="/br977.v">
+          <value>
+            <map>
+              <entry key="DECLAREINT">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="name" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="i" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="integer name=i" />
+                      <option name="source" value="/br977.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/br979.v">
+          <value>
+            <map>
+              <entry key="my_macro">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="a" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="b" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="localparam `` i``a``b``j = 8'h``a``b;" />
+                      <option name="source" value="/br979.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/br_gh105a.v">
+          <value>
+            <map>
+              <entry key="my_macro">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="a0" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="source" value="/br_gh105a.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/br_gh105b.v">
+          <value>
+            <map>
+              <entry key="STOP_HERE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="source" value="/br_gh105b.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="my_macro">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="26" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="a0" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="defaultValue" value="HERE" />
+                            <option name="name" value="a1" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="defaultValue" value="HERE" />
+                            <option name="name" value="a2" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="STOP_``a2 &#10;    $display(a0, a1);" />
+                      <option name="source" value="/br_gh105b.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/br_gh72a.v">
+          <value>
+            <map>
+              <entry key="macro1">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="24" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="defaultValue" value="d1" />
+                            <option name="name" value="arg1" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="$display(`&quot;arg1`&quot;);" />
+                      <option name="source" value="/br_gh72a.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="macro2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="68" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="defaultValue" value="d1" />
+                            <option name="name" value="arg1" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="defaultValue" value="d2" />
+                            <option name="name" value="arg2" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="$display(`&quot;arg1 arg2`&quot;);" />
+                      <option name="source" value="/br_gh72a.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/br_gh72b.v">
+          <value>
+            <map>
+              <entry key="macro1">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="24" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="arg1" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="$display(`&quot;arg1`&quot;);" />
+                      <option name="source" value="/br_gh72b.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="macro2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="65" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="defaultValue" value="d1" />
+                            <option name="name" value="arg1" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="arg2" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="$display(`&quot;arg1 arg2`&quot;);" />
+                      <option name="source" value="/br_gh72b.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/define1.v">
+          <value>
+            <map>
+              <entry key="NUM1">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="885" />
+                      <option name="replacementList" value="10" />
+                      <option name="source" value="/define1.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="NUM2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="901" />
+                      <option name="replacementList" value="4'b0001" />
+                      <option name="source" value="/define1.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="NUM3">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="922" />
+                      <option name="replacementList" value="4'h4" />
+                      <option name="source" value="/define1.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="WIDTH">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="940" />
+                      <option name="replacementList" value="4" />
+                      <option name="source" value="/define1.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/drive_strength.v">
+          <value>
+            <map>
+              <entry key="BUG_FIX">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="871" />
+                      <option name="source" value="/drive_strength.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/dummy7.v">
+          <value>
+            <map>
+              <entry key="ADDR1">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="848" />
+                      <option name="replacementList" value="16'h0011" />
+                      <option name="source" value="/dummy7.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ADDR2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="871" />
+                      <option name="replacementList" value="16'h0022" />
+                      <option name="source" value="/dummy7.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ADDR81">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="895" />
+                      <option name="replacementList" value="8'h11" />
+                      <option name="source" value="/dummy7.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ADDR82">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="916" />
+                      <option name="replacementList" value="8'h22" />
+                      <option name="source" value="/dummy7.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/else2.v">
+          <value>
+            <map>
+              <entry key="DOUBLE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="908" />
+                      <option name="source" value="/else2.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/elsif_test.v">
+          <value>
+            <map>
+              <entry key="DEFINED">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="30" />
+                      <option name="source" value="/elsif_test.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/fifo.v">
+          <value>
+            <map>
+              <entry key="TEST_FIFO">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="3548" />
+                      <option name="source" value="/fifo.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/fileline2.v">
+          <value>
+            <map>
+              <entry key="printfl">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="132" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="x" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="$display(&quot;%d -&gt; %s:%d&quot;, x, `__FILE__, `__LINE__)" />
+                      <option name="source" value="/fileline2.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/gencrc.v">
+          <value>
+            <map>
+              <entry key="TEST_GENCRC">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="2225" />
+                      <option name="source" value="/gencrc.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/ifdef2.v">
+          <value>
+            <map>
+              <entry key="NOCODE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="891" />
+                      <option name="source" value="/ifdef2.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/ifdef3.v">
+          <value>
+            <map>
+              <entry key="DOUBLE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="909" />
+                      <option name="source" value="/ifdef3.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/ifdef4.v">
+          <value>
+            <map>
+              <entry key="DOUBLE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="897" />
+                      <option name="source" value="/ifdef4.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="NOCODE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="912" />
+                      <option name="source" value="/ifdef4.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/implicit1.v">
+          <value>
+            <map>
+              <entry key="COUNT">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="50" />
+                      <option name="replacementList" value="2'b01" />
+                      <option name="source" value="/implicit1.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="DONE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="71" />
+                      <option name="replacementList" value="2'b10" />
+                      <option name="source" value="/implicit1.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="IDLE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="31" />
+                      <option name="replacementList" value="2'b00" />
+                      <option name="source" value="/implicit1.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/macro2.v">
+          <value>
+            <map>
+              <entry key="TBMESS">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="str" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="$display(&quot;PAS%s&quot;, str );" />
+                      <option name="source" value="/macro2.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/macro_redefinition.v">
+          <value>
+            <map>
+              <entry key="MACRO">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="24" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/macro_redefinition.v" />
+                    </Body>
+                    <Body>
+                      <option name="offset" value="40" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/macro_redefinition.v" />
+                    </Body>
+                    <Body>
+                      <option name="offset" value="56" />
+                      <option name="replacementList" value="2" />
+                      <option name="source" value="/macro_redefinition.v" />
+                    </Body>
+                    <Body>
+                      <option name="offset" value="85" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/macro_redefinition.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/macro_replacement.v">
+          <value>
+            <map>
+              <entry key="MACRO">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="24" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/macro_replacement.v" />
+                    </Body>
+                    <Body>
+                      <option name="offset" value="40" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/macro_replacement.v" />
+                    </Body>
+                    <Body>
+                      <option name="offset" value="56" />
+                      <option name="replacementList" value="2" />
+                      <option name="source" value="/macro_replacement.v" />
+                    </Body>
+                    <Body>
+                      <option name="offset" value="85" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/macro_replacement.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/macro_str_esc.v">
+          <value>
+            <map>
+              <entry key="DEF1">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="replacementList" value="&quot;string1&quot;" />
+                      <option name="source" value="/macro_str_esc.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="DEF2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="31" />
+                      <option name="replacementList" value="&quot;string2\&quot;&quot;" />
+                      <option name="source" value="/macro_str_esc.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="DEF3">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="56" />
+                      <option name="replacementList" value="a\b" />
+                      <option name="source" value="/macro_str_esc.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/macro_with_args.v">
+          <value>
+            <map>
+              <entry key="forward_and_reverse">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="121" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="str1" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="str2" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="str3" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="/* comment */ &#10;  $write(&quot;%0s&quot;, str1); /* comment */ &#10;  $write(&quot;..&quot;);        /* comment */ &#10;  $write(&quot;%0s&quot;, str3); /* comment */ &#10;  $write(&quot;%0s&quot;, str2); /* comment */ &#10;  $write(&quot;%0s&quot;, str3); /* comment */ &#10;  $write(&quot;..&quot;);        /* comment */ &#10;  $write(&quot;%0s&quot;, str1); /* comment */ &#10;  $write(&quot;\n&quot;)" />
+                      <option name="source" value="/macro_with_args.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="no_args">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="695" />
+                      <option name="replacementList" value="(a,b,c)" />
+                      <option name="source" value="/macro_with_args.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="null1">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="720" />
+                      <option name="replacementList" value="// null" />
+                      <option name="source" value="/macro_with_args.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="null2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="742" />
+                      <option name="source" value="/macro_with_args.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="sqr">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="470" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="x" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="(x * x) // comment" />
+                      <option name="source" value="/macro_with_args.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="sum">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="507" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="a" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="b" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="/* comment */ &#10;  (a + b)" />
+                      <option name="source" value="/macro_with_args.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="sumsqr">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="583" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="a" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="a" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="b" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="b" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="/* comment */ &#10;  (&#10;    (a * a) // comment &#10;    + &#10;    (b * b) // comment &#10;   )" />
+                      <option name="source" value="/macro_with_args.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/macsub.v">
+          <value>
+            <map>
+              <entry key="A">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="73" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="j" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="(jel == 1 &amp;&amp; j == 2)" />
+                      <option name="source" value="/macsub.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="B">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="107" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="j" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="(jel &#10; == 1 &amp;&amp; &#10; j == 2)" />
+                      <option name="source" value="/macsub.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/mem1.v">
+          <value>
+            <map>
+              <entry key="CLK">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="983" />
+                      <option name="replacementList" value="10" />
+                      <option name="source" value="/mem1.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/mips_16_core_top.v">
+          <value>
+            <map>
+              <entry key="ALU_ADD">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1689" />
+                      <option name="replacementList" value="3'b000" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ALU_AND">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1741" />
+                      <option name="replacementList" value="3'b010" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ALU_NC">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1651" />
+                      <option name="replacementList" value="3'bxxx&#9;&#9;// not care" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ALU_OR">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1767" />
+                      <option name="replacementList" value="3'b011" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ALU_SL">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1818" />
+                      <option name="replacementList" value="3'b101" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ALU_SR">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1843" />
+                      <option name="replacementList" value="3'b110" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ALU_SRU">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1868" />
+                      <option name="replacementList" value="3'b111" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ALU_SUB">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1715" />
+                      <option name="replacementList" value="3'b001" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ALU_XOR">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1792" />
+                      <option name="replacementList" value="3'b100" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="BRANCH_Z">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1953" />
+                      <option name="replacementList" value="3'b000" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="DATA_MEM_ADDR_WIDTH">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1159" />
+                      <option name="replacementList" value="8" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="INSTR_MEM_ADDR_WIDTH">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1127" />
+                      <option name="replacementList" value="8" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_ADD">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1285" />
+                      <option name="replacementList" value="4'b0001" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_ADDI">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1490" />
+                      <option name="replacementList" value="4'b1001" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_AND">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1337" />
+                      <option name="replacementList" value="4'b0011" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_BZ">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1567" />
+                      <option name="replacementList" value="4'b1100" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_LD">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1517" />
+                      <option name="replacementList" value="4'b1010" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_NOP">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1259" />
+                      <option name="replacementList" value="4'b0000" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_OR">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1363" />
+                      <option name="replacementList" value="4'b0100" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_SL">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1414" />
+                      <option name="replacementList" value="4'b0110" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_SR">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1439" />
+                      <option name="replacementList" value="4'b0111" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_SRU">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1464" />
+                      <option name="replacementList" value="4'b1000" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_ST">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1542" />
+                      <option name="replacementList" value="4'b1011" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_SUB">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1311" />
+                      <option name="replacementList" value="4'b0010" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="OP_XOR">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1388" />
+                      <option name="replacementList" value="4'b0101" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="PC_WIDTH">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1104" />
+                      <option name="replacementList" value="8" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="USE_SIMULATION_CODE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1014" />
+                      <option name="replacementList" value="// uncomment this to use simulation instruction memory" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="_MIPS_16_DEFS">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="896" />
+                      <option name="source" value="/mips_16_core_top.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/multiply_large.v">
+          <value>
+            <map>
+              <entry key="W">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="849" />
+                      <option name="replacementList" value="(65)&#9;// any value past 32 will suffice" />
+                      <option name="source" value="/multiply_large.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/param_times.v">
+          <value>
+            <map>
+              <entry key="ONE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1014" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/param_times.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="TWO">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1028" />
+                      <option name="replacementList" value="2" />
+                      <option name="source" value="/param_times.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pic.v">
+          <value>
+            <map>
+              <entry key="CLEAR_MEMORY">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="53486" />
+                      <option name="source" value="/pic.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/port-test2.v">
+          <value>
+            <map>
+              <entry key="TEST3">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="88" />
+                      <option name="source" value="/port-test2.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/port-test7.v">
+          <value>
+            <map>
+              <entry key="REG_DELAY">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/port-test7.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/ports_params.v">
+          <value>
+            <map>
+              <entry key="ADC_MSB">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="46" />
+                      <option name="replacementList" value="15" />
+                      <option name="source" value="/ports_params.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="DAC_MSB">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="28" />
+                      <option name="replacementList" value="7" />
+                      <option name="source" value="/ports_params.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MSEC">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="107" />
+                      <option name="replacementList" value="((1*1000)*1000)" />
+                      <option name="source" value="/ports_params.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="NSEC">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="66" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/ports_params.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="USEC">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="81" />
+                      <option name="replacementList" value="(1*1000)" />
+                      <option name="source" value="/ports_params.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr1029.v">
+          <value>
+            <map>
+              <entry key="bill">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="90" />
+                      <option name="replacementList" value="main.eric" />
+                      <option name="source" value="/pr1029.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="fred">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="72" />
+                      <option name="replacementList" value="eric" />
+                      <option name="source" value="/pr1029.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="none">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="59" />
+                      <option name="source" value="/pr1029.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr1676836.v">
+          <value>
+            <map>
+              <entry key="FAIL">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="source" value="/pr1676836.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr1687193.v">
+          <value>
+            <map>
+              <entry key="EOF">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="9" />
+                      <option name="replacementList" value="-1" />
+                      <option name="source" value="/pr1687193.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr1741212.v">
+          <value>
+            <map>
+              <entry key="COS_ITERATIONS">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1127" />
+                      <option name="replacementList" value="13" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="EXPLOG_ITERATIONS">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1092" />
+                      <option name="replacementList" value="50" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_1_OVER_E">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="254" />
+                      <option name="replacementList" value="0.3678794411" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_1_OVER_PI">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="389" />
+                      <option name="replacementList" value="0.3183098861" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_1_OVER_SQRT_2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="839" />
+                      <option name="replacementList" value="0.7071067811" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_2_PI">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="344" />
+                      <option name="replacementList" value="6.2831853071" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_3_PI_OVER_2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="569" />
+                      <option name="replacementList" value="4.7123889803" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_DEG_TO_RAD">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="929" />
+                      <option name="replacementList" value="0.0174532925" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_E">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="209" />
+                      <option name="replacementList" value="2.7182818284" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_LOG10_OF_E">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="749" />
+                      <option name="replacementList" value="0.4342944819" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_LOG2_OF_E">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="704" />
+                      <option name="replacementList" value="1.4426950408" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_LOG_OF_10">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="659" />
+                      <option name="replacementList" value="2.3025850929" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_LOG_OF_2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="614" />
+                      <option name="replacementList" value="0.6931471805" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_PI">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="299" />
+                      <option name="replacementList" value="3.1415926536" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_PI_OVER_2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="434" />
+                      <option name="replacementList" value="1.5707963267" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_PI_OVER_3">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="479" />
+                      <option name="replacementList" value="1.0471975511" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_PI_OVER_4">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="524" />
+                      <option name="replacementList" value="0.7853981633" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_RAD_TO_DEG">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="974" />
+                      <option name="replacementList" value="57.2957795130" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_SQRT_2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="794" />
+                      <option name="replacementList" value="1.4142135623" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MATH_SQRT_PI">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="884" />
+                      <option name="replacementList" value="1.7724538509" />
+                      <option name="source" value="/pr1741212.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr1822658.v">
+          <value>
+            <map>
+              <entry key="_variable">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/pr1822658.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr1892959b.v">
+          <value>
+            <map>
+              <entry key="DEV_TYPE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="replacementList" value="&quot;DEVICE 2&quot;" />
+                      <option name="source" value="/pr1892959b.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr1912112.v">
+          <value>
+            <map>
+              <entry key="test">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="28" />
+                      <option name="replacementList" value="Hello World" />
+                      <option name="source" value="/pr1912112.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="world">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="replacementList" value="World" />
+                      <option name="source" value="/pr1912112.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr1925360.v">
+          <value>
+            <map>
+              <entry key="MAC">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="i" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="$display(i);" />
+                      <option name="source" value="/pr1925360.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr2001162.v">
+          <value>
+            <map>
+              <entry key="PERIOD">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="replacementList" value="10" />
+                      <option name="source" value="/pr2001162.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr2002443.v">
+          <value>
+            <map>
+              <entry key="MACRO">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="_param_" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="_def_" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="source" value="/pr2002443.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr2224845.v">
+          <value>
+            <map>
+              <entry key="VUG_PCREL">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="u" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="uch" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="({ {(uch - 12 - 1 &gt; 0 ? uch - 12 - 1 : 1){u[11]}}, &#10;                             u[10:0], 2'b00 })" />
+                      <option name="source" value="/pr2224845.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr224a.v">
+          <value>
+            <map>
+              <entry key="LINE_A">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="source" value="/pr224a.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr243.v">
+          <value>
+            <map>
+              <entry key="ADC_CHANELS">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="853" />
+                      <option name="replacementList" value="8*48" />
+                      <option name="source" value="/pr243.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ADC_DATA_OFFSET">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="827" />
+                      <option name="replacementList" value="5" />
+                      <option name="source" value="/pr243.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr243_std.v">
+          <value>
+            <map>
+              <entry key="ADC_CHANELS">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="853" />
+                      <option name="replacementList" value="8*48" />
+                      <option name="source" value="/pr243_std.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ADC_DATA_OFFSET">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="827" />
+                      <option name="replacementList" value="5" />
+                      <option name="source" value="/pr243_std.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr2745281.v">
+          <value>
+            <map>
+              <entry key="MERROR">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="code" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="msg" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="if (code == 0)  begin $display(msg); end" />
+                      <option name="source" value="/pr2745281.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr3012758.v">
+          <value>
+            <map>
+              <entry key="TESTFILE">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="replacementList" value="&quot;ivltests/pr3012758.inc&quot;" />
+                      <option name="source" value="/pr3012758.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr355.v">
+          <value>
+            <map>
+              <entry key="NRBITS">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="946" />
+                      <option name="replacementList" value="4&#9;// Number of bits in each operand" />
+                      <option name="source" value="/pr355.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr434.v">
+          <value>
+            <map>
+              <entry key="VAR1">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="49" />
+                      <option name="replacementList" value="2" />
+                      <option name="source" value="/pr434.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="VAR2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="64" />
+                      <option name="replacementList" value="5" />
+                      <option name="source" value="/pr434.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr534.v">
+          <value>
+            <map>
+              <entry key="PCI_CLK_PERIOD">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="464" />
+                      <option name="replacementList" value="15.0&#9;&#9;// 66 Mhz" />
+                      <option name="source" value="/pr534.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr572.v">
+          <value>
+            <map>
+              <entry key="TEST_HIERARCHICAL_EVENT">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="409" />
+                      <option name="source" value="/pr572.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr572b.v">
+          <value>
+            <map>
+              <entry key="TEST_HIERARCHICAL_EVENT">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="409" />
+                      <option name="source" value="/pr572b.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr596.v">
+          <value>
+            <map>
+              <entry key="W">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="572" />
+                      <option name="replacementList" value="4" />
+                      <option name="source" value="/pr596.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr622.v">
+          <value>
+            <map>
+              <entry key="FOO">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="replacementList" value="bar" />
+                      <option name="source" value="/pr622.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr639.v">
+          <value>
+            <map>
+              <entry key="PERIODI">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1076" />
+                      <option name="replacementList" value="15" />
+                      <option name="source" value="/pr639.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="PERIODR">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="1096" />
+                      <option name="replacementList" value="15.2" />
+                      <option name="source" value="/pr639.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr812.v">
+          <value>
+            <map>
+              <entry key="div">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="448" />
+                      <option name="replacementList" value="0.100" />
+                      <option name="source" value="/pr812.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/pr985.v">
+          <value>
+            <map>
+              <entry key="ADDR_DEC_W">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="replacementList" value="8                 // Number of bits used to decode." />
+                      <option name="source" value="/pr985.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ADDR_DEVICE0">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="85" />
+                      <option name="replacementList" value="8                 // Number of bits used to decode.'h10    // Device 0 located at address 20xx_xxxxh" />
+                      <option name="source" value="/pr985.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="ADDR_DEVICE1">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="172" />
+                      <option name="replacementList" value="8                 // Number of bits used to decode.'h1F    // Device 1 located at address 20xx_xxxxh" />
+                      <option name="source" value="/pr985.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/sv_macro.v">
+          <value>
+            <map>
+              <entry key="FOO">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="10" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="defaultValue" value="42" />
+                            <option name="name" value="val" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="defaultValue" value="&quot;42&quot;" />
+                            <option name="name" value="text" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="do_foo(val, text)" />
+                      <option name="source" value="/sv_macro.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/sv_macro2.v">
+          <value>
+            <map>
+              <entry key="msg">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="parameters">
+                        <list>
+                          <Parameter>
+                            <option name="name" value="x" />
+                          </Parameter>
+                          <Parameter>
+                            <option name="name" value="y" />
+                          </Parameter>
+                        </list>
+                      </option>
+                      <option name="replacementList" value="`&quot;x: `\`&quot;y`\`&quot;`&quot;" />
+                      <option name="source" value="/sv_macro2.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/sv_unit1a.v">
+          <value>
+            <map>
+              <entry key="MACRO2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="8" />
+                      <option name="replacementList" value="12" />
+                      <option name="source" value="/sv_unit1a.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MACRO3">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="26" />
+                      <option name="replacementList" value="13" />
+                      <option name="source" value="/sv_unit1a.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/sv_unit1b.v">
+          <value>
+            <map>
+              <entry key="MACRO1">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="23" />
+                      <option name="replacementList" value="21" />
+                      <option name="source" value="/sv_unit1b.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MACRO2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="63" />
+                      <option name="replacementList" value="22" />
+                      <option name="source" value="/sv_unit1b.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MACRO3">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="103" />
+                      <option name="replacementList" value="23" />
+                      <option name="source" value="/sv_unit1b.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/sv_unit1c.v">
+          <value>
+            <map>
+              <entry key="MACRO1">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="23" />
+                      <option name="replacementList" value="21" />
+                      <option name="source" value="/sv_unit1c.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MACRO2">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="63" />
+                      <option name="replacementList" value="22" />
+                      <option name="source" value="/sv_unit1c.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="MACRO3">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="103" />
+                      <option name="replacementList" value="23" />
+                      <option name="source" value="/sv_unit1c.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/task-scope.v">
+          <value>
+            <map>
+              <entry key="TEST">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="923" />
+                      <option name="source" value="/task-scope.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+        <entry key="/undef.v">
+          <value>
+            <map>
+              <entry key="a">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="offset" value="116" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/undef.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="b">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="inclusionDependencies">
+                        <list>
+                          <InclusionDependency>
+                            <option name="name" value="a" />
+                            <option name="offset" value="138" />
+                            <option name="rule" value="DEFINED" />
+                            <option name="source" value="/undef.v" />
+                          </InclusionDependency>
+                        </list>
+                      </option>
+                      <option name="offset" value="138" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/undef.v" />
+                    </Body>
+                    <Body>
+                      <option name="inclusionDependencies">
+                        <list>
+                          <InclusionDependency>
+                            <option name="name" value="a" />
+                            <option name="offset" value="156" />
+                            <option name="rule" value="NOT_DEFINED" />
+                            <option name="source" value="/undef.v" />
+                          </InclusionDependency>
+                        </list>
+                      </option>
+                      <option name="offset" value="156" />
+                      <option name="replacementList" value="0" />
+                      <option name="source" value="/undef.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+              <entry key="c">
+                <value>
+                  <list>
+                    <Body>
+                      <option name="inclusionDependencies">
+                        <list>
+                          <InclusionDependency>
+                            <option name="name" value="a" />
+                            <option name="offset" value="195" />
+                            <option name="rule" value="DEFINED" />
+                            <option name="source" value="/undef.v" />
+                          </InclusionDependency>
+                        </list>
+                      </option>
+                      <option name="offset" value="195" />
+                      <option name="replacementList" value="1" />
+                      <option name="source" value="/undef.v" />
+                    </Body>
+                    <Body>
+                      <option name="inclusionDependencies">
+                        <list>
+                          <InclusionDependency>
+                            <option name="name" value="a" />
+                            <option name="offset" value="213" />
+                            <option name="rule" value="NOT_DEFINED" />
+                            <option name="source" value="/undef.v" />
+                          </InclusionDependency>
+                        </list>
+                      </option>
+                      <option name="offset" value="213" />
+                      <option name="replacementList" value="0" />
+                      <option name="source" value="/undef.v" />
+                    </Body>
+                  </list>
+                </value>
+              </entry>
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="dependencies">
+      <map>
+        <entry key="A">
+          <value>
+            <set>
+              <option value="/macsub.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ADC_CHANELS">
+          <value>
+            <set>
+              <option value="/pr243_std.v" />
+              <option value="/pr243.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ADC_DATA_OFFSET">
+          <value>
+            <set>
+              <option value="/pr243_std.v" />
+              <option value="/pr243.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ADC_MSB">
+          <value>
+            <set>
+              <option value="/ports_params.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ADDR1">
+          <value>
+            <set>
+              <option value="/dummy7.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ADDR2">
+          <value>
+            <set>
+              <option value="/dummy7.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ADDR81">
+          <value>
+            <set>
+              <option value="/dummy7.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ADDR82">
+          <value>
+            <set>
+              <option value="/dummy7.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ADDR_DEC_W">
+          <value>
+            <set>
+              <option value="/pr985.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ADDR_DEVICE0">
+          <value>
+            <set>
+              <option value="/pr985.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ADDR_DEVICE1">
+          <value>
+            <set>
+              <option value="/pr985.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ALTERA_RESERVED_QIS">
+          <value>
+            <set>
+              <option value="/gpmem.v" />
+              <option value="/instr_mem_bb.v" />
+              <option value="/gpmem_bb.v" />
+              <option value="/instr_mem.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ALU_ADD">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ALU_AND">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ALU_NC">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ALU_OR">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ALU_SL">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ALU_SR">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ALU_SRU">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ALU_SUB">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ALU_XOR">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="B">
+          <value>
+            <set>
+              <option value="/macsub.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="BRANCH_Z">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="BUG_FIX">
+          <value>
+            <set>
+              <option value="/drive_strength.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="CAUSES_PROBLEM">
+          <value>
+            <set>
+              <option value="/pr2823414.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="CB_TIME_IS_RELATIVE">
+          <value>
+            <set>
+              <option value="/start_of_simtime1.v" />
+              <option value="/br_gh184.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="CLEAR_MEMORY">
+          <value>
+            <set>
+              <option value="/pic.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="CLK">
+          <value>
+            <set>
+              <option value="/mem1.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="CODE_FOR_SYNTHESIS">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="COS_ITERATIONS">
+          <value>
+            <set>
+              <option value="/pr1741212.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="COUNT">
+          <value>
+            <set>
+              <option value="/implicit1.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DAC_MSB">
+          <value>
+            <set>
+              <option value="/ports_params.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DATA_MEM_ADDR_WIDTH">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DEBUG">
+          <value>
+            <set>
+              <option value="/swrite.v" />
+              <option value="/drive_strength.v" />
+              <option value="/fifo.v" />
+              <option value="/onehot.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DEBUG_SHOWREADS">
+          <value>
+            <set>
+              <option value="/pic.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DEBUG_SHOWWRITES">
+          <value>
+            <set>
+              <option value="/pic.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DECLAREINT">
+          <value>
+            <set>
+              <option value="/br977.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DEF1">
+          <value>
+            <set>
+              <option value="/macro_str_esc.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DEF2">
+          <value>
+            <set>
+              <option value="/macro_str_esc.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DEFINED">
+          <value>
+            <set>
+              <option value="/elsif_test.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DEV_TYPE">
+          <value>
+            <set>
+              <option value="/pr1892959b.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DISPLAY">
+          <value>
+            <set>
+              <option value="/pr529.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DONE">
+          <value>
+            <set>
+              <option value="/implicit1.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DONT_TEST_NEE">
+          <value>
+            <set>
+              <option value="/eeq.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DOUBLE">
+          <value>
+            <set>
+              <option value="/ifdef4.v" />
+              <option value="/else2.v" />
+              <option value="/ifdef3.v" />
+              <option value="/else3.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DUMMY">
+          <value>
+            <set>
+              <option value="/blif_shift_tb.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="DUMP">
+          <value>
+            <set>
+              <option value="/pr639.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="EOF">
+          <value>
+            <set>
+              <option value="/pr1687193.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="EXPLOG_ITERATIONS">
+          <value>
+            <set>
+              <option value="/pr1741212.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="FAIL">
+          <value>
+            <set>
+              <option value="/pr1676836.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="FAKE_UDP">
+          <value>
+            <set>
+              <option value="/udp_jkff.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="FOO">
+          <value>
+            <set>
+              <option value="/sv_macro.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="GOOD_CODE">
+          <value>
+            <set>
+              <option value="/param_test2.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="IDLE">
+          <value>
+            <set>
+              <option value="/implicit1.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="INSTR_MEM_ADDR_WIDTH">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="LINE_A">
+          <value>
+            <set>
+              <option value="/pr224.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MACRO">
+          <value>
+            <set>
+              <option value="/pr2002443.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MACRO1">
+          <value>
+            <set>
+              <option value="/sv_unit1c.v" />
+              <option value="/sv_unit1a.v" />
+              <option value="/sv_unit1b.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MACRO2">
+          <value>
+            <set>
+              <option value="/sv_unit1c.v" />
+              <option value="/sv_unit1a.v" />
+              <option value="/sv_unit1b.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MACRO3">
+          <value>
+            <set>
+              <option value="/sv_unit1c.v" />
+              <option value="/sv_unit1a.v" />
+              <option value="/sv_unit1b.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MATH_2_PI">
+          <value>
+            <set>
+              <option value="/pr1741212.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MATH_E">
+          <value>
+            <set>
+              <option value="/pr1741212.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MATH_LOG_OF_10">
+          <value>
+            <set>
+              <option value="/pr1741212.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MATH_LOG_OF_2">
+          <value>
+            <set>
+              <option value="/pr1741212.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MATH_PI">
+          <value>
+            <set>
+              <option value="/pr1741212.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MATH_PI_OVER_2">
+          <value>
+            <set>
+              <option value="/pr1741212.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MATH_PI_OVER_3">
+          <value>
+            <set>
+              <option value="/pr1741212.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MERROR">
+          <value>
+            <set>
+              <option value="/pr2745281.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="MSEC">
+          <value>
+            <set>
+              <option value="/ports_params.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_1_PI">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_2_PI">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_2_SQRTPI">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_E">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_LN10">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_LN2">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_LOG10E">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_LOG2E">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_PI">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_PI_2">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_PI_4">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_SQRT1_2">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_SQRT2">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="M_TWO_PI">
+          <value>
+            <set>
+              <option value="/test_va_math.v" />
+              <option value="/test_vams_math.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="NOCODE">
+          <value>
+            <set>
+              <option value="/ifdef4.v" />
+              <option value="/else2.v" />
+              <option value="/ifdef3.v" />
+              <option value="/else1.v" />
+              <option value="/ifdef2.v" />
+              <option value="/ifdef1.v" />
+              <option value="/else3.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="NOGENERATE">
+          <value>
+            <set>
+              <option value="/pr1676071.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="NO_PLI">
+          <value>
+            <set>
+              <option value="/instr_mem.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="NRBITS">
+          <value>
+            <set>
+              <option value="/pr355.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="NSEC">
+          <value>
+            <set>
+              <option value="/ports_params.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="NUM1">
+          <value>
+            <set>
+              <option value="/define1.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="NUM2">
+          <value>
+            <set>
+              <option value="/define1.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="NUM3">
+          <value>
+            <set>
+              <option value="/define1.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OLD_UNSIZED">
+          <value>
+            <set>
+              <option value="/swrite.v" />
+              <option value="/param-extend.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="ONE">
+          <value>
+            <set>
+              <option value="/param_times.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_ADD">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_ADDI">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_AND">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_BZ">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_LD">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_NOP">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_OR">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_SL">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_SR">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_SRU">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_ST">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_SUB">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="OP_XOR">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="PCI_CLK_PERIOD">
+          <value>
+            <set>
+              <option value="/pr534.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="PC_WIDTH">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="PERIOD">
+          <value>
+            <set>
+              <option value="/pr2001162.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="PERIODI">
+          <value>
+            <set>
+              <option value="/pr639.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="PERIODR">
+          <value>
+            <set>
+              <option value="/pr639.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="REG_DELAY">
+          <value>
+            <set>
+              <option value="/port-test7.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="RTL">
+          <value>
+            <set>
+              <option value="/deposit.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="STOP_">
+          <value>
+            <set>
+              <option value="/br_gh105b.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TBMESS">
+          <value>
+            <set>
+              <option value="/macro2.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TEST">
+          <value>
+            <set>
+              <option value="/task-scope.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TEST2">
+          <value>
+            <set>
+              <option value="/fifo.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TEST3">
+          <value>
+            <set>
+              <option value="/port-test2.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TEST3_X">
+          <value>
+            <set>
+              <option value="/port-test2.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TESTFILE">
+          <value>
+            <set>
+              <option value="/pr3012758.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TEST_BENCH">
+          <value>
+            <set>
+              <option value="/blif01a.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TEST_FIFO">
+          <value>
+            <set>
+              <option value="/fifo.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TEST_GENCRC">
+          <value>
+            <set>
+              <option value="/gencrc.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TEST_HIERARCHICAL_EVENT">
+          <value>
+            <set>
+              <option value="/pr572b.v" />
+              <option value="/pr572.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="TWO">
+          <value>
+            <set>
+              <option value="/param_times.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="UNDEFINED">
+          <value>
+            <set>
+              <option value="/elsif_test.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="USEC">
+          <value>
+            <set>
+              <option value="/ports_params.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="USE_SIMULATION_CODE">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="VAR1">
+          <value>
+            <set>
+              <option value="/pr434.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="VAR2">
+          <value>
+            <set>
+              <option value="/pr434.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="VLOG95">
+          <value>
+            <set>
+              <option value="/array_lval_select2.v" />
+              <option value="/array_lval_select3a.v" />
+              <option value="/array_lval_select1.v" />
+              <option value="/array_lval_select3a-.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="VUG_PCREL">
+          <value>
+            <set>
+              <option value="/pr2224845.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="W">
+          <value>
+            <set>
+              <option value="/multiply_large.v" />
+              <option value="/pr596.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="WIDTH">
+          <value>
+            <set>
+              <option value="/define1.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="_MIPS_16_DEFS">
+          <value>
+            <set>
+              <option value="/mips_16_core_top.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="__ICARUS_UNSIZED__">
+          <value>
+            <set>
+              <option value="/pr1742910.v" />
+              <option value="/big_int.v" />
+              <option value="/abstime.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="__ICARUS__">
+          <value>
+            <set>
+              <option value="/implicit_cast4.v" />
+              <option value="/array_lval_select4a.v" />
+              <option value="/pr2172606b.v" />
+              <option value="/implicit_cast6.v" />
+              <option value="/pr3539372.v" />
+              <option value="/array_lval_select5.v" />
+              <option value="/pr2800985a.v" />
+              <option value="/implicit_cast5.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="_def_">
+          <value>
+            <set>
+              <option value="/pr2002443.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="_variable">
+          <value>
+            <set>
+              <option value="/pr1822658.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="a">
+          <value>
+            <set>
+              <option value="/undef.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="b">
+          <value>
+            <set>
+              <option value="/undef.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="bill">
+          <value>
+            <set>
+              <option value="/pr1029.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="c">
+          <value>
+            <set>
+              <option value="/undef.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="delay_mode_path">
+          <value>
+            <set>
+              <option value="/pr1467825.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="disable_portfaults">
+          <value>
+            <set>
+              <option value="/pr1467825.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="div">
+          <value>
+            <set>
+              <option value="/pr812.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="enable_portfaults">
+          <value>
+            <set>
+              <option value="/pr1467825.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="endprotect">
+          <value>
+            <set>
+              <option value="/pr478.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="forward_and_reverse">
+          <value>
+            <set>
+              <option value="/macro_with_args.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="hello_world">
+          <value>
+            <set>
+              <option value="/br_gh105a.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="macro1">
+          <value>
+            <set>
+              <option value="/br_gh72b.v" />
+              <option value="/br_gh72a.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="macro2">
+          <value>
+            <set>
+              <option value="/br_gh72b.v" />
+              <option value="/br_gh72a.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="msg">
+          <value>
+            <set>
+              <option value="/sv_macro2.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="my_macro">
+          <value>
+            <set>
+              <option value="/br979.v" />
+              <option value="/br_gh105b.v" />
+              <option value="/br_gh105a.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="none">
+          <value>
+            <set>
+              <option value="/pr1029.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="nosuppress_faults">
+          <value>
+            <set>
+              <option value="/pr1467825.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="printfl">
+          <value>
+            <set>
+              <option value="/fileline2.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="protect">
+          <value>
+            <set>
+              <option value="/pr478.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="sqr">
+          <value>
+            <set>
+              <option value="/macro_with_args.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="sum">
+          <value>
+            <set>
+              <option value="/macro_with_args.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="sumsqr">
+          <value>
+            <set>
+              <option value="/macro_with_args.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="suppress_faults">
+          <value>
+            <set>
+              <option value="/pr1467825.v" />
+            </set>
+          </value>
+        </entry>
+        <entry key="world">
+          <value>
+            <set>
+              <option value="/pr1912112.v" />
+            </set>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="status" value="NORMAL" />
     <option name="version" value="547" />
   </component>

@@ -8,6 +8,7 @@ import me.tomassetti.antlrplus.xml.XmlExporter;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -20,6 +21,7 @@ import com.strumenta.antlrplus.python.Python3Parser;
 
 import static org.junit.Assert.*;
 
+@Ignore
 public class XmlExporterTest {
 
     @Test
