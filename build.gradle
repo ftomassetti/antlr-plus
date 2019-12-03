@@ -19,6 +19,7 @@ apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'idea'
 apply plugin: 'antlr'
+apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 repositories {
@@ -26,7 +27,17 @@ repositories {
     mavenLocal()
     maven { url 'https://jitpack.io' }
     jcenter()
+    maven { url 'file://' + System.getProperty('user.home') + '/.m2/repository/' }
 }
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
 
 group = 'com.strumenta'
 version = '0.2'
