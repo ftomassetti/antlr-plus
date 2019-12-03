@@ -43,11 +43,12 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "com.github.ftomassetti:kolasu:a0e7970eae"
+    compile "com.github.ftomassetti:kolasu:2ab4b6e201"
 
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testCompile 'junit:junit:4.12'
+    compile 'com.github.julianthome:inmemantlr-api:1.6'
 }
 
 configurations.all() {

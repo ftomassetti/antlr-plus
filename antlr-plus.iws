@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="56fb86ce-767d-4bc5-adb4-0578a455a82f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/generated-src/antlr/main/com/strumenta/antlrplus/antlrparser/LexerAdaptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/generated-src/antlr/main/com/strumenta/antlrplus/antlrparser/LexerAdaptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/antlr-deps/me/tomassetti/antlrplus/antlrparser/LexerAdaptor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/tomassetti/antlrplus/AntlrSimplifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/tomassetti/antlrplus/AntlrSimplifier.java" afterDir="false" />
-    </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list default="true" id="7e24f675-3920-476c-953a-228d377ee802" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,14 +47,10 @@
     <breakpoint_rules converted="true" />
     <ui_properties converted="true" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
   <component name="ModuleEditorState">
     <option name="LAST_EDITED_MODULE_NAME" />
     <option name="LAST_EDITED_TAB_NAME" />
   </component>
-  <component name="ProjectId" id="1UTb9SMZkNwX8XsQ1IgBFWfUlEz" />
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
       <profile-state />
@@ -76,11 +67,8 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -160,28 +148,12 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="56fb86ce-767d-4bc5-adb4-0578a455a82f" name="Default Changelist" comment="" />
-      <created>1575383381473</created>
+      <created>1575386144967</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1575383381473</updated>
-      <workItem from="1575383382305" duration="262000" />
+      <updated>1575386144967</updated>
     </task>
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
