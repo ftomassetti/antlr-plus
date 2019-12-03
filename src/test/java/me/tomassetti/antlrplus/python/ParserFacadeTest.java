@@ -10,6 +10,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import com.strumenta.antlrplus.python.Python3Lexer;
+import com.strumenta.antlrplus.python.Python3Parser;
+
 public class ParserFacadeTest {
 
     @Test

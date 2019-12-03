@@ -1,6 +1,6 @@
 package com.strumenta.antlrplus
 
-import me.tomassetti.antlrplus.antlrparser.Antlr4ParserFacade
+import com.strumenta.antlrplus.antlrparser.Antlr4ParserFacade
 import java.io.File
 
 fun main(args: Array<String>) {

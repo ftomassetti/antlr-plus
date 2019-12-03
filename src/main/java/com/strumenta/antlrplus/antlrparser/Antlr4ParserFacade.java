@@ -1,4 +1,4 @@
-package me.tomassetti.antlrplus.antlrparser;
+package com.strumenta.antlrplus.antlrparser;
 
 import com.strumenta.antlrplus.antlrparser.ANTLRv4Lexer;
 import com.strumenta.antlrplus.antlrparser.ANTLRv4Parser;

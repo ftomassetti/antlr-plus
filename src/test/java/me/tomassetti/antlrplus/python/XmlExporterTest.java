@@ -1,5 +1,6 @@
 package me.tomassetti.antlrplus.python;
 
+import com.strumenta.antlrplus.python.Python3Parser;
 import me.tomassetti.antlrplus.ParserFacade;
 import me.tomassetti.antlrplus.metamodel.mapping.AntlrReflectionMapper;
 import me.tomassetti.antlrplus.model.OrderedElement;
@@ -13,6 +14,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
+
+import com.strumenta.antlrplus.python.Python3Lexer;
+import com.strumenta.antlrplus.python.Python3Parser;
 
 import static org.junit.Assert.*;
 

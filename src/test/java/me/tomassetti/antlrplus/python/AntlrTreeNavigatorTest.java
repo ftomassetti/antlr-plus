@@ -14,6 +14,9 @@ import static org.junit.Assert.*;
 
 import static me.tomassetti.antlrplus.AntlrTreeNavigator.allChildrenIterable;
 
+import com.strumenta.antlrplus.python.Python3Lexer;
+import com.strumenta.antlrplus.python.Python3Parser;
+
 public class AntlrTreeNavigatorTest {
 
     private ParserFacade<Python3Parser.Single_inputContext, Python3Parser> parserFacade = new ParserFacade<Python3Parser.Single_inputContext, Python3Parser>() {
