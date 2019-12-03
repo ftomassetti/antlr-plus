@@ -31,12 +31,23 @@ repositories {
 group = 'com.strumenta'
 version = '0.2'
 
+def generatedMain = "generated-src/antlr/main"
+def generatedMainFile = file(generatedMain)
+
 dependencies {
     antlr "org.antlr:antlr4:${antlrVersion}"
     compile "org.antlr:antlr4-runtime:${antlrVersion}"
     testCompile 'junit:junit:4.12'
     testCompile group: 'com.google.guava', name: 'guava', version: '19.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "com.github.ftomassetti:kolasu:a0e7970eae"
+
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testCompile 'junit:junit:4.12'
 }
 
 configurations.all() {
@@ -45,20 +56,28 @@ configurations.all() {
 }
 
 generateGrammarSource {
+    inputs.files fileTree('src/main/antlr').include('**/*.g4')
     maxHeapSize = "64m"
     arguments += ['-package', 'com.strumenta.antlrplus.antlrparser']
-    outputDirectory = new File("generated-src/antlr/main/com/strumenta/antlrplus/antlrparser".toString())
+    outputDirectory = file(generatedMain + "/com/strumenta/antlrplus/antlrparser")
 }
 compileJava.dependsOn generateGrammarSource
-sourceSets {
-    antlrdeps {
-        java.srcDir 'src/main/antlr-deps/'
-    }
-    generated {
-        java.srcDir 'generated-src/antlr/main/'
-    }
+compileJava.source generatedMainFile, sourceSets.main.java
+//sourceSets {
+//    antlrdeps {
+//        java.srcDir 'src/main/antlr-deps/'
+//    }
+//    generated {
+//        java.srcDir 'generated-src/antlr/main/'
+//    }
+//}
+//compileJava.source sourceSets.antlrdeps.java, sourceSets.generated.java, sourceSets.main.java
+compileKotlin {
+    source generatedMainFile, sourceSets.main.java, sourceSets.main.kotlin
+    kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlin.ExperimentalUnsignedTypes"]
+    dependsOn generateGrammarSource
 }
-compileJava.source sourceSets.antlrdeps.java, sourceSets.generated.java, sourceSets.main.java
+
 
 generateTestGrammarSource {
     maxHeapSize = "64m"
@@ -79,9 +98,11 @@ clean{
 
 idea {
     module {
-        sourceDirs += file("generated-src/antlr/main")
-        sourceDirs += file("src/main/antlr-deps")
-        testSourceDirs += file("generated-src/antlr/test")
+//        sourceDirs += file("generated-src/antlr/main")
+//        sourceDirs += file("src/main/antlr-deps")
+//        testSourceDirs += file("generated-src/antlr/test")
+        mkdir generatedMain
+        sourceDirs += generatedMainFile
     }
 }
 compileKotlin {
