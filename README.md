@@ -11,7 +11,7 @@ Once you have the AST you are on your own. At that point you may want to use ant
 * add additional information like calculated fields to your model
 
 Antlr-plus has been built to support ANTLR users in performing the typical operation that they want to perform on the AST,
-to reshape the data they obtained from the paerser and use it more easily.
+to reshape the data they obtained from the parser and use it more easily.
 
 It is a lightweight alternative to more heavy platforms like [EMF](https://en.wikipedia.org/wiki/Eclipse_Modeling_Framework).
 
